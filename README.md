@@ -4,13 +4,26 @@ Mixed Reality Recorder (MRR) is a Package for the Unity Engine that lets you rec
 
 ## Requirements
 
-Following Software is Required to run MRR.
-
-- **[SteamVR Client](https://store.steampowered.com/app/250820/SteamVR/)**
-
 Currently MRR is tested only on Microsoft Windows operating systems.
 
 - This version of MRR was tested on Microsoft **Windows 10 64 bit**.
+
+### Software
+
+Following Software is Required to run MRR.
+
+- **[Unity 2019.3](https://unity.com/releases/2019-3)**
+- **[SteamVR Client](https://store.steampowered.com/app/250820/SteamVR/)**
+
+### Hardware
+
+Listed Hardware is Required to use MMR.
+
+- **[HMD](https://store.steampowered.com/steamvr#WhatYouNeed)** *(Compatible with SteamVR)*
+- **[Vive Tracker](https://www.vive.com/eu/vive-tracker/)**
+- **Camera** *(With HDMI Output)*
+- **HDMI Capture Card**
+- **Greenscreen**
 
 ## Setup
 
@@ -36,6 +49,7 @@ MRR was tested with the listed VR systems.
 
 ## Build with
 
+- [Unity](https://unity.com/)
 - [SteamVR](https://store.steampowered.com/steamvr)
 - [FFmpeg](https://www.ffmpeg.org/)
 
