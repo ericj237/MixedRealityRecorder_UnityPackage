@@ -12,7 +12,7 @@ Currently MRR is tested only on Microsoft Windows operating systems.
 
 Following Software is Required to run MRR.
 
-- **[Unity 2019.3](https://unity.com/releases/2019-3)**
+- **[Unity 2019.1](https://blogs.unity3d.com/2019/04/16/introducing-unity-2019-1/)**
 - **[SteamVR Client](https://store.steampowered.com/app/250820/SteamVR/)**
 
 ### Hardware
