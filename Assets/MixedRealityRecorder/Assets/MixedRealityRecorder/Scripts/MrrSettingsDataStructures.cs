@@ -11,5 +11,7 @@
 
         public int sensorDynamic;
 
+        public int framerate;
+
     }
 }

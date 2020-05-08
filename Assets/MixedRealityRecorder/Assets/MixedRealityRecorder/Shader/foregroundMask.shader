@@ -28,7 +28,7 @@
 
             sampler2D _DepthTex;
 			float4 _DepthTex_ST;
-			float4 _HmdPos;
+			float2 _HmdScreenPos;
 
             v2f vert (appdata v)
             {

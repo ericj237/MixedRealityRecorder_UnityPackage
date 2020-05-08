@@ -15,14 +15,14 @@ public class MrCamManager : MonoBehaviour
     private RenderTexture depthTexture;
     private RenderTexture foregroundMaskTexture;
 
-    private CameraSettings cameraSettings;
+    //private CameraSettings cameraSettings;
 
     void Start()
     {
 
         // create new camera settings and assign framerate
-        cameraSettings = new CameraSettings();
-        cameraSettings.framerate = 50;
+        //cameraSettings = new CameraSettings();
+        //cameraSettings.framerate = 50;
 
         // TMP
         ApplyApplicationSettings();
@@ -49,7 +49,7 @@ public class MrCamManager : MonoBehaviour
         // is there a better way to lock the camera rendering framerate?
         // most vr sdks set the application framerate to 75 or 90 
         // we cant control our virtual camera framerate with this settings
-        Application.targetFrameRate = (int)cameraSettings.framerate;
+        //Application.targetFrameRate = (int)cameraSettings.framerate;
 
     }
 
@@ -77,14 +77,6 @@ public class MrCamManager : MonoBehaviour
         // assign the textures to the ui raw image component
         imgColor.texture = colorTexture;
         imgForegroundMask.texture = foregroundMaskTexture;
-
-    }
-
-    // camera settings data
-    private struct CameraSettings
-    {
-
-        public uint framerate;
 
     }
 }
