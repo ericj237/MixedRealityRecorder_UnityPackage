@@ -4193,6 +4193,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c80f78602762204fbd51dc223f98210, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  matDepthTexture: {fileID: 2100000, guid: 65d78336d94d99f4687f242fdf5f3092, type: 2}
+  appManager: {fileID: 2463952265447027494}
+  foregroundTarget: {fileID: 0}
 --- !u!1 &6148841860617510640
 GameObject:
   m_ObjectHideFlags: 0
@@ -4634,7 +4637,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiController: {fileID: 7742372038242531299}
-  virtualCamera: {fileID: 6148841860107912221}
+  virtualCamera: {fileID: 3885660899844517695}
   matForegroundMask: {fileID: 2100000, guid: 39e54473b0e74214d804fe360cd2c86a, type: 2}
 --- !u!1 &7536889122443227029
 GameObject:

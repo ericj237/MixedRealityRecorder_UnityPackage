@@ -12,18 +12,19 @@ namespace MRR.Video
         private CameraSettings cameraSettings;
 
         private RenderTexture colorTexture;
+        private RenderTexture rawDepthTexture;
         private RenderTexture depthTexture;
+        private Texture2D depthTexture2D;
+
+        public Material matDepthTexture;
 
         public MrrAppManager appManager;
         public Transform foregroundTarget;
 
-        private Texture2D tmpDepthTexture2D;
+        private float hmdDepth;
 
         private void Start()
         {
-
-            tmpDepthTexture2D = new Texture2D(1920, 1080, TextureFormat.RGB24, false);
-
             // create new camera settings and assign framerate
             cameraSettings = new CameraSettings();
             cameraSettings.framerate = 50;
@@ -33,7 +34,9 @@ namespace MRR.Video
 
             // create render textures
             colorTexture = new RenderTexture(screenSize.x, screenSize.y, 0, RenderTextureFormat.RGB565);
-            depthTexture = new RenderTexture(screenSize.x, screenSize.y, 24, RenderTextureFormat.Depth);
+            rawDepthTexture = new RenderTexture(screenSize.x, screenSize.y, 24, RenderTextureFormat.Depth);
+            depthTexture = new RenderTexture(screenSize.x, screenSize.y, 0, RenderTextureFormat.ARGBHalf);
+            depthTexture2D = new Texture2D(screenSize.x, screenSize.y, TextureFormat.RGBAHalf, false);
 
             virtualCamera = GetComponent<Camera>();
 
@@ -41,7 +44,9 @@ namespace MRR.Video
             virtualCamera.depthTextureMode = DepthTextureMode.Depth;
 
             // set color and depth buffer locations to the render textures
-            virtualCamera.SetTargetBuffers(colorTexture.colorBuffer, depthTexture.depthBuffer);
+            virtualCamera.SetTargetBuffers(colorTexture.colorBuffer, rawDepthTexture.depthBuffer);
+
+            matDepthTexture.SetTexture("_RawDepthTex", rawDepthTexture);
         }
 
         public RenderTexture GetDepthTexture()
@@ -64,19 +69,27 @@ namespace MRR.Video
             return virtualCamera;
         }
 
+        public float GetHmdDepth()
+        {
+            return hmdDepth;
+        }
+
         private void OnPostRender()
         {
+
+            Graphics.Blit(rawDepthTexture, depthTexture, matDepthTexture);
+
             Vector2 targetScreenPosition = virtualCamera.WorldToScreenPoint(foregroundTarget.position);
             //Debug.Log(targetScreenPosition);
 
-            //RenderTexture.active = depthTexture;
+            RenderTexture.active = depthTexture;
 
-            //tmpDepthTexture2D.ReadPixels(new Rect(0, 0, 1920, 1080), 0, 0);
-            //tmpDepthTexture2D.Apply();
+            depthTexture2D.ReadPixels(new Rect(0, 0, 1920, 1080), 0, 0);
+            depthTexture2D.Apply();
 
-            //RenderTexture.active = null;
+            RenderTexture.active = null;
 
-            //float hmdDepth = tmpDepthTexture2D.GetPixel((int)targetScreenPosition.x, (int)targetScreenPosition.y).r;
+            hmdDepth = depthTexture2D.GetPixel((int)targetScreenPosition.x, (int)targetScreenPosition.y).r;
 
             //Debug.Log("HDM Depth = " + hmdDepth);
 
@@ -85,12 +98,7 @@ namespace MRR.Video
             //else
             //    matForegroundMask.SetVector("_HmdPos", new Vector2(-1.0f, -1.0f));
 
-            appManager.CreateForegroundMask();
-        }
-
-        public Texture2D GetTmpDepthTexture()
-        {
-            return tmpDepthTexture2D;
+            appManager.UpdateForegroundMask();
         }
     }
 }

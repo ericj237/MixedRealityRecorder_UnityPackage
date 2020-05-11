@@ -154,8 +154,8 @@ Light:
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
-    m_Resolution: -1
+    m_Type: 1
+    m_Resolution: 0
     m_CustomResolution: -1
     m_Strength: 1
     m_Bias: 0.05
@@ -246,18 +246,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1134527866 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3885660899844517695, guid: 3d832f69edbe6b7498c6be0963342e51,
-    type: 3}
-  m_PrefabInstance: {fileID: 6148841861028112750}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c80f78602762204fbd51dc223f98210, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1353070937
 GameObject:
   m_ObjectHideFlags: 0
@@ -443,18 +431,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1486008199}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1614209320 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2463952265447027494, guid: 3d832f69edbe6b7498c6be0963342e51,
-    type: 3}
-  m_PrefabInstance: {fileID: 6148841861028112750}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b27dfcd6bb9335408754573edec7994, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1692758136
 GameObject:
   m_ObjectHideFlags: 0
@@ -698,6 +674,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: MixedRealityRecorder
       objectReference: {fileID: 0}
+    - target: {fileID: 3885660899844517695, guid: 3d832f69edbe6b7498c6be0963342e51,
+        type: 3}
+      propertyPath: foregroundTarget
+      value: 
+      objectReference: {fileID: 1692758137}
     - target: {fileID: 6148841860617510641, guid: 3d832f69edbe6b7498c6be0963342e51,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1717,25 +1698,5 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2463952265447027494, guid: 3d832f69edbe6b7498c6be0963342e51,
-        type: 3}
-      propertyPath: foregroundTarget
-      value: 
-      objectReference: {fileID: 1692758137}
-    - target: {fileID: 2463952265447027494, guid: 3d832f69edbe6b7498c6be0963342e51,
-        type: 3}
-      propertyPath: virtualCamera
-      value: 
-      objectReference: {fileID: 1134527866}
-    - target: {fileID: 3885660899844517695, guid: 3d832f69edbe6b7498c6be0963342e51,
-        type: 3}
-      propertyPath: appManager
-      value: 
-      objectReference: {fileID: 1614209320}
-    - target: {fileID: 3885660899844517695, guid: 3d832f69edbe6b7498c6be0963342e51,
-        type: 3}
-      propertyPath: foregroundTarget
-      value: 
-      objectReference: {fileID: 1692758137}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3d832f69edbe6b7498c6be0963342e51, type: 3}

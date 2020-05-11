@@ -21,10 +21,5 @@ namespace MRR.Controller
         {
             screenForegroundMask.texture = foregroundMaskTexture;
         }
-
-        public void SetScreenForegroundMask(Texture2D foregroundMaskTexture)
-        {
-            screenForegroundMask.texture = foregroundMaskTexture;
-        }
     }
 }

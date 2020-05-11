@@ -1,6 +1,5 @@
-﻿Shader "Custom/foregroundMask"
+﻿Shader "MixedRealityRecorder/foregroundMask"
 {
-
     SubShader
     {
         Tags { "RenderType"="Opaque" }
@@ -28,7 +27,7 @@
 
             sampler2D _DepthTex;
 			float4 _DepthTex_ST;
-			float2 _HmdScreenPos;
+			float _HmdDepth;
 
             v2f vert (appdata v)
             {
@@ -44,14 +43,10 @@
 				// get depth from depth texture
 				float depth = tex2D(_DepthTex, i.uv).r;
 
-				// linear depth between camera and far clipping plane
-				depth = 1 - Linear01Depth(depth);
-
-				if (depth > 0)
-					return fixed4(1.0f, 1.0f, 1.0f, 1);
+				if (depth > _HmdDepth - 0.00015f)
+					return fixed4(1.0f, 1.0f, 1.0f, 1.0f);
 				else
-					return fixed4(0.0f, 0.0f, 0.0f, 1);
-
+					return fixed4(0.0f, 0.0f, 0.0f, 1.0f);
             }
             ENDCG
         }
