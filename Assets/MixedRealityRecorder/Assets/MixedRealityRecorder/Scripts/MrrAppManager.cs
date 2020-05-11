@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using MRR.Settings;
 using MRR.Video;
+using System.Collections;
 
 namespace MRR.Controller
 {
@@ -25,6 +26,13 @@ namespace MRR.Controller
 
             foregroundMaskTexture = new RenderTexture(screenSize.x, screenSize.y, 0, RenderTextureFormat.ARGBHalf);
 
+            StartCoroutine(Init());
+        }
+
+        private IEnumerator Init()
+        {
+            yield return new WaitForSeconds(1.0f);
+
             // set foreground shader depth texture
             matForegroundMask.SetTexture("_DepthTex", virtualCamera.GetDepthTexture());
 
@@ -39,7 +47,6 @@ namespace MRR.Controller
             // all shader properties are already set in Initialize() method
             matForegroundMask.SetFloat("_HmdDepth", virtualCamera.GetHmdDepth());
             Graphics.Blit(virtualCamera.GetDepthTexture(), foregroundMaskTexture, matForegroundMask);
-
         }
 
         private void ApplyApplicationSettings()
