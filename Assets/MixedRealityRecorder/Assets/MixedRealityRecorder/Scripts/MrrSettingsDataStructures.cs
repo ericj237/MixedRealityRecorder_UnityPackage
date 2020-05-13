@@ -3,15 +3,17 @@
 
     public struct CameraSettings
     {
-
-        public float sensorWidth;
-        public float sensorHeight;
-
-        public int focalLenth;
-
-        public int sensorDynamic;
-
+        // in px
+        public int resolutionWidth, resolutionHeight;
+        // in fps
         public int framerate;
 
+        // in mm
+        public int sensorWidth, sensorHeight;
+        // in stops
+        public int dynamicRange;
+
+        // in mm
+        public int focalLenth;
     }
 }
