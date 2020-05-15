@@ -1,4 +1,4 @@
-﻿namespace MRR.Settings
+﻿namespace MRR.DataStructures
 {
 
     public struct CameraSettings
@@ -15,5 +15,12 @@
 
         // in mm
         public int focalLenth;
+    }
+
+    public enum Vector3Component
+    {
+        x,
+        y,
+        z
     }
 }

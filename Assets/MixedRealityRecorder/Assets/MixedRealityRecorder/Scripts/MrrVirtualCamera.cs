@@ -1,5 +1,5 @@
 ﻿using MRR.Controller;
-using MRR.Settings;
+using MRR.DataStructures;
 using UnityEngine;
 
 namespace MRR.Video
