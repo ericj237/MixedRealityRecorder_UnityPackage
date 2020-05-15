@@ -17,7 +17,6 @@ public class VRCameraOffset : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
         vrCameraTransform = this.gameObject.GetComponent<Transform>();
 
         vrCameraOffset = vrCameraTransform.position;
@@ -45,36 +44,27 @@ public class VRCameraOffset : MonoBehaviour
         submitEvent_vrCameraFov = new InputField.SubmitEvent();
         submitEvent_vrCameraFov.AddListener(setVRCameraOffsetZ);
         inputField_vrCameraFov.onEndEdit = submitEvent_vrCameraOffsetZ;
-
     }
 
     public void setVRCameraOffsetX(string x) 
     {
-
         vrCameraTransform.position = new Vector3(float.Parse(x), vrCameraTransform.position.y, vrCameraTransform.position.z);
-
     }
 
     public void setVRCameraOffsetY(string y) 
     {
-
         vrCameraTransform.position = new Vector3(vrCameraTransform.position.x, float.Parse(y), vrCameraTransform.position.z);
-
     }
 
     public void setVRCameraOffsetZ(string z) 
     {
-
         vrCameraTransform.position = new Vector3(vrCameraTransform.position.x, vrCameraTransform.position.y, float.Parse(z));
-
     }
 
     public void setVRCameraFov(string fov) 
     {
-
         vrCameraForeground.focalLength = float.Parse(fov);
         vrCameraBackground.focalLength = float.Parse(fov);
         vrCameraMask.focalLength = float.Parse(fov);
-
     }
 }

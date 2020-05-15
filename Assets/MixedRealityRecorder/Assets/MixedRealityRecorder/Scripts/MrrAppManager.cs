@@ -57,6 +57,60 @@ namespace MRR.Controller
             Application.targetFrameRate = (int)virtualCamera.GetCameraSettings().framerate;
         }
 
+        private void SetCameraResolutionWidth(int resolutionWidth)
+        {
+            CameraSettings cameraSettings = virtualCamera.GetCameraSettings();
+            cameraSettings.resolutionWidth = resolutionWidth;
+            virtualCamera.SetCameraSettings(cameraSettings);
+        }
+
+        private void SetCameraResolutionHeight(int resolutionHeight)
+        {
+            CameraSettings cameraSettings = virtualCamera.GetCameraSettings();
+            cameraSettings.resolutionWidth = resolutionHeight;
+            virtualCamera.SetCameraSettings(cameraSettings);
+        }
+
+        private void SetCameraFramerate(int framerate)
+        {
+            CameraSettings cameraSettings = virtualCamera.GetCameraSettings();
+            cameraSettings.framerate = framerate;
+            virtualCamera.SetCameraSettings(cameraSettings);
+        }
+
+        private void SetCameraFocalLength(int focalLength)
+        {
+            CameraSettings cameraSettings = virtualCamera.GetCameraSettings();
+            cameraSettings.focalLenth = focalLength;
+            virtualCamera.SetCameraSettings(cameraSettings);
+        }
+
+        private void SetCameraSensorHeight(int sensorHeight)
+        {
+            CameraSettings cameraSettings = virtualCamera.GetCameraSettings();
+            cameraSettings.sensorHeight = sensorHeight;
+            virtualCamera.SetCameraSettings(cameraSettings);
+        }
+
+        private void SetCameraSensorWidth(int sensorWidth)
+        {
+            CameraSettings cameraSettings = virtualCamera.GetCameraSettings();
+            cameraSettings.sensorHeight = sensorWidth;
+            virtualCamera.SetCameraSettings(cameraSettings);
+        }
+
+        private void SetCameraSensorDynamicRange(int stops)
+        {
+            CameraSettings cameraSettings = virtualCamera.GetCameraSettings();
+            cameraSettings.dynamicRange = stops;
+            virtualCamera.SetCameraSettings(cameraSettings);
+        }
+
+        public CameraSettings GetCameraSettings()
+        {
+            return virtualCamera.GetCameraSettings();
+        }
+
         public void SetSensorOffsetPosition(float value, Vector3Component component)
         {
             switch(component)

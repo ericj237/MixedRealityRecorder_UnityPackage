@@ -23,11 +23,23 @@ namespace MRR.Video
 
         private float hmdDepth;
 
+        private CameraSettings CreateDefaultCameraSettings()
+        {
+            CameraSettings cameraSettings = new CameraSettings();
+            cameraSettings.resolutionHeight = 1280;
+            cameraSettings.resolutionWidth = 720;
+            cameraSettings.framerate = 25;
+            cameraSettings.focalLenth = 40;
+            cameraSettings.sensorHeight = 3;
+            cameraSettings.sensorWidth = 4;
+            cameraSettings.dynamicRange = 8;
+            return cameraSettings;
+        }
+
         private void Start()
         {
             // create new camera settings and assign framerate
-            cameraSettings = new CameraSettings();
-            cameraSettings.framerate = 50;
+            cameraSettings = CreateDefaultCameraSettings();
 
             // screen size
             Vector2Int screenSize = new Vector2Int(1920, 1080);
@@ -62,6 +74,18 @@ namespace MRR.Video
         public CameraSettings GetCameraSettings()
         {
             return cameraSettings;
+        }
+
+        public void SetCameraSettings(CameraSettings cameraSettings)
+        {
+            this.cameraSettings = cameraSettings;
+
+            UpdateCameraSettings();
+        }
+
+        private void UpdateCameraSettings()
+        {
+
         }
 
         public Camera GetVirtualCamera()
