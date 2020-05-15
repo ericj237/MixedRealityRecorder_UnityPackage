@@ -53,35 +53,54 @@ namespace MRR.Controller
         public Text tAllocatedMemory;
 
         // Events
-        private InputField.SubmitEvent eventVirtualCameraOffsetPositionX = new InputField.SubmitEvent();
-        private InputField.SubmitEvent eventVirtualCameraOffsetPositionY = new InputField.SubmitEvent();
-        private InputField.SubmitEvent eventVirtualCameraOffsetPositionZ = new InputField.SubmitEvent();
+        private InputField.OnChangeEvent eventVirtualCameraOffsetPositionX = new InputField.OnChangeEvent();
+        private InputField.OnChangeEvent eventVirtualCameraOffsetPositionY = new InputField.OnChangeEvent();
+        private InputField.OnChangeEvent eventVirtualCameraOffsetPositionZ = new InputField.OnChangeEvent();
 
-        private InputField.SubmitEvent eventVirtualCameraOffsetRotationX = new InputField.SubmitEvent();
-        private InputField.SubmitEvent eventVirtualCameraOffsetRotationY = new InputField.SubmitEvent();
-        private InputField.SubmitEvent eventVirtualCameraOffsetRotationZ = new InputField.SubmitEvent();
+        private InputField.OnChangeEvent eventVirtualCameraOffsetRotationX = new InputField.OnChangeEvent();
+        private InputField.OnChangeEvent eventVirtualCameraOffsetRotationY = new InputField.OnChangeEvent();
+        private InputField.OnChangeEvent eventVirtualCameraOffsetRotationZ = new InputField.OnChangeEvent();
 
         private void Start()
         {
+            RegisterEventsSensorOffset();
+            InitInputFieldsSensorOffset();
+        }
+
+        private void InitInputFieldsSensorOffset()
+        {
+            Vector3 sensorOffsetPosition = appManager.GetSensorOffsetPosition();
+            iSensorOffsetPosition[0].SetTextWithoutNotify(sensorOffsetPosition.x.ToString());
+            iSensorOffsetPosition[1].SetTextWithoutNotify(sensorOffsetPosition.y.ToString());
+            iSensorOffsetPosition[2].SetTextWithoutNotify(sensorOffsetPosition.z.ToString());
+
+            Vector3 sensorOffsetRoation = appManager.GetSensorOffsetRotation();
+            iSensorOffsetRotation[0].SetTextWithoutNotify(sensorOffsetRoation.x.ToString());
+            iSensorOffsetRotation[1].SetTextWithoutNotify(sensorOffsetRoation.y.ToString());
+            iSensorOffsetRotation[2].SetTextWithoutNotify(sensorOffsetRoation.z.ToString());
+        }
+
+        private void RegisterEventsSensorOffset()
+        {
             // events offset position
             eventVirtualCameraOffsetPositionX.AddListener(SetSensorOffsetPositionX);
-            iSensorOffsetPosition[0].onEndEdit = eventVirtualCameraOffsetPositionX;
+            iSensorOffsetPosition[0].onValueChanged = eventVirtualCameraOffsetPositionX;
 
             eventVirtualCameraOffsetPositionY.AddListener(SetSensorOffsetPositionY);
-            iSensorOffsetPosition[1].onEndEdit = eventVirtualCameraOffsetPositionY;
+            iSensorOffsetPosition[1].onValueChanged = eventVirtualCameraOffsetPositionY;
 
             eventVirtualCameraOffsetPositionZ.AddListener(SetSensorOffsetPositionZ);
-            iSensorOffsetPosition[2].onEndEdit = eventVirtualCameraOffsetPositionZ;
+            iSensorOffsetPosition[2].onValueChanged = eventVirtualCameraOffsetPositionZ;
 
             // events offset rotation
             eventVirtualCameraOffsetRotationX.AddListener(SetSensorOffsetRotationX);
-            iSensorOffsetRotation[0].onEndEdit = eventVirtualCameraOffsetRotationX;
+            iSensorOffsetRotation[0].onValueChanged = eventVirtualCameraOffsetRotationX;
 
             eventVirtualCameraOffsetRotationY.AddListener(SetSensorOffsetRotationY);
-            iSensorOffsetRotation[1].onEndEdit = eventVirtualCameraOffsetRotationY;
+            iSensorOffsetRotation[1].onValueChanged = eventVirtualCameraOffsetRotationY;
 
             eventVirtualCameraOffsetRotationZ.AddListener(SetSensorOffsetRotationZ);
-            iSensorOffsetRotation[2].onEndEdit = eventVirtualCameraOffsetRotationZ;
+            iSensorOffsetRotation[2].onValueChanged = eventVirtualCameraOffsetRotationZ;
         }
 
         private void SetSensorOffsetPositionX(string x)

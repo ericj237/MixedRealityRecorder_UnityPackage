@@ -75,6 +75,11 @@ namespace MRR.Controller
             }
         }
 
+        public Vector3 GetSensorOffsetPosition()
+        {
+            return virtualCamera.transform.localPosition;
+        }
+
         public void SetSensorOffsetRotation(float value, Vector3Component component)
         {
             switch (component)
@@ -91,6 +96,11 @@ namespace MRR.Controller
                 default:
                     break;
             }
+        }
+
+        public Vector3 GetSensorOffsetRotation()
+        {
+            return virtualCamera.transform.localEulerAngles;
         }
     }
 }
