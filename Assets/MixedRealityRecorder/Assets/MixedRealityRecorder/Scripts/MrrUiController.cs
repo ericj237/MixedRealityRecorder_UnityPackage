@@ -11,6 +11,8 @@ namespace MRR.Controller
 
         public RawImage screenVirtualCamera;
         public RawImage screenForegroundMask;
+        public RawImage screenPhysicalCamera;
+        public RawImage screenOptional;
 
         public void SetScreenVirtualCamera(RenderTexture colorTexture)
         {
