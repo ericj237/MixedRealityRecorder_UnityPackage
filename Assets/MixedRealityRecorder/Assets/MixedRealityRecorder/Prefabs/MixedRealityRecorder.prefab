@@ -1301,7 +1301,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Option A
+  m_Text: Desktop
 --- !u!1 &430685196717014696
 GameObject:
   m_ObjectHideFlags: 0
@@ -1647,9 +1647,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2386843674424373682}
-  - component: {fileID: 7742372038242531299}
+  - component: {fileID: 6701903564010593674}
   m_Layer: 0
-  m_Name: $uiController
+  m_Name: $uiView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1669,7 +1669,7 @@ Transform:
   m_Father: {fileID: 7917043588134940520}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7742372038242531299
+--- !u!114 &6701903564010593674
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1678,10 +1678,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 560626513256113159}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 474c3da6de5fe1c4c8130b524b5691ae, type: 3}
+  m_Script: {fileID: 11500000, guid: a20ec6866261bca4eba34741ea1c1657, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  appManager: {fileID: 2463952265447027494}
+  appController: {fileID: 904347279075937804}
   screenVirtualCamera: {fileID: 1963696357}
   screenForegroundMask: {fileID: 1180021730}
   screenPhysicalCamera: {fileID: 936241318}
@@ -2356,11 +2356,7 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
-    - m_Text: Option A
-      m_Image: {fileID: 0}
-    - m_Text: Option B
-      m_Image: {fileID: 0}
-    - m_Text: Option C
+    - m_Text: H.264
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3796,11 +3792,9 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
-    - m_Text: Option A
+    - m_Text: Desktop
       m_Image: {fileID: 0}
-    - m_Text: Option B
-      m_Image: {fileID: 0}
-    - m_Text: Option C
+    - m_Text: Project Root
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -5049,7 +5043,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Option A
+  m_Text: H.264
 --- !u!1 &2238911602169478880
 GameObject:
   m_ObjectHideFlags: 0
@@ -9098,7 +9092,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -11950,7 +11944,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6148841860107912218}
   - component: {fileID: 6148841860107912221}
-  - component: {fileID: 3885660899844517695}
+  - component: {fileID: 3084823666005829763}
   m_Layer: 0
   m_Name: cam_virtual
   m_TagString: MainCamera
@@ -11965,7 +11959,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6148841860107912223}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -12015,7 +12009,7 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!114 &3885660899844517695
+--- !u!114 &3084823666005829763
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -12024,11 +12018,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6148841860107912223}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c80f78602762204fbd51dc223f98210, type: 3}
+  m_Script: {fileID: 11500000, guid: 5d06b393201e5eb4ba2eab14236bd15f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   matDepthTexture: {fileID: 2100000, guid: 65d78336d94d99f4687f242fdf5f3092, type: 2}
-  appManager: {fileID: 2463952265447027494}
+  appController: {fileID: 904347279075937804}
   foregroundTarget: {fileID: 0}
 --- !u!1 &6148841860617510640
 GameObject:
@@ -12831,9 +12825,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1423056749122093380}
-  - component: {fileID: 2463952265447027494}
+  - component: {fileID: 904347279075937804}
   m_Layer: 0
-  m_Name: $appManager
+  m_Name: $appController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12853,7 +12847,7 @@ Transform:
   m_Father: {fileID: 6148841860617510641}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2463952265447027494
+--- !u!114 &904347279075937804
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -12862,11 +12856,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 6681230324396378224}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b27dfcd6bb9335408754573edec7994, type: 3}
+  m_Script: {fileID: 11500000, guid: 8c0037ec15d98a544bd072a341667755, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiController: {fileID: 7742372038242531299}
-  virtualCamera: {fileID: 3885660899844517695}
+  uiView: {fileID: 6701903564010593674}
+  virtualCamera: {fileID: 3084823666005829763}
+  cameraPresets:
+  - {fileID: 11400000, guid: ee1b237ceed1fd440b4a5f72edf83e8b, type: 2}
   matForegroundMask: {fileID: 2100000, guid: 39e54473b0e74214d804fe360cd2c86a, type: 2}
 --- !u!1 &6697903725941223795
 GameObject:

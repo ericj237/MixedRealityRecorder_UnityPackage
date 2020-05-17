@@ -1,11 +1,10 @@
 ﻿using MRR.Controller;
-using MRR.DataStructures;
 using UnityEngine;
 
-namespace MRR.Video
+namespace MRR.Model
 {
 
-    public class MrrVirtualCamera : MonoBehaviour
+    public class MrrVirtualCameraModel : MonoBehaviour
     {
 
         private Camera virtualCamera;
@@ -18,7 +17,7 @@ namespace MRR.Video
 
         public Material matDepthTexture;
 
-        public MrrAppManager appManager;
+        public MrrAppController appController;
         public Transform foregroundTarget;
 
         private float hmdDepth;
@@ -122,7 +121,7 @@ namespace MRR.Video
             //else
             //    matForegroundMask.SetVector("_HmdPos", new Vector2(-1.0f, -1.0f));
 
-            appManager.UpdateForegroundMask();
+            appController.UpdateForegroundMask();
         }
     }
 }

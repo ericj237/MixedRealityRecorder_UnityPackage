@@ -1,15 +1,17 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using MRR.DataStructures;
+using MRR.Model;
+using MRR.Controller;
 using System.Collections;
+using System.Collections.Generic;
 
-namespace MRR.Controller
+namespace MRR.View
 {
 
-    public class MrrUiController : MonoBehaviour
+    public class MrrUiView : MonoBehaviour
     {
 
-        public MrrAppManager appManager;
+        public MrrAppController appController;
 
         [Header("Screens")]
         public RawImage screenVirtualCamera;
@@ -71,8 +73,22 @@ namespace MRR.Controller
         private IEnumerator Init()
         {
             yield return new WaitForSeconds(1.0f);
-
+            SetCameraPresets();
             UpdateValues();
+        }
+
+        private void SetCameraPresets()
+        {
+            dCameraPresetDevice.ClearOptions();
+
+            List<CameraPreset> cameraPresets = appController.GetCameraPresets();
+
+            List<Dropdown.OptionData> optionData = new List<Dropdown.OptionData>();
+
+            foreach (CameraPreset cameraPreset in cameraPresets)
+                optionData.Add(new Dropdown.OptionData(cameraPreset.presetName));
+
+            dCameraPresetDevice.AddOptions(optionData);
         }
 
         private void UpdateValues()
@@ -91,42 +107,42 @@ namespace MRR.Controller
 
         private void UpdateCameraResolutionHeight()
         {
-            iCameraResolution[1].SetTextWithoutNotify(appManager.GetCameraSettings().resolutionHeight.ToString());
+            iCameraResolution[1].SetTextWithoutNotify(appController.GetCameraSettings().resolutionHeight.ToString());
         }
 
         private void UpdateCameraResolutionWidth()
         {
-            iCameraResolution[0].SetTextWithoutNotify(appManager.GetCameraSettings().resolutionWidth.ToString());
+            iCameraResolution[0].SetTextWithoutNotify(appController.GetCameraSettings().resolutionWidth.ToString());
         }
 
         private void UpdateCameraFramerate()
         {
-            iCameraFramerate.SetTextWithoutNotify(appManager.GetCameraSettings().framerate.ToString());
+            iCameraFramerate.SetTextWithoutNotify(appController.GetCameraSettings().framerate.ToString());
         }
 
         private void UpdateCameraFocalLength()
         {
-            iCameraFocalLenth.SetTextWithoutNotify(appManager.GetCameraSettings().focalLenth.ToString());
+            iCameraFocalLenth.SetTextWithoutNotify(appController.GetCameraSettings().focalLenth.ToString());
         }
 
         private void UpdateSensorHeight()
         {
-            iSensorSize[0].SetTextWithoutNotify(appManager.GetCameraSettings().sensorHeight.ToString());
+            iSensorSize[0].SetTextWithoutNotify(appController.GetCameraSettings().sensorHeight.ToString());
         }
 
         private void UpdateSensorWidth()
         {
-            iSensorSize[1].SetTextWithoutNotify(appManager.GetCameraSettings().sensorWidth.ToString());
+            iSensorSize[1].SetTextWithoutNotify(appController.GetCameraSettings().sensorWidth.ToString());
         }
 
         private void UpdateSensorDynamicRange()
         {
-            iSensorDynamicRange.SetTextWithoutNotify(appManager.GetCameraSettings().dynamicRange.ToString());
+            iSensorDynamicRange.SetTextWithoutNotify(appController.GetCameraSettings().dynamicRange.ToString());
         }
 
         private void UpdateSensorOffsetPosition()
         {
-            Vector3 sensorOffsetPosition = appManager.GetSensorOffsetPosition();
+            Vector3 sensorOffsetPosition = appController.GetSensorOffsetPosition();
             iSensorOffsetPosition[0].SetTextWithoutNotify(sensorOffsetPosition.x.ToString());
             iSensorOffsetPosition[1].SetTextWithoutNotify(sensorOffsetPosition.y.ToString());
             iSensorOffsetPosition[2].SetTextWithoutNotify(sensorOffsetPosition.z.ToString());
@@ -134,7 +150,7 @@ namespace MRR.Controller
 
         private void UpdateSensorOffsetRotation()
         {
-            Vector3 sensorOffsetRoation = appManager.GetSensorOffsetRotation();
+            Vector3 sensorOffsetRoation = appController.GetSensorOffsetRotation();
             iSensorOffsetRotation[0].SetTextWithoutNotify(sensorOffsetRoation.x.ToString());
             iSensorOffsetRotation[1].SetTextWithoutNotify(sensorOffsetRoation.y.ToString());
             iSensorOffsetRotation[2].SetTextWithoutNotify(sensorOffsetRoation.z.ToString());
@@ -170,35 +186,50 @@ namespace MRR.Controller
 
         private void SetSensorOffsetPositionX(string x)
         {
-            appManager.SetSensorOffsetPosition(float.Parse(x), Vector3Component.x);
+            appController.SetSensorOffsetPosition(float.Parse(x), Vector3Component.x);
         }
 
         private void SetSensorOffsetPositionY(string y)
         {
-            appManager.SetSensorOffsetPosition(float.Parse(y), Vector3Component.y);
+            appController.SetSensorOffsetPosition(float.Parse(y), Vector3Component.y);
         }
 
         private void SetSensorOffsetPositionZ(string z)
         {
-            appManager.SetSensorOffsetPosition(float.Parse(z), Vector3Component.z);
+            appController.SetSensorOffsetPosition(float.Parse(z), Vector3Component.z);
         }
 
         private void SetSensorOffsetRotationX(string x)
         {
-            appManager.SetSensorOffsetRotation(float.Parse(x), Vector3Component.x);
+            appController.SetSensorOffsetRotation(float.Parse(x), Vector3Component.x);
             UpdateSensorOffsetRotation();
         }
 
         private void SetSensorOffsetRotationY(string y)
         {
-            appManager.SetSensorOffsetRotation(float.Parse(y), Vector3Component.y);
+            appController.SetSensorOffsetRotation(float.Parse(y), Vector3Component.y);
             UpdateSensorOffsetRotation();
         }
 
         private void SetSensorOffsetRotationZ(string z)
         {
-            appManager.SetSensorOffsetRotation(float.Parse(z), Vector3Component.z);
+            appController.SetSensorOffsetRotation(float.Parse(z), Vector3Component.z);
             UpdateSensorOffsetRotation();
+        }
+
+        public void SetScreenPhysicalCamera(RenderTexture physicalCameraTexture)
+        {
+            screenPhysicalCamera.texture = physicalCameraTexture;
+        }
+
+        public void SetScreenPhysicalCamera(WebCamTexture rawPhysicalCameraTexture)
+        {
+            screenPhysicalCamera.texture = rawPhysicalCameraTexture;
+        }
+
+        public void SetScreenPhysicalCamera(Texture2D physicalCameraTexture)
+        {
+            screenPhysicalCamera.texture = physicalCameraTexture;
         }
 
         public void SetScreenVirtualCamera(RenderTexture colorTexture)

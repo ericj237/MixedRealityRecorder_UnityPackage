@@ -1,6 +1,8 @@
-﻿namespace MRR.DataStructures
-{
+﻿using UnityEngine;
 
+namespace MRR.Model
+{
+    [System.Serializable]
     public struct CameraSettings
     {
         // in px
@@ -22,5 +24,12 @@
         x,
         y,
         z
+    }
+
+    [CreateAssetMenu(fileName = "CameraPreset", menuName = "MixedRealityRecorder/CameraPreset", order = 1)]
+    public class CameraPreset : ScriptableObject
+    {
+        public string presetName;
+        public CameraSettings cameraSettings;
     }
 }

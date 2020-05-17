@@ -1,20 +1,30 @@
 ﻿using UnityEngine;
-using MRR.DataStructures;
+using MRR.Model;
+using MRR.View;
 using MRR.Video;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace MRR.Controller
 {
 
-    public class MrrAppManager : MonoBehaviour
+    public class MrrAppController : MonoBehaviour
     {
 
-        public MrrUiController uiController;
+        public MrrUiView uiView;
 
-        public MrrVirtualCamera virtualCamera;
+        public MrrVirtualCameraModel virtualCamera;
+
+        public List<CameraPreset> cameraPresets = new List<CameraPreset>();
 
         public Material matForegroundMask;
         private RenderTexture foregroundMaskTexture;
+        private WebCamTexture rawPhysicalCameraTexture;
+
+        public List<CameraPreset> GetCameraPresets()
+        {
+            return cameraPresets;
+        }
 
         void Start()
         {
@@ -25,6 +35,7 @@ namespace MRR.Controller
             Vector2Int screenSize = new Vector2Int(1920, 1080);
 
             foregroundMaskTexture = new RenderTexture(screenSize.x, screenSize.y, 0, RenderTextureFormat.ARGBHalf);
+            rawPhysicalCameraTexture = new WebCamTexture();
 
             StartCoroutine(Init());
         }
@@ -33,12 +44,17 @@ namespace MRR.Controller
         {
             yield return new WaitForSeconds(1.0f);
 
+            virtualCamera.SetCameraSettings(cameraPresets[0].cameraSettings);
+
             // set foreground shader depth texture
             matForegroundMask.SetTexture("_DepthTex", virtualCamera.GetDepthTexture());
 
+            rawPhysicalCameraTexture.Play();
+
             // assign the textures to the ui raw image component
-            uiController.SetScreenVirtualCamera(virtualCamera.GetColorTexture());
-            uiController.SetScreenForegroundMask(foregroundMaskTexture);
+            uiView.SetScreenVirtualCamera(virtualCamera.GetColorTexture());
+            uiView.SetScreenForegroundMask(foregroundMaskTexture);
+            uiView.SetScreenPhysicalCamera(rawPhysicalCameraTexture);
         }
 
         public void UpdateForegroundMask()
@@ -109,6 +125,11 @@ namespace MRR.Controller
         public CameraSettings GetCameraSettings()
         {
             return virtualCamera.GetCameraSettings();
+        }
+
+        public void SetCameraSettings(CameraSettings cameraSettings)
+        {
+            virtualCamera.SetCameraSettings(cameraSettings);
         }
 
         public void SetSensorOffsetPosition(float value, Vector3Component component)
