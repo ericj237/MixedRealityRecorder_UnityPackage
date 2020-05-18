@@ -32,7 +32,7 @@ namespace MRR.Controller
 
             // create render textures
             colorTexture = new RenderTexture(screenSize.x, screenSize.y, 0, RenderTextureFormat.RGB565);
-            rawDepthTexture = new RenderTexture(screenSize.x, screenSize.y, 24, RenderTextureFormat.Depth);
+            rawDepthTexture = new RenderTexture(screenSize.x, screenSize.y, 16, RenderTextureFormat.Depth);
             depthTexture = new RenderTexture(screenSize.x, screenSize.y, 0, RenderTextureFormat.ARGBHalf);
             depthTexture2D = new Texture2D(1, 1, TextureFormat.RGBAHalf, false);
 
@@ -113,18 +113,18 @@ namespace MRR.Controller
                 {
                     if (hit.collider.gameObject.name == foregroundTarget.name)
                     {
-                        Debug.DrawRay(origin, direction * hit.distance, Color.green);
+                        //Debug.DrawRay(origin, direction * hit.distance, Color.green);
                         hmdDepth = depthTexture2D.GetPixel(1, 1).r;
                         return;
                     }
-                    else
-                    {
-                        Debug.DrawRay(origin, direction * hit.distance, Color.red);
-                    }
+                    //else
+                    //{
+                    //    Debug.DrawRay(origin, direction * hit.distance, Color.red);
+                    //}
                 }
             }
 
-            hmdDepth = 0.0f;
+            //hmdDepth = 0.0f;
         }
     }
 }
