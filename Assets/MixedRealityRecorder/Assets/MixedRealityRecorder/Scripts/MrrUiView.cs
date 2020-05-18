@@ -73,6 +73,8 @@ namespace MRR.View
         private IEnumerator Init()
         {
             yield return new WaitForSeconds(1.0f);
+            SetPhysicalCameraInputSources();
+            SetOptionalScreenInputSources();
             SetCameraPresets();
             UpdateValues();
         }
@@ -85,16 +87,50 @@ namespace MRR.View
 
             List<Dropdown.OptionData> optionData = new List<Dropdown.OptionData>();
 
-            foreach (CameraPreset cameraPreset in cameraPresets)
-                optionData.Add(new Dropdown.OptionData(cameraPreset.presetName));
+            foreach (CameraPreset device in cameraPresets)
+                optionData.Add(new Dropdown.OptionData(device.presetName));
 
             dCameraPresetDevice.AddOptions(optionData);
         }
 
+        private void SetPhysicalCameraInputSources()
+        {
+            dPhysicalCameraInputSource.ClearOptions();
+
+            WebCamDevice[] webCamDevices = appController.GetWebCamDevices();
+
+            List<Dropdown.OptionData> optionData = new List<Dropdown.OptionData>();
+
+            foreach (WebCamDevice source in webCamDevices)
+                optionData.Add(new Dropdown.OptionData(source.name));
+
+            dPhysicalCameraInputSource.AddOptions(optionData);
+        }
+
+        private void SetOptionalScreenInputSources()
+        {
+            dOptionalScreenInputSource.ClearOptions();
+
+            WebCamDevice[] webCamDevices = appController.GetWebCamDevices();
+
+            List<Dropdown.OptionData> optionData = new List<Dropdown.OptionData>();
+
+            optionData.Add(new Dropdown.OptionData("None"));
+            //optionData.Add(new Dropdown.OptionData("Composite"));
+
+            foreach (WebCamDevice source in webCamDevices)
+            {
+                if (source.name != dPhysicalCameraInputSource.captionText.text)
+                    optionData.Add(new Dropdown.OptionData(source.name));
+            }
+
+            dOptionalScreenInputSource.AddOptions(optionData);            
+        }
+
         private void UpdateValues()
         {
-            UpdateCameraResolutionHeight();
             UpdateCameraResolutionWidth();
+            UpdateCameraResolutionHeight();
             UpdateCameraFramerate();
             UpdateCameraFocalLength();
             UpdateSensorHeight();
@@ -103,16 +139,26 @@ namespace MRR.View
 
             UpdateSensorOffsetPosition();
             UpdateSensorOffsetRotation();
-        }
 
-        private void UpdateCameraResolutionHeight()
-        {
-            iCameraResolution[1].SetTextWithoutNotify(appController.GetCameraSettings().resolutionHeight.ToString());
+            CameraSettings currCameraSettings = appController.GetCameraSettings();
+
+            SetFooterResolutionWidth(currCameraSettings.resolutionWidth);
+            SetFooterResolutionHeight(currCameraSettings.resolutionHeight);
+            SetFooterFramerate(currCameraSettings.framerate);
+            SetFooterContainer(Container.MP4);
+            SetFooterCodec(Codec.H246);
+            //SetFooterFrameTime();
+            //SetFooterAllocatedMemory();
         }
 
         private void UpdateCameraResolutionWidth()
         {
             iCameraResolution[0].SetTextWithoutNotify(appController.GetCameraSettings().resolutionWidth.ToString());
+        }
+
+        private void UpdateCameraResolutionHeight()
+        {
+            iCameraResolution[1].SetTextWithoutNotify(appController.GetCameraSettings().resolutionHeight.ToString());
         }
 
         private void UpdateCameraFramerate()
@@ -154,6 +200,55 @@ namespace MRR.View
             iSensorOffsetRotation[0].SetTextWithoutNotify(sensorOffsetRoation.x.ToString());
             iSensorOffsetRotation[1].SetTextWithoutNotify(sensorOffsetRoation.y.ToString());
             iSensorOffsetRotation[2].SetTextWithoutNotify(sensorOffsetRoation.z.ToString());
+        }
+
+        private void SetFooterResolutionWidth(int resolutionWidth)
+        {
+            tCameraResolution[0].text = resolutionWidth.ToString();
+        }
+
+        private void SetFooterResolutionHeight(int resolutionHeight)
+        {
+            tCameraResolution[1].text = resolutionHeight.ToString();
+        }
+
+        private void SetFooterFramerate(int framerate)
+        {
+            tCameraFramerate.text = framerate.ToString();
+        }
+
+        private void SetFooterContainer(Container container)
+        {
+            switch(container)
+            {
+                case Container.MP4:
+                    tOutputContainer.text = "MP4";
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void SetFooterCodec(Codec codec)
+        {
+            switch (codec)
+            {
+                case Codec.H246:
+                    tOutputCodec.text = "H.246";
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void SetFooterFrameTime(int frameTime)
+        {
+            tFrameRecordTime.text = frameTime.ToString();
+        }
+
+        private void SetFooterAllocatedMemory(int memory)
+        {
+            tAllocatedMemory.text = memory.ToString();
         }
 
         private void RegisterEvents()

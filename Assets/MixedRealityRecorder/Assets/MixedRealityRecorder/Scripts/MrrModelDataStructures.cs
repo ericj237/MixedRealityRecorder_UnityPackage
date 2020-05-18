@@ -32,4 +32,14 @@ namespace MRR.Model
         public string presetName;
         public CameraSettings cameraSettings;
     }
+
+    public enum Container
+    {
+        MP4
+    }
+
+    public enum Codec
+    {
+        H246
+    }
 }

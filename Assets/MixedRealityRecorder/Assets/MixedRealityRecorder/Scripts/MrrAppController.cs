@@ -13,7 +13,7 @@ namespace MRR.Controller
 
         public MrrUiView uiView;
 
-        public MrrVirtualCameraModel virtualCamera;
+        public MrrVirtualCameraController virtualCamera;
 
         public List<CameraPreset> cameraPresets = new List<CameraPreset>();
 
@@ -21,15 +21,37 @@ namespace MRR.Controller
         private RenderTexture foregroundMaskTexture;
         private WebCamTexture rawPhysicalCameraTexture;
 
+        private WebCamDevice[] webCamDevices;
+
+        private void RunCycle()
+        {
+            virtualCamera.Render();
+            UpdateForegroundMask();
+        }
+
         public List<CameraPreset> GetCameraPresets()
         {
             return cameraPresets;
+        }
+
+        public WebCamDevice[] GetWebCamDevices()
+        {
+            return webCamDevices;
+        }
+
+        private void CacheWebcamDevices()
+        {
+            webCamDevices = WebCamTexture.devices;
         }
 
         void Start()
         {
             // TMP
             //ApplyApplicationSettings();
+
+            virtualCamera.SetCameraSettings(cameraPresets[0].cameraSettings);
+
+            CacheWebcamDevices();
 
             // screen size
             Vector2Int screenSize = new Vector2Int(1920, 1080);
@@ -44,8 +66,6 @@ namespace MRR.Controller
         {
             yield return new WaitForSeconds(1.0f);
 
-            virtualCamera.SetCameraSettings(cameraPresets[0].cameraSettings);
-
             // set foreground shader depth texture
             matForegroundMask.SetTexture("_DepthTex", virtualCamera.GetDepthTexture());
 
@@ -55,6 +75,8 @@ namespace MRR.Controller
             uiView.SetScreenVirtualCamera(virtualCamera.GetColorTexture());
             uiView.SetScreenForegroundMask(foregroundMaskTexture);
             uiView.SetScreenPhysicalCamera(rawPhysicalCameraTexture);
+
+            InvokeRepeating("RunCycle", 0.0f, ((float)1 / virtualCamera.GetCameraSettings().framerate));
         }
 
         public void UpdateForegroundMask()

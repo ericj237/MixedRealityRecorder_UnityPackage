@@ -1301,7 +1301,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Desktop
+  m_Text: Videos Folder
 --- !u!1 &430685196717014696
 GameObject:
   m_ObjectHideFlags: 0
@@ -3665,7 +3665,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 20
+  m_Text: 0000
 --- !u!1 &1335886125825786593
 GameObject:
   m_ObjectHideFlags: 0
@@ -3792,6 +3792,8 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
+    - m_Text: Videos Folder
+      m_Image: {fileID: 0}
     - m_Text: Desktop
       m_Image: {fileID: 0}
     - m_Text: Project Root
@@ -5445,9 +5447,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '3840
-
-'
+  m_Text: 0000
 --- !u!1 &2477107723600606616
 GameObject:
   m_ObjectHideFlags: 0
@@ -7281,9 +7281,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '20
-
-'
+  m_Text: 000
 --- !u!1 &3268920695847655127
 GameObject:
   m_ObjectHideFlags: 0
@@ -7715,7 +7713,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: MP4
+  m_Text: XXX
 --- !u!1 &3369340538783747189
 GameObject:
   m_ObjectHideFlags: 0
@@ -9285,7 +9283,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 2160
+  m_Text: 0000
 --- !u!1 &4039206684032352061
 GameObject:
   m_ObjectHideFlags: 0
@@ -11944,7 +11942,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6148841860107912218}
   - component: {fileID: 6148841860107912221}
-  - component: {fileID: 3084823666005829763}
+  - component: {fileID: 1635771267612320462}
   m_Layer: 0
   m_Name: cam_virtual
   m_TagString: MainCamera
@@ -11974,7 +11972,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6148841860107912223}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_ClearFlags: 2
   m_BackGroundColor: {r: 0.25, g: 0.25, b: 0.25, a: 0}
@@ -12010,7 +12008,7 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!114 &3084823666005829763
+--- !u!114 &1635771267612320462
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -12861,7 +12859,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiView: {fileID: 6701903564010593674}
-  virtualCamera: {fileID: 3084823666005829763}
+  virtualCamera: {fileID: 1635771267612320462}
   cameraPresets:
   - {fileID: 11400000, guid: ee1b237ceed1fd440b4a5f72edf83e8b, type: 2}
   matForegroundMask: {fileID: 2100000, guid: 39e54473b0e74214d804fe360cd2c86a, type: 2}
@@ -14390,7 +14388,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 50
+  m_Text: 000
 --- !u!1 &7967291886129756742
 GameObject:
   m_ObjectHideFlags: 0
@@ -15611,7 +15609,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'H.264
+  m_Text: 'XXXXX
 
 '
 --- !u!1 &8647413941689224896

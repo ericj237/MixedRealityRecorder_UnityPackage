@@ -1,14 +1,14 @@
-﻿using MRR.Controller;
+﻿using MRR.Model;
 using UnityEngine;
 
-namespace MRR.Model
+namespace MRR.Controller
 {
 
-    public class MrrVirtualCameraModel : MonoBehaviour
+    public class MrrVirtualCameraController : MonoBehaviour
     {
 
         private Camera virtualCamera;
-        private CameraSettings cameraSettings;
+        private CameraSettings cameraSettings = new CameraSettings();
 
         private RenderTexture colorTexture;
         private RenderTexture rawDepthTexture;
@@ -22,23 +22,10 @@ namespace MRR.Model
 
         private float hmdDepth;
 
-        private CameraSettings CreateDefaultCameraSettings()
-        {
-            CameraSettings cameraSettings = new CameraSettings();
-            cameraSettings.resolutionHeight = 1280;
-            cameraSettings.resolutionWidth = 720;
-            cameraSettings.framerate = 25;
-            cameraSettings.focalLenth = 40;
-            cameraSettings.sensorHeight = 3;
-            cameraSettings.sensorWidth = 4;
-            cameraSettings.dynamicRange = 8;
-            return cameraSettings;
-        }
-
         private void Start()
         {
             // create new camera settings and assign framerate
-            cameraSettings = CreateDefaultCameraSettings();
+            // cameraSettings = CreateDefaultCameraSettings();
 
             // screen size
             Vector2Int screenSize = new Vector2Int(1920, 1080);
@@ -79,12 +66,13 @@ namespace MRR.Model
         {
             this.cameraSettings = cameraSettings;
 
-            UpdateCameraSettings();
+            //UpdateCameraSettings();
         }
 
         private void UpdateCameraSettings()
         {
-
+            virtualCamera.focalLength = cameraSettings.focalLenth;
+            virtualCamera.sensorSize = new Vector2(cameraSettings.sensorWidth, cameraSettings.sensorHeight);
         }
 
         public Camera GetVirtualCamera()
@@ -97,8 +85,9 @@ namespace MRR.Model
             return hmdDepth;
         }
 
-        private void OnPostRender()
+        public void Render()
         {
+            virtualCamera.Render();
 
             Graphics.Blit(rawDepthTexture, depthTexture, matDepthTexture);
 
@@ -112,16 +101,30 @@ namespace MRR.Model
 
             RenderTexture.active = null;
 
-            hmdDepth = depthTexture2D.GetPixel((int)targetScreenPosition.x, (int)targetScreenPosition.y).r;
-
             //Debug.Log("HDM Depth = " + hmdDepth);
 
-            //if(targetScreenPosition.x >= 0 && targetScreenPosition.x <= 1920 && targetScreenPosition.y >= 0 && targetScreenPosition.y <= 1080)
-            //    matForegroundMask.SetVector("_HmdPos", targetScreenPosition);
-            //else
-            //    matForegroundMask.SetVector("_HmdPos", new Vector2(-1.0f, -1.0f));
+            if (targetScreenPosition.x >= 0 && targetScreenPosition.x <= 1920 && targetScreenPosition.y >= 0 && targetScreenPosition.y <= 1080)
+            {
+                Vector3 origin = transform.position + transform.forward * virtualCamera.nearClipPlane;
+                Vector3 direction = Vector3.Normalize(foregroundTarget.transform.position - origin);
 
-            appController.UpdateForegroundMask();
+                RaycastHit hit;
+                if (Physics.Raycast(origin, direction, out hit, virtualCamera.farClipPlane))
+                {
+                    if (hit.collider.gameObject.name == foregroundTarget.name)
+                    {
+                        Debug.DrawRay(origin, direction * hit.distance, Color.green);
+                        hmdDepth = depthTexture2D.GetPixel((int)targetScreenPosition.x, (int)targetScreenPosition.y).r;
+                        return;
+                    }
+                    else
+                    {
+                        Debug.DrawRay(origin, direction * hit.distance, Color.red);
+                    }
+                }
+            }
+
+            hmdDepth = 0.0f;
         }
     }
 }

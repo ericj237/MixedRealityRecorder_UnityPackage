@@ -19,5 +19,5 @@ MonoBehaviour:
     framerate: 25
     sensorWidth: 3
     sensorHeight: 4
-    dynamicRange: 666
-    focalLenth: 40
+    dynamicRange: 8
+    focalLenth: 6

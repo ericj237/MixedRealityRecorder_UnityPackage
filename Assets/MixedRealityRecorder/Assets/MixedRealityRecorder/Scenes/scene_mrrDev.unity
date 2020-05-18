@@ -287,6 +287,7 @@ GameObject:
   - component: {fileID: 1380493193}
   - component: {fileID: 1380493195}
   - component: {fileID: 1380493194}
+  - component: {fileID: 1380493196}
   m_Layer: 0
   m_Name: mesh_sphere
   m_TagString: Untagged
@@ -353,6 +354,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1380493192}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!135 &1380493196
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1380493192}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1486008199
 GameObject:
   m_ObjectHideFlags: 0
@@ -364,6 +378,7 @@ GameObject:
   - component: {fileID: 1486008200}
   - component: {fileID: 1486008202}
   - component: {fileID: 1486008201}
+  - component: {fileID: 1486008203}
   m_Layer: 0
   m_Name: mesh_cylinder
   m_TagString: Untagged
@@ -430,6 +445,20 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1486008199}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!64 &1486008203
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1486008199}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1692758136
 GameObject:
   m_ObjectHideFlags: 0
@@ -441,6 +470,7 @@ GameObject:
   - component: {fileID: 1692758137}
   - component: {fileID: 1692758139}
   - component: {fileID: 1692758138}
+  - component: {fileID: 1692758140}
   m_Layer: 0
   m_Name: mesh_debugForegroundTarget
   m_TagString: Untagged
@@ -507,6 +537,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1692758136}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!135 &1692758140
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1692758136}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1966014725
 GameObject:
   m_ObjectHideFlags: 0
@@ -595,6 +638,7 @@ GameObject:
   - component: {fileID: 2051788228}
   - component: {fileID: 2051788230}
   - component: {fileID: 2051788229}
+  - component: {fileID: 2051788231}
   m_Layer: 0
   m_Name: mesh_cube
   m_TagString: Untagged
@@ -661,6 +705,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2051788227}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!65 &2051788231
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2051788227}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &6148841861028112750
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -673,6 +730,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: MixedRealityRecorder
       objectReference: {fileID: 0}
+    - target: {fileID: 1635771267612320462, guid: 3d832f69edbe6b7498c6be0963342e51,
+        type: 3}
+      propertyPath: foregroundTarget
+      value: 
+      objectReference: {fileID: 1692758137}
     - target: {fileID: 6148841860617510641, guid: 3d832f69edbe6b7498c6be0963342e51,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3032,10 +3094,5 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3084823666005829763, guid: 3d832f69edbe6b7498c6be0963342e51,
-        type: 3}
-      propertyPath: foregroundTarget
-      value: 
-      objectReference: {fileID: 1692758137}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3d832f69edbe6b7498c6be0963342e51, type: 3}
