@@ -34,7 +34,7 @@ namespace MRR.Controller
             colorTexture = new RenderTexture(screenSize.x, screenSize.y, 0, RenderTextureFormat.RGB565);
             rawDepthTexture = new RenderTexture(screenSize.x, screenSize.y, 24, RenderTextureFormat.Depth);
             depthTexture = new RenderTexture(screenSize.x, screenSize.y, 0, RenderTextureFormat.ARGBHalf);
-            depthTexture2D = new Texture2D(screenSize.x, screenSize.y, TextureFormat.RGBAHalf, false);
+            depthTexture2D = new Texture2D(1, 1, TextureFormat.RGBAHalf, false);
 
             virtualCamera = GetComponent<Camera>();
 
@@ -66,7 +66,7 @@ namespace MRR.Controller
         {
             this.cameraSettings = cameraSettings;
 
-            //UpdateCameraSettings();
+            // UpdateCameraSettings();
         }
 
         private void UpdateCameraSettings()
@@ -96,7 +96,7 @@ namespace MRR.Controller
 
             RenderTexture.active = depthTexture;
 
-            depthTexture2D.ReadPixels(new Rect(0, 0, 1920, 1080), 0, 0);
+            depthTexture2D.ReadPixels(new Rect((int)targetScreenPosition.x, (int)targetScreenPosition.y, 1, 1), 0, 0);
             depthTexture2D.Apply();
 
             RenderTexture.active = null;
@@ -114,7 +114,7 @@ namespace MRR.Controller
                     if (hit.collider.gameObject.name == foregroundTarget.name)
                     {
                         Debug.DrawRay(origin, direction * hit.distance, Color.green);
-                        hmdDepth = depthTexture2D.GetPixel((int)targetScreenPosition.x, (int)targetScreenPosition.y).r;
+                        hmdDepth = depthTexture2D.GetPixel(1, 1).r;
                         return;
                     }
                     else
