@@ -47,6 +47,9 @@ namespace MRR.View
         [Header("Controls")]
         public Button bRecord;
 
+        [Header("Target")]
+        public Dropdown dTargetObjects;
+
         [Header("Footer")]
         public Text[] tCameraResolution = new Text[2];
         public Text tCameraFramerate;
@@ -64,19 +67,29 @@ namespace MRR.View
         private InputField.OnChangeEvent eventVirtualCameraOffsetRotationY = new InputField.OnChangeEvent();
         private InputField.OnChangeEvent eventVirtualCameraOffsetRotationZ = new InputField.OnChangeEvent();
 
-        private void Start()
+        public void Init()
         {
             RegisterEvents();
-            StartCoroutine(Init());
-        }
 
-        private IEnumerator Init()
-        {
-            yield return new WaitForSeconds(1.0f);
             SetPhysicalCameraInputSources();
             SetOptionalScreenInputSources();
             SetCameraPresets();
+            SetTargetObjects();
             UpdateValues();
+        }
+
+        private void SetTargetObjects()
+        {
+            dTargetObjects.ClearOptions();
+
+            List<GameObject> targetObjects = appController.GetTargetObjects();
+
+            List<Dropdown.OptionData> optionData = new List<Dropdown.OptionData>();
+
+            foreach (GameObject target in targetObjects)
+                optionData.Add(new Dropdown.OptionData(target.name));
+
+            dTargetObjects.AddOptions(optionData);
         }
 
         private void SetCameraPresets()
@@ -147,7 +160,6 @@ namespace MRR.View
             SetFooterFramerate(currCameraSettings.framerate);
             SetFooterContainer(Container.MP4);
             SetFooterCodec(Codec.H246);
-            //SetFooterFrameTime();
             //SetFooterAllocatedMemory();
         }
 
@@ -241,9 +253,26 @@ namespace MRR.View
             }
         }
 
-        private void SetFooterFrameTime(int frameTime)
+        public void SetFooterFrameTime(long frameTime)
         {
+            if (frameTime < 1)
+                frameTime = 1;
+
             tFrameRecordTime.text = frameTime.ToString();
+
+            double currFps = 0;
+
+            if (frameTime > 0)
+                currFps = (double)(1 / (frameTime * 1000));
+
+            double currFramerate = (double)appController.GetCameraSettings().framerate;
+
+            if(currFps < (double)(currFramerate * 0.9f))
+                tFrameRecordTime.color = new Color(0, 184, 148);
+            else if(currFps < currFramerate)
+                tFrameRecordTime.color = new Color(225, 112, 85);
+            else
+                tFrameRecordTime.color = new Color(214, 48, 49);
         }
 
         private void SetFooterAllocatedMemory(int memory)
@@ -335,6 +364,11 @@ namespace MRR.View
         public void SetScreenForegroundMask(RenderTexture foregroundMaskTexture)
         {
             screenForegroundMask.texture = foregroundMaskTexture;
+        }
+
+        public void SetOptionalScreen(RenderTexture renderTexture)
+        {
+            screenOptional.texture = renderTexture;
         }
     }
 }

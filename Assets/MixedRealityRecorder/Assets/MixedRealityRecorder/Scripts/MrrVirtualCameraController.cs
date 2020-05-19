@@ -18,33 +18,40 @@ namespace MRR.Controller
         public Material matDepthTexture;
 
         public MrrAppController appController;
-        public Transform foregroundTarget;
+        private Transform target;
 
-        private float hmdDepth;
+        private float targetDepth;
 
-        private void Start()
+        public void Init(CameraSettings cameraSetting, GameObject targetObject)
         {
-            // create new camera settings and assign framerate
-            // cameraSettings = CreateDefaultCameraSettings();
-
-            // screen size
-            Vector2Int screenSize = new Vector2Int(1920, 1080);
-
-            // create render textures
-            colorTexture = new RenderTexture(screenSize.x, screenSize.y, 0, RenderTextureFormat.RGB565);
-            rawDepthTexture = new RenderTexture(screenSize.x, screenSize.y, 16, RenderTextureFormat.Depth);
-            depthTexture = new RenderTexture(screenSize.x, screenSize.y, 0, RenderTextureFormat.ARGBHalf);
-            depthTexture2D = new Texture2D(1, 1, TextureFormat.RGBAHalf, false);
+            SetTargetObject(targetObject);
 
             virtualCamera = GetComponent<Camera>();
-
-            // set camera to render depth
             virtualCamera.depthTextureMode = DepthTextureMode.Depth;
 
-            // set color and depth buffer locations to the render textures
-            virtualCamera.SetTargetBuffers(colorTexture.colorBuffer, rawDepthTexture.depthBuffer);
+            SetCameraSettings(cameraSetting);
 
+            depthTexture2D = new Texture2D(1, 1, TextureFormat.RGBAHalf, false);
+            UpdateInternalTextures();
+
+            virtualCamera.SetTargetBuffers(colorTexture.colorBuffer, rawDepthTexture.depthBuffer);
             matDepthTexture.SetTexture("_RawDepthTex", rawDepthTexture);
+        }
+
+        private void SetTargetObject(GameObject targetObject)
+        {
+            target = targetObject.transform;
+        }
+
+        private void UpdateInternalTextures()
+        {
+            // screen size
+            Vector2Int cameraResolution = new Vector2Int(cameraSettings.resolutionWidth, cameraSettings.resolutionHeight);
+
+            // create render textures
+            colorTexture = new RenderTexture(cameraResolution.x, cameraResolution.y, 0, RenderTextureFormat.RGB565);
+            rawDepthTexture = new RenderTexture(cameraResolution.x, cameraResolution.y, 16, RenderTextureFormat.Depth);
+            depthTexture = new RenderTexture(cameraResolution.x, cameraResolution.y, 0, RenderTextureFormat.ARGBHalf);
         }
 
         public RenderTexture GetDepthTexture()
@@ -65,8 +72,7 @@ namespace MRR.Controller
         public void SetCameraSettings(CameraSettings cameraSettings)
         {
             this.cameraSettings = cameraSettings;
-
-            // UpdateCameraSettings();
+            UpdateCameraSettings();
         }
 
         private void UpdateCameraSettings()
@@ -80,42 +86,50 @@ namespace MRR.Controller
             return virtualCamera;
         }
 
-        public float GetHmdDepth()
+        public float GetTargetDepth()
         {
-            return hmdDepth;
+            return targetDepth;
         }
 
         public void Render()
         {
             virtualCamera.Render();
-
+            UpdateTargetDepth();
+        }
+        
+        private void UpdateTargetDepth()
+        {
             Graphics.Blit(rawDepthTexture, depthTexture, matDepthTexture);
 
-            Vector2 targetScreenPosition = virtualCamera.WorldToScreenPoint(foregroundTarget.position);
+            Vector2 targetScreenPosition = virtualCamera.WorldToScreenPoint(target.position);
             //Debug.Log(targetScreenPosition);
 
-            RenderTexture.active = depthTexture;
+            // screen size
+            Vector2Int cameraResolution = new Vector2Int(cameraSettings.resolutionWidth, cameraSettings.resolutionHeight);
 
-            depthTexture2D.ReadPixels(new Rect((int)targetScreenPosition.x, (int)targetScreenPosition.y, 1, 1), 0, 0);
-            depthTexture2D.Apply();
-
-            RenderTexture.active = null;
-
-            //Debug.Log("HDM Depth = " + hmdDepth);
-
-            if (targetScreenPosition.x >= 0 && targetScreenPosition.x <= 1920 && targetScreenPosition.y >= 0 && targetScreenPosition.y <= 1080)
+            if (targetScreenPosition.x >= 0 && targetScreenPosition.x <= cameraResolution.x && targetScreenPosition.y >= 0 && targetScreenPosition.y <= cameraResolution.y)
             {
+                //Debug.Log("HDM Depth = " + hmdDepth);
+
                 Vector3 origin = transform.position + transform.forward * virtualCamera.nearClipPlane;
-                Vector3 direction = Vector3.Normalize(foregroundTarget.transform.position - origin);
+                Vector3 direction = Vector3.Normalize(target.position - origin);
+                float distance = Vector3.Distance(target.position, origin);
 
                 RaycastHit hit;
                 if (Physics.Raycast(origin, direction, out hit, virtualCamera.farClipPlane))
                 {
-                    if (hit.collider.gameObject.name == foregroundTarget.name)
+                    if (hit.collider.gameObject.name == target.name)
                     {
+                        RenderTexture.active = depthTexture;
+
+                        depthTexture2D.ReadPixels(new Rect((int)targetScreenPosition.x, (int)targetScreenPosition.y, 1, 1), 0, 0);
+                        depthTexture2D.Apply();
+
+                        RenderTexture.active = null;
+
                         //Debug.DrawRay(origin, direction * hit.distance, Color.green);
-                        hmdDepth = depthTexture2D.GetPixel(1, 1).r;
-                        return;
+                        targetDepth = depthTexture2D.GetPixel(1, 1).r;
+                        //return;
                     }
                     //else
                     //{
@@ -123,8 +137,6 @@ namespace MRR.Controller
                     //}
                 }
             }
-
-            //hmdDepth = 0.0f;
         }
     }
 }

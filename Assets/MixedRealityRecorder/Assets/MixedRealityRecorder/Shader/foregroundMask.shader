@@ -43,7 +43,7 @@
 				// get depth from depth texture
 				float depth = tex2D(_DepthTex, i.uv).r;
 
-				if (depth > _HmdDepth - 0.00015f)
+				if (depth > _HmdDepth - 0.001f)
 					return fixed4(1.0f, 1.0f, 1.0f, 1.0f);
 				else
 					return fixed4(0.0f, 0.0f, 0.0f, 1.0f);

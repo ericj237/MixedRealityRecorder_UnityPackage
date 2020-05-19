@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
 using MRR.Model;
 using MRR.View;
-using MRR.Video;
-using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace MRR.Controller
 {
@@ -16,6 +15,7 @@ namespace MRR.Controller
         public MrrVirtualCameraController virtualCamera;
 
         public List<CameraPreset> cameraPresets = new List<CameraPreset>();
+        public List<GameObject> targetObjects = new List<GameObject>();
 
         public Material matForegroundMask;
         private RenderTexture foregroundMaskTexture;
@@ -23,10 +23,53 @@ namespace MRR.Controller
 
         private WebCamDevice[] webCamDevices;
 
+        void Start()
+        {
+            CacheWebcamDevices();
+            CacheTargetObjects();
+
+            virtualCamera.Init(cameraPresets[0].cameraSettings, targetObjects[0]);
+
+            // screen size
+            Vector2Int screenSize = new Vector2Int(1920, 1080);
+
+            foregroundMaskTexture = new RenderTexture(screenSize.x, screenSize.y, 0, RenderTextureFormat.ARGBHalf);
+            rawPhysicalCameraTexture = new WebCamTexture();
+
+            // set foreground shader depth texture
+            matForegroundMask.SetTexture("_DepthTex", virtualCamera.GetDepthTexture());
+
+            rawPhysicalCameraTexture.Play();
+
+            // assign the textures to the ui raw image component
+            uiView.SetScreenVirtualCamera(virtualCamera.GetColorTexture());
+            uiView.SetScreenForegroundMask(foregroundMaskTexture);
+            uiView.SetScreenPhysicalCamera(rawPhysicalCameraTexture);
+            uiView.SetOptionalScreen(virtualCamera.GetDepthTexture());
+
+            InvokeRepeating("RunCycle", 0.0f, ((float)1 / virtualCamera.GetCameraSettings().framerate));
+
+            uiView.Init();
+        }
+
         private void RunCycle()
         {
+            var stopWatch = Stopwatch.StartNew();
+
             virtualCamera.Render();
             UpdateForegroundMask();
+
+            long frameTime = stopWatch.ElapsedMilliseconds;
+
+            uiView.SetFooterFrameTime(frameTime);
+        }
+
+        public void UpdateForegroundMask()
+        {
+            // we only use this method to receive our processed foreground mask texture
+            // all shader properties are already set in Initialize() method
+            matForegroundMask.SetFloat("_HmdDepth", virtualCamera.GetTargetDepth());
+            Graphics.Blit(virtualCamera.GetDepthTexture(), foregroundMaskTexture, matForegroundMask);
         }
 
         public List<CameraPreset> GetCameraPresets()
@@ -44,55 +87,18 @@ namespace MRR.Controller
             webCamDevices = WebCamTexture.devices;
         }
 
-        void Start()
+        public List<GameObject> GetTargetObjects()
         {
-            // TMP
-            //ApplyApplicationSettings();
-
-            virtualCamera.SetCameraSettings(cameraPresets[0].cameraSettings);
-
-            CacheWebcamDevices();
-
-            // screen size
-            Vector2Int screenSize = new Vector2Int(1920, 1080);
-
-            foregroundMaskTexture = new RenderTexture(screenSize.x, screenSize.y, 0, RenderTextureFormat.ARGBHalf);
-            rawPhysicalCameraTexture = new WebCamTexture();
-
-            StartCoroutine(Init());
+            return targetObjects;
         }
 
-        private IEnumerator Init()
+        private void CacheTargetObjects()
         {
-            yield return new WaitForSeconds(1.0f);
+            Camera[] cameras = FindObjectsOfType<Camera>();
 
-            // set foreground shader depth texture
-            matForegroundMask.SetTexture("_DepthTex", virtualCamera.GetDepthTexture());
-
-            rawPhysicalCameraTexture.Play();
-
-            // assign the textures to the ui raw image component
-            uiView.SetScreenVirtualCamera(virtualCamera.GetColorTexture());
-            uiView.SetScreenForegroundMask(foregroundMaskTexture);
-            uiView.SetScreenPhysicalCamera(rawPhysicalCameraTexture);
-
-            InvokeRepeating("RunCycle", 0.0f, ((float)1 / virtualCamera.GetCameraSettings().framerate));
-        }
-
-        public void UpdateForegroundMask()
-        {
-            // we only use this method to receive our processed foreground mask texture
-            // all shader properties are already set in Initialize() method
-            matForegroundMask.SetFloat("_HmdDepth", virtualCamera.GetHmdDepth());
-            Graphics.Blit(virtualCamera.GetDepthTexture(), foregroundMaskTexture, matForegroundMask);
-        }
-
-        private void ApplyApplicationSettings()
-        {
-            // is there a better way to lock the camera rendering framerate?
-            // most vr sdks set the application framerate to 75 or 90 
-            // we cant control our virtual camera framerate with this settings
-            Application.targetFrameRate = (int)virtualCamera.GetCameraSettings().framerate;
+            foreach (Camera camera in cameras)
+                if (camera.gameObject.name != "cam_virtual" && camera.gameObject.name != "cam_ui")
+                    targetObjects.Add(camera.gameObject);
         }
 
         private void SetCameraResolutionWidth(int resolutionWidth)

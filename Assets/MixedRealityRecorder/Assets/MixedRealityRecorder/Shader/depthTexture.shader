@@ -41,7 +41,8 @@
 			{
 
 				// get depth from depth texture
-				float depth = tex2D(_RawDepthTex, i.uv).r;
+				//float depth = tex2D(_RawDepthTex, i.uv).r;
+				float depth = SAMPLE_DEPTH_TEXTURE(_RawDepthTex, i.uv);
 
 				return fixed4(depth, depth, depth, 1.0f);
 			}
