@@ -67,7 +67,7 @@ namespace MRR.View
             SetOptionalScreenInputSources();
             SetOutputPath(Application.persistentDataPath);
             SetOutputCodecPresets();
-            SetFooterValues(appController.GetCameraSettings());
+            SetFooterValues(appController.GetVirtualCameraController().GetCameraSettings());
 
             RegisterEvents();
         }
@@ -164,34 +164,34 @@ namespace MRR.View
 
         private void OnSensorOffsetPositionXChanged(string x)
         {
-            appController.SetSensorOffsetPosition(float.Parse(x), Vector3Component.x);
+            appController.GetVirtualCameraController().SetSensorOffsetPosition(float.Parse(x), Vector3Component.x);
         }
 
         private void OnSensorOffsetPositionYChanged(string y)
         {
-            appController.SetSensorOffsetPosition(float.Parse(y), Vector3Component.y);
+            appController.GetVirtualCameraController().SetSensorOffsetPosition(float.Parse(y), Vector3Component.y);
         }
 
         private void OnSensorOffsetPositionZChanged(string z)
         {
-            appController.SetSensorOffsetPosition(float.Parse(z), Vector3Component.z);
+            appController.GetVirtualCameraController().SetSensorOffsetPosition(float.Parse(z), Vector3Component.z);
         }                    
 
         private void OnSensorOffsetRotationXChanged(string x)
         {
-            appController.SetSensorOffsetRotation(float.Parse(x), Vector3Component.x);
+            appController.GetVirtualCameraController().SetSensorOffsetRotation(float.Parse(x), Vector3Component.x);
             UpdateSensorOffsetRotation();
         }
 
         private void OnSensorOffsetRotationYChanged(string y)
         {
-            appController.SetSensorOffsetRotation(float.Parse(y), Vector3Component.y);
+            appController.GetVirtualCameraController().SetSensorOffsetRotation(float.Parse(y), Vector3Component.y);
             UpdateSensorOffsetRotation();
         }
 
         private void OnSensorOffsetRotationZChanged(string z)
         {
-            appController.SetSensorOffsetRotation(float.Parse(z), Vector3Component.z);
+            appController.GetVirtualCameraController().SetSensorOffsetRotation(float.Parse(z), Vector3Component.z);
             UpdateSensorOffsetRotation();
         }
 
@@ -199,42 +199,42 @@ namespace MRR.View
 
         private void UpdateCameraResolutionWidth()
         {
-            iCameraResolution[0].SetTextWithoutNotify(appController.GetCameraSettings().resolutionWidth.ToString());
+            iCameraResolution[0].SetTextWithoutNotify(appController.GetVirtualCameraController().GetCameraSettings().resolutionWidth.ToString());
         }
 
         private void UpdateCameraResolutionHeight()
         {
-            iCameraResolution[1].SetTextWithoutNotify(appController.GetCameraSettings().resolutionHeight.ToString());
+            iCameraResolution[1].SetTextWithoutNotify(appController.GetVirtualCameraController().GetCameraSettings().resolutionHeight.ToString());
         }
 
         private void UpdateCameraFramerate()
         {
-            iCameraFramerate.SetTextWithoutNotify(appController.GetCameraSettings().framerate.ToString());
+            iCameraFramerate.SetTextWithoutNotify(appController.GetVirtualCameraController().GetCameraSettings().framerate.ToString());
         }
 
         private void UpdateCameraFocalLength()
         {
-            iCameraFocalLenth.SetTextWithoutNotify(appController.GetCameraSettings().focalLenth.ToString());
+            iCameraFocalLenth.SetTextWithoutNotify(appController.GetVirtualCameraController().GetCameraSettings().focalLenth.ToString());
         }
 
         private void UpdateSensorHeight()
         {
-            iSensorSize[0].SetTextWithoutNotify(appController.GetCameraSettings().sensorHeight.ToString());
+            iSensorSize[0].SetTextWithoutNotify(appController.GetVirtualCameraController().GetCameraSettings().sensorHeight.ToString());
         }
 
         private void UpdateSensorWidth()
         {
-            iSensorSize[1].SetTextWithoutNotify(appController.GetCameraSettings().sensorWidth.ToString());
+            iSensorSize[1].SetTextWithoutNotify(appController.GetVirtualCameraController().GetCameraSettings().sensorWidth.ToString());
         }
 
         private void UpdateSensorDynamicRange()
         {
-            iSensorDynamicRange.SetTextWithoutNotify(appController.GetCameraSettings().dynamicRange.ToString());
+            iSensorDynamicRange.SetTextWithoutNotify(appController.GetVirtualCameraController().GetCameraSettings().dynamicRange.ToString());
         }
 
         private void UpdateSensorOffsetPosition()
         {
-            Vector3 sensorOffsetPosition = appController.GetSensorOffsetPosition();
+            Vector3 sensorOffsetPosition = appController.GetVirtualCameraController().GetSensorOffsetPosition();
             iSensorOffsetPosition[0].SetTextWithoutNotify(sensorOffsetPosition.x.ToString());
             iSensorOffsetPosition[1].SetTextWithoutNotify(sensorOffsetPosition.y.ToString());
             iSensorOffsetPosition[2].SetTextWithoutNotify(sensorOffsetPosition.z.ToString());
@@ -242,7 +242,7 @@ namespace MRR.View
 
         private void UpdateSensorOffsetRotation()
         {
-            Vector3 sensorOffsetRoation = appController.GetSensorOffsetRotation();
+            Vector3 sensorOffsetRoation = appController.GetVirtualCameraController().GetSensorOffsetRotation();
             iSensorOffsetRotation[0].SetTextWithoutNotify(sensorOffsetRoation.x.ToString());
             iSensorOffsetRotation[1].SetTextWithoutNotify(sensorOffsetRoation.y.ToString());
             iSensorOffsetRotation[2].SetTextWithoutNotify(sensorOffsetRoation.z.ToString());
@@ -398,7 +398,7 @@ namespace MRR.View
             if (frameTime > 0)
                 currFps = (double)(1 / (frameTime * 1000));
 
-            double currFramerate = (double)appController.GetCameraSettings().framerate;
+            double currFramerate = (double)appController.GetVirtualCameraController().GetCameraSettings().framerate;
 
             if (currFps < (double)(currFramerate * 0.9f))
                 tFrameTime.color = new Color(0, 184, 148);
