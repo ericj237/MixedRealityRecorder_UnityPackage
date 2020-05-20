@@ -197,7 +197,10 @@ namespace MRR.View
             if (width == 0)
                 iResolutionWidth.text = appController.GetVirtualCameraController().GetCameraSettings().resolutionWidth.ToString();
             else
+            {
                 Debug.Log("Changed camera resolution width!");
+                EnableCustomCameraPreset(true);
+            }
         }
 
         private void OnCameraResolutionHeightChanged(InputField iResolutionHeight)
@@ -217,7 +220,10 @@ namespace MRR.View
             if (framerate == 0)
                 iFramerate.text = appController.GetVirtualCameraController().GetCameraSettings().framerate.ToString();
             else
+            {
                 Debug.Log("Changed camera framerate!");
+                EnableCustomCameraPreset(true);
+            }
         }
 
         private void OnCameraFocalLengthChanged(InputField iFocalLength)
@@ -227,7 +233,10 @@ namespace MRR.View
             if (focalLength == 0)
                 iFocalLength.text = appController.GetVirtualCameraController().GetCameraSettings().focalLenth.ToString();
             else
+            {
                 Debug.Log("Changed camera focal length!");
+                EnableCustomCameraPreset(true);
+            }
         }
 
         private void OnSensorSizeWidthChanged(InputField iSensorWidth)
@@ -237,7 +246,10 @@ namespace MRR.View
             if (sensorWidth == 0)
                 iSensorWidth.text = appController.GetVirtualCameraController().GetCameraSettings().sensorWidth.ToString();
             else
+            {
                 Debug.Log("Changed sensor size width!");
+                EnableCustomCameraPreset(true);
+            }
         }
 
         private void OnSensorSizeHeightChanged(InputField iSensorHeight)
@@ -247,7 +259,10 @@ namespace MRR.View
             if (sensorHeight == 0)
                 iSensorHeight.text = appController.GetVirtualCameraController().GetCameraSettings().sensorHeight.ToString();
             else
+            {
                 Debug.Log("Changed sensor size heigth!");
+                EnableCustomCameraPreset(true);
+            }
         }
 
         private void OnSensorDynamicRangeChanged(InputField iSensorDynamicRange)
@@ -257,7 +272,10 @@ namespace MRR.View
             if (sensorDynamicRange == 0)
                 iSensorDynamicRange.text = appController.GetVirtualCameraController().GetCameraSettings().dynamicRange.ToString();
             else
+            {
                 Debug.Log("Changed sensor dynamic range!");
+                EnableCustomCameraPreset(true);
+            }
         }
 
         private void OnOptionalScreenChanged(string sourceName)
@@ -408,6 +426,27 @@ namespace MRR.View
                 optionData.Add(new Dropdown.OptionData(device.presetName));
 
             dCameraPresetDevice.AddOptions(optionData);
+        }
+
+        private void EnableCustomCameraPreset(bool toggle)
+        {
+            if (toggle == true)
+            {
+                dCameraPresetDevice.ClearOptions();
+
+                List<CameraPreset> cameraPresets = appController.GetCameraPresets();
+
+                List<Dropdown.OptionData> optionData = new List<Dropdown.OptionData>();
+
+                optionData.Add(new Dropdown.OptionData("Custom"));
+
+                foreach (CameraPreset device in cameraPresets)
+                    optionData.Add(new Dropdown.OptionData(device.presetName));
+
+                dCameraPresetDevice.AddOptions(optionData);
+            }
+            else
+                SetCameraPresets();
         }
 
         private void SetOptionalScreenInputSources()
