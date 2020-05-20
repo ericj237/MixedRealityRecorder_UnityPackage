@@ -31,15 +31,15 @@ namespace MRR.Controller
             virtualCamera.Init(cameraPresets[0].cameraSettings, targetObjects[0]);
 
             // screen size
-            Vector2Int screenSize = new Vector2Int(1920, 1080);
+            Vector2Int screenSize = new Vector2Int(virtualCamera.GetCameraSettings().resolutionWidth, virtualCamera.GetCameraSettings().resolutionHeight);
 
             foregroundMaskTexture = new RenderTexture(screenSize.x, screenSize.y, 0, RenderTextureFormat.ARGBHalf);
+
             rawPhysicalCameraTexture = new WebCamTexture();
+            rawPhysicalCameraTexture.Play();
 
             // set foreground shader depth texture
             matForegroundMask.SetTexture("_DepthTex", virtualCamera.GetDepthTexture());
-
-            rawPhysicalCameraTexture.Play();
 
             // assign the textures to the ui raw image component
             uiView.SetScreenVirtualCamera(virtualCamera.GetColorTexture());

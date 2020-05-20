@@ -2,7 +2,6 @@
 using UnityEngine.UI;
 using MRR.Model;
 using MRR.Controller;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace MRR.View
@@ -10,17 +9,12 @@ namespace MRR.View
 
     public class MrrUiView : MonoBehaviour
     {
-
         public MrrAppController appController;
 
-        [Header("Screens")]
-        public RawImage screenVirtualCamera;
-        public RawImage screenForegroundMask;
-        public RawImage screenPhysicalCamera;
-        public RawImage screenOptional;
-
-        [Header("Physical Camera Input")]
-        public Dropdown dPhysicalCameraInputSource;
+        [Header("Physical Camera")]
+        public Dropdown dPhysicalCameraSource;
+        [Header("Target")]
+        public Dropdown dTargetObject;
         [Header("Camera Preset")]
         public Dropdown dCameraPresetDevice;
         [Header("Camera Settings")]
@@ -31,6 +25,11 @@ namespace MRR.View
         [Header("Sensor Settings")]
         public InputField[] iSensorSize = new InputField[2];
         public InputField iSensorDynamicRange;
+        [Header("Optional Screen")]
+        public Dropdown dOptionalScreenSource;
+        [Header("Output Settings")]
+        public InputField iOutputPath;
+        public Dropdown dOutputCodec;
         [Header("Buttons")]
         public Button bApplyA;
         public Button bResetA;
@@ -38,130 +37,165 @@ namespace MRR.View
         [Header("Sensor Offset")]
         public InputField[] iSensorOffsetPosition = new InputField[3];
         public InputField[] iSensorOffsetRotation = new InputField[3];
-        [Header("Output Settings")]
-        public Dropdown dOutputDestination;
-        public Dropdown dOutputCodec;
-        [Header("Output Settings")]
-        public Dropdown dOptionalScreenInputSource;
 
         [Header("Controls")]
         public Button bRecord;
-
-        [Header("Target")]
-        public Dropdown dTargetObjects;
 
         [Header("Footer")]
         public Text[] tCameraResolution = new Text[2];
         public Text tCameraFramerate;
         public Text tOutputContainer;
         public Text tOutputCodec;
-        public Text tFrameRecordTime;
+        public Text tFrameTime;
         public Text tAllocatedMemory;
 
-        // Events
-        private InputField.OnChangeEvent eventVirtualCameraOffsetPositionX = new InputField.OnChangeEvent();
-        private InputField.OnChangeEvent eventVirtualCameraOffsetPositionY = new InputField.OnChangeEvent();
-        private InputField.OnChangeEvent eventVirtualCameraOffsetPositionZ = new InputField.OnChangeEvent();
-
-        private InputField.OnChangeEvent eventVirtualCameraOffsetRotationX = new InputField.OnChangeEvent();
-        private InputField.OnChangeEvent eventVirtualCameraOffsetRotationY = new InputField.OnChangeEvent();
-        private InputField.OnChangeEvent eventVirtualCameraOffsetRotationZ = new InputField.OnChangeEvent();
+        [Header("Screens")]
+        public RawImage screenVirtualCamera;
+        public RawImage screenForegroundMask;
+        public RawImage screenPhysicalCamera;
+        public RawImage screenOptional;
 
         public void Init()
         {
-            RegisterEvents();
+            //EnableButtonApplyA(false);
+            //EnableButtonResetA(false);
 
             SetPhysicalCameraInputSources();
-            SetOptionalScreenInputSources();
-            SetCameraPresets();
             SetTargetObjects();
-            UpdateValues();
+            SetCameraPresets();
+            SetCameraValues();
+            SetOptionalScreenInputSources();
+            SetOutputPath(Application.persistentDataPath);
+            SetOutputCodecPresets();
+            SetFooterValues(appController.GetCameraSettings());
+
+            RegisterEvents();
         }
 
-        private void SetTargetObjects()
+        private void RegisterEvents()
         {
-            dTargetObjects.ClearOptions();
 
-            List<GameObject> targetObjects = appController.GetTargetObjects();
-
-            List<Dropdown.OptionData> optionData = new List<Dropdown.OptionData>();
-
-            foreach (GameObject target in targetObjects)
-                optionData.Add(new Dropdown.OptionData(target.name));
-
-            dTargetObjects.AddOptions(optionData);
-        }
-
-        private void SetCameraPresets()
-        {
-            dCameraPresetDevice.ClearOptions();
-
-            List<CameraPreset> cameraPresets = appController.GetCameraPresets();
-
-            List<Dropdown.OptionData> optionData = new List<Dropdown.OptionData>();
-
-            foreach (CameraPreset device in cameraPresets)
-                optionData.Add(new Dropdown.OptionData(device.presetName));
-
-            dCameraPresetDevice.AddOptions(optionData);
-        }
-
-        private void SetPhysicalCameraInputSources()
-        {
-            dPhysicalCameraInputSource.ClearOptions();
-
-            WebCamDevice[] webCamDevices = appController.GetWebCamDevices();
-
-            List<Dropdown.OptionData> optionData = new List<Dropdown.OptionData>();
-
-            foreach (WebCamDevice source in webCamDevices)
-                optionData.Add(new Dropdown.OptionData(source.name));
-
-            dPhysicalCameraInputSource.AddOptions(optionData);
-        }
-
-        private void SetOptionalScreenInputSources()
-        {
-            dOptionalScreenInputSource.ClearOptions();
-
-            WebCamDevice[] webCamDevices = appController.GetWebCamDevices();
-
-            List<Dropdown.OptionData> optionData = new List<Dropdown.OptionData>();
-
-            optionData.Add(new Dropdown.OptionData("None"));
-            //optionData.Add(new Dropdown.OptionData("Composite"));
-
-            foreach (WebCamDevice source in webCamDevices)
+            dPhysicalCameraSource.onValueChanged.AddListener(delegate
             {
-                if (source.name != dPhysicalCameraInputSource.captionText.text)
-                    optionData.Add(new Dropdown.OptionData(source.name));
-            }
+                OnPhysicalCameraChanged(dPhysicalCameraSource.captionText.text);
+            });
 
-            dOptionalScreenInputSource.AddOptions(optionData);            
+            dTargetObject.onValueChanged.AddListener(delegate
+            {
+                OnTargetObjectChanged(dTargetObject.captionText.text);
+            });
+
+            dCameraPresetDevice.onValueChanged.AddListener(delegate
+            {
+                OnCameraPresetChanged(dCameraPresetDevice.captionText.text);
+            });
+
+            // HERE CAMERA VALUES CALLBACKS
+
+            iOutputPath.onEndEdit.AddListener(delegate
+            {
+                OnOutputPathChanged(iOutputPath.text);
+            });
+
+            dOutputCodec.onValueChanged.AddListener(delegate
+            {
+                OnOuputCodecChanged(dOutputCodec.captionText.text);
+            });
+
+            // events offset position
+            iSensorOffsetPosition[0].onValueChanged.AddListener(delegate
+            {
+                OnSensorOffsetPositionXChanged(iSensorOffsetPosition[0].text);
+            });
+
+            iSensorOffsetPosition[1].onValueChanged.AddListener(delegate
+            {
+                OnSensorOffsetPositionYChanged(iSensorOffsetPosition[1].text);
+            });
+
+            iSensorOffsetPosition[2].onValueChanged.AddListener(delegate
+            {
+                OnSensorOffsetPositionZChanged(iSensorOffsetPosition[2].text);
+            });
+
+            // events offset rotation
+            iSensorOffsetRotation[0].onValueChanged.AddListener(delegate
+            {
+                OnSensorOffsetRotationXChanged(iSensorOffsetRotation[0].text);
+            });
+
+            iSensorOffsetRotation[1].onValueChanged.AddListener(delegate
+            {
+                OnSensorOffsetRotationYChanged(iSensorOffsetRotation[1].text);
+            });
+
+            iSensorOffsetRotation[2].onValueChanged.AddListener(delegate
+            {
+                OnSensorOffsetRotationZChanged(iSensorOffsetRotation[2].text);
+            });
         }
 
-        private void UpdateValues()
+        // event callback methods
+
+        private void OnPhysicalCameraChanged(string sourceName)
         {
-            UpdateCameraResolutionWidth();
-            UpdateCameraResolutionHeight();
-            UpdateCameraFramerate();
-            UpdateCameraFocalLength();
-            UpdateSensorHeight();
-            UpdateSensorWidth();
-            UpdateSensorDynamicRange();
-
-            UpdateSensorOffsetPosition();
-            UpdateSensorOffsetRotation();
-
-            CameraSettings currCameraSettings = appController.GetCameraSettings();
-
-            SetFooterResolutionWidth(currCameraSettings.resolutionWidth);
-            SetFooterResolutionHeight(currCameraSettings.resolutionHeight);
-            SetFooterFramerate(currCameraSettings.framerate);
-            SetFooterContainer(Container.MP4);
-            SetFooterCodec(Codec.H246);
-            //SetFooterAllocatedMemory();
+            Debug.Log("Changed physical camera source!");
         }
+
+        private void OnTargetObjectChanged(string targetName)
+        {
+            Debug.Log("Changed target object!");
+        }
+
+        private void OnCameraPresetChanged(string presetName)
+        {
+            Debug.Log("Changed camera preset!");
+        }
+                          
+        private void OnOutputPathChanged(string path)
+        {
+            Debug.Log("Changed output path!");
+        } 
+
+        private void OnOuputCodecChanged(string codecName)
+        {
+            Debug.Log("Changed output codec!");
+        } 
+
+        private void OnSensorOffsetPositionXChanged(string x)
+        {
+            appController.SetSensorOffsetPosition(float.Parse(x), Vector3Component.x);
+        }
+
+        private void OnSensorOffsetPositionYChanged(string y)
+        {
+            appController.SetSensorOffsetPosition(float.Parse(y), Vector3Component.y);
+        }
+
+        private void OnSensorOffsetPositionZChanged(string z)
+        {
+            appController.SetSensorOffsetPosition(float.Parse(z), Vector3Component.z);
+        }                    
+
+        private void OnSensorOffsetRotationXChanged(string x)
+        {
+            appController.SetSensorOffsetRotation(float.Parse(x), Vector3Component.x);
+            UpdateSensorOffsetRotation();
+        }
+
+        private void OnSensorOffsetRotationYChanged(string y)
+        {
+            appController.SetSensorOffsetRotation(float.Parse(y), Vector3Component.y);
+            UpdateSensorOffsetRotation();
+        }
+
+        private void OnSensorOffsetRotationZChanged(string z)
+        {
+            appController.SetSensorOffsetRotation(float.Parse(z), Vector3Component.z);
+            UpdateSensorOffsetRotation();
+        }
+
+        // update methods
 
         private void UpdateCameraResolutionWidth()
         {
@@ -214,6 +248,112 @@ namespace MRR.View
             iSensorOffsetRotation[2].SetTextWithoutNotify(sensorOffsetRoation.z.ToString());
         }
 
+        // setter methods
+
+        private void SetPhysicalCameraInputSources()
+        {
+            dPhysicalCameraSource.ClearOptions();
+
+            WebCamDevice[] webCamDevices = appController.GetWebCamDevices();
+
+            List<Dropdown.OptionData> optionData = new List<Dropdown.OptionData>();
+
+            foreach (WebCamDevice source in webCamDevices)
+                optionData.Add(new Dropdown.OptionData(source.name));
+
+            dPhysicalCameraSource.AddOptions(optionData);
+        }
+
+        private void SetTargetObjects()
+        {
+            dTargetObject.ClearOptions();
+
+            List<GameObject> targetObjects = appController.GetTargetObjects();
+
+            List<Dropdown.OptionData> optionData = new List<Dropdown.OptionData>();
+
+            foreach (GameObject target in targetObjects)
+                optionData.Add(new Dropdown.OptionData(target.name));
+
+            dTargetObject.AddOptions(optionData);
+        }
+
+        private void SetCameraPresets()
+        {
+            dCameraPresetDevice.ClearOptions();
+
+            List<CameraPreset> cameraPresets = appController.GetCameraPresets();
+
+            List<Dropdown.OptionData> optionData = new List<Dropdown.OptionData>();
+
+            foreach (CameraPreset device in cameraPresets)
+                optionData.Add(new Dropdown.OptionData(device.presetName));
+
+            dCameraPresetDevice.AddOptions(optionData);
+        }
+
+        private void SetOptionalScreenInputSources()
+        {
+            dOptionalScreenSource.ClearOptions();
+
+            WebCamDevice[] webCamDevices = appController.GetWebCamDevices();
+
+            List<Dropdown.OptionData> optionData = new List<Dropdown.OptionData>();
+
+            optionData.Add(new Dropdown.OptionData("None"));
+            //optionData.Add(new Dropdown.OptionData("Composite"));
+
+            foreach (WebCamDevice source in webCamDevices)
+            {
+                if (source.name != dPhysicalCameraSource.captionText.text)
+                    optionData.Add(new Dropdown.OptionData(source.name));
+            }
+
+            dOptionalScreenSource.AddOptions(optionData);
+        }
+
+        private void SetOutputCodecPresets()
+        {
+            dOutputCodec.ClearOptions();
+
+            List<Dropdown.OptionData> optionData = new List<Dropdown.OptionData>();
+
+            foreach (Codec codec in (Codec[])System.Enum.GetValues(typeof(Codec)))
+                optionData.Add(new Dropdown.OptionData(GetCodecName(codec)));
+
+            dOutputCodec.AddOptions(optionData);
+        }
+
+        private void SetCameraValues()
+        {
+            UpdateCameraResolutionWidth();
+            UpdateCameraResolutionHeight();
+            UpdateCameraFramerate();
+            UpdateCameraFocalLength();
+            UpdateSensorHeight();
+            UpdateSensorWidth();
+            UpdateSensorDynamicRange();
+
+            UpdateSensorOffsetPosition();
+            UpdateSensorOffsetRotation();
+        }
+
+        private void SetFooterValues(CameraSettings cameraSettings)
+        {
+            SetFooterResolutionWidth(cameraSettings.resolutionWidth);
+            SetFooterResolutionHeight(cameraSettings.resolutionHeight);
+            SetFooterFramerate(cameraSettings.framerate);
+            SetFooterOutputContainer(Container.MP4);
+            SetFooterOutputCodec(Codec.H246);
+        }
+
+        private void SetOutputPath(string path)
+        {
+            iOutputPath.SetTextWithoutNotify(path);
+        }
+
+        // setter fotter methods
+
         private void SetFooterResolutionWidth(int resolutionWidth)
         {
             tCameraResolution[0].text = resolutionWidth.ToString();
@@ -229,9 +369,9 @@ namespace MRR.View
             tCameraFramerate.text = framerate.ToString();
         }
 
-        private void SetFooterContainer(Container container)
+        private void SetFooterOutputContainer(Container container)
         {
-            switch(container)
+            switch (container)
             {
                 case Container.MP4:
                     tOutputContainer.text = "MP4";
@@ -241,16 +381,9 @@ namespace MRR.View
             }
         }
 
-        private void SetFooterCodec(Codec codec)
+        private void SetFooterOutputCodec(Codec codec)
         {
-            switch (codec)
-            {
-                case Codec.H246:
-                    tOutputCodec.text = "H.246";
-                    break;
-                default:
-                    break;
-            }
+            tOutputCodec.text = GetCodecName(codec);
         }
 
         public void SetFooterFrameTime(long frameTime)
@@ -258,7 +391,7 @@ namespace MRR.View
             if (frameTime < 1)
                 frameTime = 1;
 
-            tFrameRecordTime.text = frameTime.ToString();
+            tFrameTime.text = frameTime.ToString();
 
             double currFps = 0;
 
@@ -267,78 +400,29 @@ namespace MRR.View
 
             double currFramerate = (double)appController.GetCameraSettings().framerate;
 
-            if(currFps < (double)(currFramerate * 0.9f))
-                tFrameRecordTime.color = new Color(0, 184, 148);
-            else if(currFps < currFramerate)
-                tFrameRecordTime.color = new Color(225, 112, 85);
+            if (currFps < (double)(currFramerate * 0.9f))
+                tFrameTime.color = new Color(0, 184, 148);
+            else if (currFps < currFramerate)
+                tFrameTime.color = new Color(225, 112, 85);
             else
-                tFrameRecordTime.color = new Color(214, 48, 49);
+                tFrameTime.color = new Color(214, 48, 49);
         }
 
-        private void SetFooterAllocatedMemory(int memory)
+        public void SetFooterAllocatedMemory(int memory)
         {
             tAllocatedMemory.text = memory.ToString();
         }
 
-        private void RegisterEvents()
+        // setter screens methods
+
+        public void SetScreenVirtualCamera(RenderTexture colorTexture)
         {
-            RegisterEventsSensorOffset();
+            screenVirtualCamera.texture = colorTexture;
         }
 
-        private void RegisterEventsSensorOffset()
+        public void SetScreenForegroundMask(RenderTexture foregroundMaskTexture)
         {
-            // events offset position
-            eventVirtualCameraOffsetPositionX.AddListener(SetSensorOffsetPositionX);
-            iSensorOffsetPosition[0].onValueChanged = eventVirtualCameraOffsetPositionX;
-
-            eventVirtualCameraOffsetPositionY.AddListener(SetSensorOffsetPositionY);
-            iSensorOffsetPosition[1].onValueChanged = eventVirtualCameraOffsetPositionY;
-
-            eventVirtualCameraOffsetPositionZ.AddListener(SetSensorOffsetPositionZ);
-            iSensorOffsetPosition[2].onValueChanged = eventVirtualCameraOffsetPositionZ;
-
-            // events offset rotation
-            eventVirtualCameraOffsetRotationX.AddListener(SetSensorOffsetRotationX);
-            iSensorOffsetRotation[0].onValueChanged = eventVirtualCameraOffsetRotationX;
-
-            eventVirtualCameraOffsetRotationY.AddListener(SetSensorOffsetRotationY);
-            iSensorOffsetRotation[1].onValueChanged = eventVirtualCameraOffsetRotationY;
-
-            eventVirtualCameraOffsetRotationZ.AddListener(SetSensorOffsetRotationZ);
-            iSensorOffsetRotation[2].onValueChanged = eventVirtualCameraOffsetRotationZ;
-        }
-
-        private void SetSensorOffsetPositionX(string x)
-        {
-            appController.SetSensorOffsetPosition(float.Parse(x), Vector3Component.x);
-        }
-
-        private void SetSensorOffsetPositionY(string y)
-        {
-            appController.SetSensorOffsetPosition(float.Parse(y), Vector3Component.y);
-        }
-
-        private void SetSensorOffsetPositionZ(string z)
-        {
-            appController.SetSensorOffsetPosition(float.Parse(z), Vector3Component.z);
-        }
-
-        private void SetSensorOffsetRotationX(string x)
-        {
-            appController.SetSensorOffsetRotation(float.Parse(x), Vector3Component.x);
-            UpdateSensorOffsetRotation();
-        }
-
-        private void SetSensorOffsetRotationY(string y)
-        {
-            appController.SetSensorOffsetRotation(float.Parse(y), Vector3Component.y);
-            UpdateSensorOffsetRotation();
-        }
-
-        private void SetSensorOffsetRotationZ(string z)
-        {
-            appController.SetSensorOffsetRotation(float.Parse(z), Vector3Component.z);
-            UpdateSensorOffsetRotation();
+            screenForegroundMask.texture = foregroundMaskTexture;
         }
 
         public void SetScreenPhysicalCamera(RenderTexture physicalCameraTexture)
@@ -351,24 +435,60 @@ namespace MRR.View
             screenPhysicalCamera.texture = rawPhysicalCameraTexture;
         }
 
-        public void SetScreenPhysicalCamera(Texture2D physicalCameraTexture)
-        {
-            screenPhysicalCamera.texture = physicalCameraTexture;
-        }
-
-        public void SetScreenVirtualCamera(RenderTexture colorTexture)
-        {
-            screenVirtualCamera.texture = colorTexture;
-        }
-
-        public void SetScreenForegroundMask(RenderTexture foregroundMaskTexture)
-        {
-            screenForegroundMask.texture = foregroundMaskTexture;
-        }
-
         public void SetOptionalScreen(RenderTexture renderTexture)
         {
             screenOptional.texture = renderTexture;
+        }
+
+        public void SetOptionalScreen(WebCamTexture webCamTexture)
+        {
+            screenOptional.texture = webCamTexture;
+        }
+
+        public void SetOptionalScreen(Texture2D texture2D)
+        {
+            screenOptional.texture = texture2D;
+        }
+
+        // button util methods
+
+        private void EnableButtonApplyA(bool toggle)
+        {
+            if (toggle == true)
+            {
+                bApplyA.targetGraphic.color = new Color(0, 184, 148);
+                bApplyA.interactable = true;
+            }
+            else
+            {
+                bApplyA.targetGraphic.color = new Color(138, 184, 175);
+                bApplyA.interactable = false;
+            }
+        }
+
+        private void EnableButtonResetA(bool toggle)
+        {
+            if (toggle == true)
+            {
+                bResetA.targetGraphic.color = new Color(214, 48, 49);
+                bResetA.interactable = true;
+            }
+            else
+            {
+                bResetA.targetGraphic.color = new Color(214, 161, 161);
+                bResetA.interactable = false;
+            }
+        }
+
+        private string GetCodecName(Codec codec)
+        {
+            switch (codec)
+            {
+                case Codec.H246:
+                    return "H.246";
+                default:
+                    return "None";
+            }
         }
     }
 }
