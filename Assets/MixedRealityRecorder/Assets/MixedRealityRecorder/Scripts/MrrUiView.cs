@@ -92,37 +92,37 @@ namespace MRR.View
 
             iCameraResolution[0].onEndEdit.AddListener(delegate
             {                
-                OnCameraResolutionWidthChanged(ReturnValidIntFromString(iCameraResolution[0].text));
+                OnCameraResolutionWidthChanged(iCameraResolution[0]);
             });
 
             iCameraResolution[1].onEndEdit.AddListener(delegate
             {
-                OnCameraResolutionHeightChanged(ReturnValidIntFromString(iCameraResolution[1].text));
+                OnCameraResolutionHeightChanged(iCameraResolution[1]);
             });
 
             iCameraFramerate.onEndEdit.AddListener(delegate
             {
-                OnCameraFramerateChanged(ReturnValidIntFromString(iCameraFramerate.text));
+                OnCameraFramerateChanged(iCameraFramerate);
             });
 
             iCameraFocalLenth.onEndEdit.AddListener(delegate
             {
-                OnCameraFocalLengthChanged(ReturnValidIntFromString(iCameraFocalLenth.text));
+                OnCameraFocalLengthChanged(iCameraFocalLenth);
             });
 
             iSensorSize[0].onEndEdit.AddListener(delegate
             {
-                OnSensorSizeWidthChanged(ReturnValidIntFromString(iSensorSize[0].text));
+                OnSensorSizeWidthChanged(iSensorSize[0]);
             });
 
             iSensorSize[1].onEndEdit.AddListener(delegate
             {
-                OnSensorSizeHeightChanged(ReturnValidIntFromString(iSensorSize[1].text));
+                OnSensorSizeHeightChanged(iSensorSize[1]);
             });
 
             iSensorDynamicRange.onEndEdit.AddListener(delegate
             {
-                OnSensorDynamicRangeChanged(ReturnValidIntFromString(iSensorDynamicRange.text));
+                OnSensorDynamicRangeChanged(iSensorDynamicRange);
             });
 
             dOptionalScreenSource.onValueChanged.AddListener(delegate
@@ -173,7 +173,7 @@ namespace MRR.View
             });
         }
 
-        // event callback methods
+        // event callback settings
 
         private void OnPhysicalCameraChanged(string sourceName)
         {
@@ -190,39 +190,74 @@ namespace MRR.View
             Debug.Log("Changed camera preset!");
         }
 
-        private void OnCameraResolutionWidthChanged(int resolutionWidth)
+        private void OnCameraResolutionWidthChanged(InputField iResolutionWidth)
         {
-            Debug.Log("Changed camera resolution width!");
+            int width = ReturnValidIntFromString(iResolutionWidth.text);
+
+            if (width == 0)
+                iResolutionWidth.text = appController.GetVirtualCameraController().GetCameraSettings().resolutionWidth.ToString();
+            else
+                Debug.Log("Changed camera resolution width!");
         }
 
-        private void OnCameraResolutionHeightChanged(int resolutionHeight)
+        private void OnCameraResolutionHeightChanged(InputField iResolutionHeight)
         {
-            Debug.Log("Changed camera resolution height!");
+            int height = ReturnValidIntFromString(iResolutionHeight.text);
+
+            if (height == 0)
+                iResolutionHeight.text = appController.GetVirtualCameraController().GetCameraSettings().resolutionHeight.ToString();
+            else
+                Debug.Log("Changed camera resolution height!");
         }
 
-        private void OnCameraFramerateChanged(int framerate)
+        private void OnCameraFramerateChanged(InputField iFramerate)
         {
-            Debug.Log("Changed camera framerate!");
+            int framerate = ReturnValidIntFromString(iFramerate.text);
+
+            if (framerate == 0)
+                iFramerate.text = appController.GetVirtualCameraController().GetCameraSettings().framerate.ToString();
+            else
+                Debug.Log("Changed camera framerate!");
         }
 
-        private void OnCameraFocalLengthChanged(int focalLength)
+        private void OnCameraFocalLengthChanged(InputField iFocalLength)
         {
-            Debug.Log("Changed camera focal length!");
+            int focalLength = ReturnValidIntFromString(iFocalLength.text);
+
+            if (focalLength == 0)
+                iFocalLength.text = appController.GetVirtualCameraController().GetCameraSettings().focalLenth.ToString();
+            else
+                Debug.Log("Changed camera focal length!");
         }
 
-        private void OnSensorSizeWidthChanged(int sensorWidth)
+        private void OnSensorSizeWidthChanged(InputField iSensorWidth)
         {
-            Debug.Log("Changed sensor size width!");
+            int sensorWidth = ReturnValidIntFromString(iSensorWidth.text);
+
+            if (sensorWidth == 0)
+                iSensorWidth.text = appController.GetVirtualCameraController().GetCameraSettings().sensorWidth.ToString();
+            else
+                Debug.Log("Changed sensor size width!");
         }
 
-        private void OnSensorSizeHeightChanged(int sensorHeight)
+        private void OnSensorSizeHeightChanged(InputField iSensorHeight)
         {
-            Debug.Log("Changed sensor size heigth!");
+            int sensorHeight = ReturnValidIntFromString(iSensorHeight.text);
+
+            if (sensorHeight == 0)
+                iSensorHeight.text = appController.GetVirtualCameraController().GetCameraSettings().sensorHeight.ToString();
+            else
+                Debug.Log("Changed sensor size heigth!");
         }
 
-        private void OnSensorDynamicRangeChanged(int sensorHeight)
+        private void OnSensorDynamicRangeChanged(InputField iSensorDynamicRange)
         {
-            Debug.Log("Changed sensor dynamic range!");
+            int sensorDynamicRange = ReturnValidIntFromString(iSensorDynamicRange.text);
+
+            if (sensorDynamicRange == 0)
+                iSensorDynamicRange.text = appController.GetVirtualCameraController().GetCameraSettings().dynamicRange.ToString();
+            else
+                Debug.Log("Changed sensor dynamic range!");
         }
 
         private void OnOptionalScreenChanged(string sourceName)
@@ -239,6 +274,8 @@ namespace MRR.View
         {
             Debug.Log("Changed output codec!");
         } 
+
+        // event callback sensor offset - REALTIME
 
         private void OnSensorOffsetPositionXChanged(float x)
         {
