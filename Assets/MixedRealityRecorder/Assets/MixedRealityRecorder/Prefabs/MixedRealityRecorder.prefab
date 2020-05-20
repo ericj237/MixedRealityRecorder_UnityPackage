@@ -11942,8 +11942,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d06b393201e5eb4ba2eab14236bd15f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  matDepthTexture: {fileID: 2100000, guid: 65d78336d94d99f4687f242fdf5f3092, type: 2}
   appController: {fileID: 904347279075937804}
+  matDepthTexture: {fileID: 2100000, guid: 65d78336d94d99f4687f242fdf5f3092, type: 2}
 --- !u!1 &6148841860617510640
 GameObject:
   m_ObjectHideFlags: 0
@@ -13132,12 +13132,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c0037ec15d98a544bd072a341667755, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiView: {fileID: 6701903564010593674}
   virtualCamera: {fileID: 1635771267612320462}
+  uiView: {fileID: 6701903564010593674}
+  matForegroundMask: {fileID: 2100000, guid: 39e54473b0e74214d804fe360cd2c86a, type: 2}
   cameraPresets:
   - {fileID: 11400000, guid: ee1b237ceed1fd440b4a5f72edf83e8b, type: 2}
   targetObjects: []
-  matForegroundMask: {fileID: 2100000, guid: 39e54473b0e74214d804fe360cd2c86a, type: 2}
 --- !u!1 &6729394067924925621
 GameObject:
   m_ObjectHideFlags: 0
@@ -15792,7 +15792,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3451878422321967412}
   - component: {fileID: 5804706171241315711}
-  - component: {fileID: 136806250337420822}
   m_Layer: 0
   m_Name: cam_ui
   m_TagString: Untagged
@@ -15857,14 +15856,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &136806250337420822
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8428700343197109673}
-  m_Enabled: 1
 --- !u!1 &8575976839698785642
 GameObject:
   m_ObjectHideFlags: 0

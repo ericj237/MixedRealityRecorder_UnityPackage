@@ -10,18 +10,19 @@ namespace MRR.Controller
     public class MrrAppController : MonoBehaviour
     {
 
+        public MrrVirtualCameraController virtualCamera;
         public MrrUiView uiView;
 
-        public MrrVirtualCameraController virtualCamera;
+        public Material matForegroundMask;
 
         public List<CameraPreset> cameraPresets = new List<CameraPreset>();
         public List<GameObject> targetObjects = new List<GameObject>();
+        private WebCamDevice[] webCamDevices;
 
-        public Material matForegroundMask;
         private RenderTexture foregroundMaskTexture;
         private WebCamTexture rawPhysicalCameraTexture;
 
-        private WebCamDevice[] webCamDevices;
+        // init methods - entry point for MixedRealtiyRecorder
 
         void Start()
         {
@@ -52,6 +53,8 @@ namespace MRR.Controller
             uiView.Init();
         }
 
+        // main loop
+
         private void RunCycle()
         {
             var stopWatch = Stopwatch.StartNew();
@@ -72,24 +75,11 @@ namespace MRR.Controller
             Graphics.Blit(virtualCamera.GetDepthTexture(), foregroundMaskTexture, matForegroundMask);
         }
 
-        public List<CameraPreset> GetCameraPresets()
-        {
-            return cameraPresets;
-        }
-
-        public WebCamDevice[] GetWebCamDevices()
-        {
-            return webCamDevices;
-        }
+        // caching methods
 
         private void CacheWebcamDevices()
         {
             webCamDevices = WebCamTexture.devices;
-        }
-
-        public List<GameObject> GetTargetObjects()
-        {
-            return targetObjects;
         }
 
         private void CacheTargetObjects()
@@ -99,6 +89,23 @@ namespace MRR.Controller
             foreach (Camera camera in cameras)
                 if (camera.gameObject.name != "cam_virtual" && camera.gameObject.name != "cam_ui")
                     targetObjects.Add(camera.gameObject);
+        }
+
+        // getter methods
+
+        public WebCamDevice[] GetWebCamDevices()
+        {
+            return webCamDevices;
+        }
+
+        public List<GameObject> GetTargetObjects()
+        {
+            return targetObjects;
+        }
+
+        public List<CameraPreset> GetCameraPresets()
+        {
+            return cameraPresets;
         }
 
         public MrrVirtualCameraController GetVirtualCameraController()

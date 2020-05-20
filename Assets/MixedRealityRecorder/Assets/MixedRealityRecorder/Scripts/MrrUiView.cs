@@ -90,7 +90,45 @@ namespace MRR.View
                 OnCameraPresetChanged(dCameraPresetDevice.captionText.text);
             });
 
-            // HERE CAMERA VALUES CALLBACKS
+            iCameraResolution[0].onEndEdit.AddListener(delegate
+            {                
+                OnCameraResolutionWidthChanged(ReturnValidIntFromString(iCameraResolution[0].text));
+            });
+
+            iCameraResolution[1].onEndEdit.AddListener(delegate
+            {
+                OnCameraResolutionHeightChanged(ReturnValidIntFromString(iCameraResolution[1].text));
+            });
+
+            iCameraFramerate.onEndEdit.AddListener(delegate
+            {
+                OnCameraFramerateChanged(ReturnValidIntFromString(iCameraFramerate.text));
+            });
+
+            iCameraFocalLenth.onEndEdit.AddListener(delegate
+            {
+                OnCameraFocalLengthChanged(ReturnValidIntFromString(iCameraFocalLenth.text));
+            });
+
+            iSensorSize[0].onEndEdit.AddListener(delegate
+            {
+                OnSensorSizeWidthChanged(ReturnValidIntFromString(iSensorSize[0].text));
+            });
+
+            iSensorSize[1].onEndEdit.AddListener(delegate
+            {
+                OnSensorSizeHeightChanged(ReturnValidIntFromString(iSensorSize[1].text));
+            });
+
+            iSensorDynamicRange.onEndEdit.AddListener(delegate
+            {
+                OnSensorDynamicRangeChanged(ReturnValidIntFromString(iSensorDynamicRange.text));
+            });
+
+            dOptionalScreenSource.onValueChanged.AddListener(delegate
+            {
+                OnOptionalScreenChanged(dOptionalScreenSource.captionText.text);
+            });
 
             iOutputPath.onEndEdit.AddListener(delegate
             {
@@ -103,35 +141,35 @@ namespace MRR.View
             });
 
             // events offset position
-            iSensorOffsetPosition[0].onValueChanged.AddListener(delegate
+            iSensorOffsetPosition[0].onEndEdit.AddListener(delegate
             {
-                OnSensorOffsetPositionXChanged(iSensorOffsetPosition[0].text);
+                OnSensorOffsetPositionXChanged(ReturnValidFloatFromString(iSensorOffsetPosition[0].text));
             });
 
-            iSensorOffsetPosition[1].onValueChanged.AddListener(delegate
+            iSensorOffsetPosition[1].onEndEdit.AddListener(delegate
             {
-                OnSensorOffsetPositionYChanged(iSensorOffsetPosition[1].text);
+                OnSensorOffsetPositionYChanged(ReturnValidFloatFromString(iSensorOffsetPosition[1].text));
             });
 
-            iSensorOffsetPosition[2].onValueChanged.AddListener(delegate
+            iSensorOffsetPosition[2].onEndEdit.AddListener(delegate
             {
-                OnSensorOffsetPositionZChanged(iSensorOffsetPosition[2].text);
+                OnSensorOffsetPositionZChanged(ReturnValidFloatFromString(iSensorOffsetPosition[2].text));
             });
 
             // events offset rotation
-            iSensorOffsetRotation[0].onValueChanged.AddListener(delegate
+            iSensorOffsetRotation[0].onEndEdit.AddListener(delegate
             {
-                OnSensorOffsetRotationXChanged(iSensorOffsetRotation[0].text);
+                OnSensorOffsetRotationXChanged(ReturnValidFloatFromString(iSensorOffsetRotation[0].text));
             });
 
-            iSensorOffsetRotation[1].onValueChanged.AddListener(delegate
+            iSensorOffsetRotation[1].onEndEdit.AddListener(delegate
             {
-                OnSensorOffsetRotationYChanged(iSensorOffsetRotation[1].text);
+                OnSensorOffsetRotationYChanged(ReturnValidFloatFromString(iSensorOffsetRotation[1].text));
             });
 
-            iSensorOffsetRotation[2].onValueChanged.AddListener(delegate
+            iSensorOffsetRotation[2].onEndEdit.AddListener(delegate
             {
-                OnSensorOffsetRotationZChanged(iSensorOffsetRotation[2].text);
+                OnSensorOffsetRotationZChanged(ReturnValidFloatFromString(iSensorOffsetRotation[2].text));
             });
         }
 
@@ -151,7 +189,47 @@ namespace MRR.View
         {
             Debug.Log("Changed camera preset!");
         }
-                          
+
+        private void OnCameraResolutionWidthChanged(int resolutionWidth)
+        {
+            Debug.Log("Changed camera resolution width!");
+        }
+
+        private void OnCameraResolutionHeightChanged(int resolutionHeight)
+        {
+            Debug.Log("Changed camera resolution height!");
+        }
+
+        private void OnCameraFramerateChanged(int framerate)
+        {
+            Debug.Log("Changed camera framerate!");
+        }
+
+        private void OnCameraFocalLengthChanged(int focalLength)
+        {
+            Debug.Log("Changed camera focal length!");
+        }
+
+        private void OnSensorSizeWidthChanged(int sensorWidth)
+        {
+            Debug.Log("Changed sensor size width!");
+        }
+
+        private void OnSensorSizeHeightChanged(int sensorHeight)
+        {
+            Debug.Log("Changed sensor size heigth!");
+        }
+
+        private void OnSensorDynamicRangeChanged(int sensorHeight)
+        {
+            Debug.Log("Changed sensor dynamic range!");
+        }
+
+        private void OnOptionalScreenChanged(string sourceName)
+        {
+            Debug.Log("Changed optional screen source!");
+        }
+
         private void OnOutputPathChanged(string path)
         {
             Debug.Log("Changed output path!");
@@ -162,36 +240,39 @@ namespace MRR.View
             Debug.Log("Changed output codec!");
         } 
 
-        private void OnSensorOffsetPositionXChanged(string x)
+        private void OnSensorOffsetPositionXChanged(float x)
         {
-            appController.GetVirtualCameraController().SetSensorOffsetPosition(float.Parse(x), Vector3Component.x);
+            appController.GetVirtualCameraController().SetSensorOffsetPosition(x, Vector3Component.x);
+            UpdateSensorOffsetPosition();
         }
 
-        private void OnSensorOffsetPositionYChanged(string y)
+        private void OnSensorOffsetPositionYChanged(float y)
         {
-            appController.GetVirtualCameraController().SetSensorOffsetPosition(float.Parse(y), Vector3Component.y);
+            appController.GetVirtualCameraController().SetSensorOffsetPosition(y, Vector3Component.y);
+            UpdateSensorOffsetPosition();
         }
 
-        private void OnSensorOffsetPositionZChanged(string z)
+        private void OnSensorOffsetPositionZChanged(float z)
         {
-            appController.GetVirtualCameraController().SetSensorOffsetPosition(float.Parse(z), Vector3Component.z);
+            appController.GetVirtualCameraController().SetSensorOffsetPosition(z, Vector3Component.z);
+            UpdateSensorOffsetPosition();
         }                    
 
-        private void OnSensorOffsetRotationXChanged(string x)
+        private void OnSensorOffsetRotationXChanged(float x)
         {
-            appController.GetVirtualCameraController().SetSensorOffsetRotation(float.Parse(x), Vector3Component.x);
+            appController.GetVirtualCameraController().SetSensorOffsetRotation(x, Vector3Component.x);
             UpdateSensorOffsetRotation();
         }
 
-        private void OnSensorOffsetRotationYChanged(string y)
+        private void OnSensorOffsetRotationYChanged(float y)
         {
-            appController.GetVirtualCameraController().SetSensorOffsetRotation(float.Parse(y), Vector3Component.y);
+            appController.GetVirtualCameraController().SetSensorOffsetRotation(y, Vector3Component.y);
             UpdateSensorOffsetRotation();
         }
 
-        private void OnSensorOffsetRotationZChanged(string z)
+        private void OnSensorOffsetRotationZChanged(float z)
         {
-            appController.GetVirtualCameraController().SetSensorOffsetRotation(float.Parse(z), Vector3Component.z);
+            appController.GetVirtualCameraController().SetSensorOffsetRotation(z, Vector3Component.z);
             UpdateSensorOffsetRotation();
         }
 
@@ -300,8 +381,7 @@ namespace MRR.View
 
             List<Dropdown.OptionData> optionData = new List<Dropdown.OptionData>();
 
-            optionData.Add(new Dropdown.OptionData("None"));
-            //optionData.Add(new Dropdown.OptionData("Composite"));
+            optionData.Add(new Dropdown.OptionData("Depth Virtual Camera"));
 
             foreach (WebCamDevice source in webCamDevices)
             {
@@ -480,6 +560,8 @@ namespace MRR.View
             }
         }
 
+        // util methods
+
         private string GetCodecName(Codec codec)
         {
             switch (codec)
@@ -489,6 +571,22 @@ namespace MRR.View
                 default:
                     return "None";
             }
+        }
+
+        private float ReturnValidFloatFromString(string input)
+        {
+            if (input == "" || input == "-")
+                return 0.0f;
+            else
+                return float.Parse(input);
+        }
+
+        private int ReturnValidIntFromString(string input)
+        {             
+            if(input == "" || input[0] == '-')
+                return 0;
+            else
+                return int.Parse(input);
         }
     }
 }

@@ -774,11 +774,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: MixedRealityRecorder
       objectReference: {fileID: 0}
-    - target: {fileID: 1635771267612320462, guid: 3d832f69edbe6b7498c6be0963342e51,
-        type: 3}
-      propertyPath: foregroundTarget
-      value: 
-      objectReference: {fileID: 10416257}
     - target: {fileID: 6148841860617510641, guid: 3d832f69edbe6b7498c6be0963342e51,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2718,26 +2713,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3011126301572072384, guid: 3d832f69edbe6b7498c6be0963342e51,
-        type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3011126301572072384, guid: 3d832f69edbe6b7498c6be0963342e51,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3011126301572072384, guid: 3d832f69edbe6b7498c6be0963342e51,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3011126301572072384, guid: 3d832f69edbe6b7498c6be0963342e51,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 434926183769459994, guid: 3d832f69edbe6b7498c6be0963342e51,
         type: 3}
       propertyPath: m_AnchorMin.y
@@ -3236,11 +3211,6 @@ PrefabInstance:
     - target: {fileID: 2487419496852423725, guid: 3d832f69edbe6b7498c6be0963342e51,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6148841860107912221, guid: 3d832f69edbe6b7498c6be0963342e51,
-        type: 3}
-      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 121625948104945643, guid: 3d832f69edbe6b7498c6be0963342e51,
