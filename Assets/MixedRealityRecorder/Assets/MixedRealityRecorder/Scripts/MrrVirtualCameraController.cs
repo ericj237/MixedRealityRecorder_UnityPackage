@@ -11,7 +11,7 @@ namespace MRR.Controller
         public Material matDepthTexture;
 
         private Camera virtualCamera;
-        private CameraSettings cameraSettings = new CameraSettings();
+        private CameraSetting cameraSettings = new CameraSetting();
 
         private Transform target;
         private float targetDepth;
@@ -23,7 +23,7 @@ namespace MRR.Controller
 
         // init method
 
-        public void Init(CameraSettings cameraSetting, GameObject targetObject)
+        public void Init(CameraSetting cameraSetting, GameObject targetObject)
         {
             SetTargetObject(targetObject);
 
@@ -110,7 +110,7 @@ namespace MRR.Controller
 
         // getter methods
 
-        public CameraSettings GetCameraSettings()
+        public CameraSetting GetCameraSettings()
         {
             return cameraSettings;
         }
@@ -137,13 +137,13 @@ namespace MRR.Controller
 
         // setter methods
 
-        public void SetCameraSettings(CameraSettings cameraSettings)
+        public void SetCameraSettings(CameraSetting cameraSettings)
         {
             this.cameraSettings = cameraSettings;
             UpdateCameraSettings();
         }
 
-        private void SetTargetObject(GameObject targetObject)
+        public void SetTargetObject(GameObject targetObject)
         {
             target = targetObject.transform;
         }

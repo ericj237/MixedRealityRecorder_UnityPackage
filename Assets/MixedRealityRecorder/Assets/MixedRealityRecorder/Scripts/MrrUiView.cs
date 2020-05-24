@@ -57,16 +57,19 @@ namespace MRR.View
 
         public void Init()
         {
-            //EnableButtonApplyA(false);
-            //EnableButtonResetA(false);
+            EnableButtonsA(false);
 
             SetPhysicalCameraInputSources();
             SetTargetObjects();
             SetCameraPresets();
-            SetCameraValues();
+
+            UpdateCameraValues();
+
             SetOptionalScreenInputSources();
+
             SetOutputPath(Application.persistentDataPath);
             SetOutputCodecPresets();
+
             SetFooterValues(appController.GetVirtualCameraController().GetCameraSettings());
 
             RegisterEvents();
@@ -140,6 +143,16 @@ namespace MRR.View
                 OnOuputCodecChanged(dOutputCodec.captionText.text);
             });
 
+            bApplyA.onClick.AddListener(delegate
+            {
+                OnButtonApplyAClicked(bApplyA);
+            });
+
+            bResetA.onClick.AddListener(delegate
+            {
+                OnButtonResetAClicked(bResetA);
+            });
+
             // events offset position
             iSensorOffsetPosition[0].onEndEdit.AddListener(delegate
             {
@@ -178,16 +191,22 @@ namespace MRR.View
         private void OnPhysicalCameraChanged(string sourceName)
         {
             Debug.Log("Changed physical camera source!");
+            EnableButtonsA(true);
         }
 
         private void OnTargetObjectChanged(string targetName)
         {
             Debug.Log("Changed target object!");
+            EnableButtonsA(true);
         }
 
         private void OnCameraPresetChanged(string presetName)
         {
             Debug.Log("Changed camera preset!");
+
+            SetCameraValues(appController.GetCameraSettingByPresetName(presetName));
+
+            EnableButtonsA(true);
         }
 
         private void OnCameraResolutionWidthChanged(InputField iResolutionWidth)
@@ -195,11 +214,12 @@ namespace MRR.View
             int width = ReturnValidIntFromString(iResolutionWidth.text);
 
             if (width == 0)
-                iResolutionWidth.text = appController.GetVirtualCameraController().GetCameraSettings().resolutionWidth.ToString();
+                UpdateCameraResolutionWidth();
             else
             {
                 Debug.Log("Changed camera resolution width!");
-                EnableCustomCameraPreset(true);
+                SetCustomCameraPreset();
+                EnableButtonsA(true);
             }
         }
 
@@ -208,9 +228,14 @@ namespace MRR.View
             int height = ReturnValidIntFromString(iResolutionHeight.text);
 
             if (height == 0)
-                iResolutionHeight.text = appController.GetVirtualCameraController().GetCameraSettings().resolutionHeight.ToString();
+                UpdateCameraResolutionHeight();
             else
+            {
                 Debug.Log("Changed camera resolution height!");
+                SetCustomCameraPreset();
+                EnableButtonsA(true);
+            }
+
         }
 
         private void OnCameraFramerateChanged(InputField iFramerate)
@@ -218,11 +243,12 @@ namespace MRR.View
             int framerate = ReturnValidIntFromString(iFramerate.text);
 
             if (framerate == 0)
-                iFramerate.text = appController.GetVirtualCameraController().GetCameraSettings().framerate.ToString();
+                UpdateCameraFramerate();
             else
             {
                 Debug.Log("Changed camera framerate!");
-                EnableCustomCameraPreset(true);
+                SetCustomCameraPreset();
+                EnableButtonsA(true);
             }
         }
 
@@ -231,11 +257,12 @@ namespace MRR.View
             int focalLength = ReturnValidIntFromString(iFocalLength.text);
 
             if (focalLength == 0)
-                iFocalLength.text = appController.GetVirtualCameraController().GetCameraSettings().focalLenth.ToString();
+                UpdateCameraFocalLength();
             else
             {
                 Debug.Log("Changed camera focal length!");
-                EnableCustomCameraPreset(true);
+                SetCustomCameraPreset();
+                EnableButtonsA(true);
             }
         }
 
@@ -244,11 +271,12 @@ namespace MRR.View
             int sensorWidth = ReturnValidIntFromString(iSensorWidth.text);
 
             if (sensorWidth == 0)
-                iSensorWidth.text = appController.GetVirtualCameraController().GetCameraSettings().sensorWidth.ToString();
+                UpdateSensorWidth();
             else
             {
                 Debug.Log("Changed sensor size width!");
-                EnableCustomCameraPreset(true);
+                SetCustomCameraPreset();
+                EnableButtonsA(true);
             }
         }
 
@@ -257,11 +285,12 @@ namespace MRR.View
             int sensorHeight = ReturnValidIntFromString(iSensorHeight.text);
 
             if (sensorHeight == 0)
-                iSensorHeight.text = appController.GetVirtualCameraController().GetCameraSettings().sensorHeight.ToString();
+                UpdateSensorHeight();
             else
             {
                 Debug.Log("Changed sensor size heigth!");
-                EnableCustomCameraPreset(true);
+                SetCustomCameraPreset();
+                EnableButtonsA(true);
             }
         }
 
@@ -270,27 +299,31 @@ namespace MRR.View
             int sensorDynamicRange = ReturnValidIntFromString(iSensorDynamicRange.text);
 
             if (sensorDynamicRange == 0)
-                iSensorDynamicRange.text = appController.GetVirtualCameraController().GetCameraSettings().dynamicRange.ToString();
+                UpdateSensorDynamicRange();
             else
             {
                 Debug.Log("Changed sensor dynamic range!");
-                EnableCustomCameraPreset(true);
+                SetCustomCameraPreset();
+                EnableButtonsA(true);
             }
         }
 
         private void OnOptionalScreenChanged(string sourceName)
         {
             Debug.Log("Changed optional screen source!");
+            EnableButtonsA(true);
         }
 
         private void OnOutputPathChanged(string path)
         {
             Debug.Log("Changed output path!");
+            EnableButtonsA(true);
         } 
 
         private void OnOuputCodecChanged(string codecName)
         {
             Debug.Log("Changed output codec!");
+            EnableButtonsA(true);
         } 
 
         // event callback sensor offset - REALTIME
@@ -329,6 +362,52 @@ namespace MRR.View
         {
             appController.GetVirtualCameraController().SetSensorOffsetRotation(z, Vector3Component.z);
             UpdateSensorOffsetRotation();
+        }
+
+        // event callback buttons
+
+        private void OnButtonApplyAClicked(Button bApplyA)
+        {
+            Debug.Log("Clicked button apply A!");
+            EnableButtonsA(false);
+
+            Settings settings = new Settings();
+            settings.cameraSettings = new CameraSetting();
+
+            settings.physicalCameraSource = GetSelectedPhysicalCamera();
+            settings.targetObject = GetSelectedTargetObject();
+            settings.cameraPreset = GetSelectedCameraPreset();
+            settings.cameraSettings.resolutionWidth = GetSelectedCameraResolutionWidth();
+            settings.cameraSettings.resolutionHeight = GetSelectedCameraResolutionHeight();
+            settings.cameraSettings.framerate = GetSelectedCameraFramerate();
+            settings.cameraSettings.focalLenth = GetSelectedCameraFocalLength();
+            settings.cameraSettings.sensorWidth = GetSelectedSensorSizeWidth();
+            settings.cameraSettings.sensorHeight = GetSelectedSensorSizeHeight();
+            settings.cameraSettings.dynamicRange = GetSelectedSensorDynamicRange();
+            settings.outputPath = GetSelectedOutputPath();
+            settings.outputCodec = GetSelectedOuputCodec();
+
+            appController.ApplySettings(settings);
+            SetFooterValues(settings.cameraSettings);
+        }
+
+        private void OnButtonResetAClicked(Button bResetA)
+        {
+            Debug.Log("Clicked button reset A!");
+            EnableButtonsA(false);
+
+            SetPhysicalCameraInputSources();
+            SetTargetObjects();
+            SetCameraPresets();
+
+            UpdateCameraValues();
+
+            SetOptionalScreenInputSources();
+
+            SetOutputPath(Application.persistentDataPath);
+            SetOutputCodecPresets();
+
+            SetFooterValues(appController.GetVirtualCameraController().GetCameraSettings());
         }
 
         // update methods
@@ -386,6 +465,41 @@ namespace MRR.View
 
         // setter methods
 
+        private void SetCameraResolutionWidth(int resolutionWidth)
+        {
+            iCameraResolution[0].SetTextWithoutNotify(resolutionWidth.ToString());
+        }
+
+        private void SetCameraResolutionHeight(int resolutionHeight)
+        {
+            iCameraResolution[1].SetTextWithoutNotify(resolutionHeight.ToString());
+        }
+
+        private void SetCameraFramerate(int framerate)
+        {
+            iCameraFramerate.SetTextWithoutNotify(framerate.ToString());
+        }
+
+        private void SetCameraFocalLength(int focalLenth)
+        {
+            iCameraFocalLenth.SetTextWithoutNotify(focalLenth.ToString());
+        }
+
+        private void SetSensorHeight(int sensorHeight)
+        {
+            iSensorSize[1].SetTextWithoutNotify(sensorHeight.ToString());
+        }
+
+        private void SetSensorWidth(int sensorWidth)
+        {
+            iSensorSize[1].SetTextWithoutNotify(sensorWidth.ToString());
+        }
+
+        private void SetSensorDynamicRange(int dynamicRange)
+        {
+            iSensorDynamicRange.SetTextWithoutNotify(dynamicRange.ToString());
+        }
+
         private void SetPhysicalCameraInputSources()
         {
             dPhysicalCameraSource.ClearOptions();
@@ -428,25 +542,20 @@ namespace MRR.View
             dCameraPresetDevice.AddOptions(optionData);
         }
 
-        private void EnableCustomCameraPreset(bool toggle)
+        private void SetCustomCameraPreset()
         {
-            if (toggle == true)
-            {
-                dCameraPresetDevice.ClearOptions();
+            dCameraPresetDevice.ClearOptions();
 
-                List<CameraPreset> cameraPresets = appController.GetCameraPresets();
+            List<CameraPreset> cameraPresets = appController.GetCameraPresets();
 
-                List<Dropdown.OptionData> optionData = new List<Dropdown.OptionData>();
+            List<Dropdown.OptionData> optionData = new List<Dropdown.OptionData>();
 
-                optionData.Add(new Dropdown.OptionData("Custom"));
+            optionData.Add(new Dropdown.OptionData("Custom"));
 
-                foreach (CameraPreset device in cameraPresets)
-                    optionData.Add(new Dropdown.OptionData(device.presetName));
+            foreach (CameraPreset device in cameraPresets)
+                optionData.Add(new Dropdown.OptionData(device.presetName));
 
-                dCameraPresetDevice.AddOptions(optionData);
-            }
-            else
-                SetCameraPresets();
+            dCameraPresetDevice.AddOptions(optionData);
         }
 
         private void SetOptionalScreenInputSources()
@@ -480,7 +589,18 @@ namespace MRR.View
             dOutputCodec.AddOptions(optionData);
         }
 
-        private void SetCameraValues()
+        private void SetCameraValues(CameraSetting cameraSetting)
+        {
+            SetCameraResolutionWidth(cameraSetting.resolutionWidth);
+            SetCameraResolutionHeight(cameraSetting.resolutionHeight);
+            SetCameraFramerate(cameraSetting.framerate);
+            SetCameraFocalLength(cameraSetting.focalLenth);
+            SetSensorHeight(cameraSetting.sensorHeight);
+            SetSensorWidth(cameraSetting.sensorWidth);
+            SetSensorDynamicRange(cameraSetting.dynamicRange);
+        }
+
+        private void UpdateCameraValues()
         {
             UpdateCameraResolutionWidth();
             UpdateCameraResolutionHeight();
@@ -494,7 +614,7 @@ namespace MRR.View
             UpdateSensorOffsetRotation();
         }
 
-        private void SetFooterValues(CameraSettings cameraSettings)
+        private void SetFooterValues(CameraSetting cameraSettings)
         {
             SetFooterResolutionWidth(cameraSettings.resolutionWidth);
             SetFooterResolutionHeight(cameraSettings.resolutionHeight);
@@ -606,34 +726,95 @@ namespace MRR.View
             screenOptional.texture = texture2D;
         }
 
+        // getter methods
+
+        public string GetSelectedPhysicalCamera()
+        {
+            return dPhysicalCameraSource.captionText.text;
+        }
+
+        private string GetSelectedTargetObject()
+        {
+            return dTargetObject.captionText.text;
+        }
+
+        private string GetSelectedCameraPreset()
+        {
+            return dCameraPresetDevice.captionText.text;
+        }
+
+        private int GetSelectedCameraResolutionWidth()
+        {
+            return int.Parse(iCameraResolution[0].text);
+        }
+
+        private int GetSelectedCameraResolutionHeight()
+        {
+            return int.Parse(iCameraResolution[1].text);
+        }
+
+        private int GetSelectedCameraFramerate()
+        {
+            return int.Parse(iCameraFramerate.text);
+        }
+
+        private int GetSelectedCameraFocalLength()
+        {
+            return int.Parse(iCameraFocalLenth.text);
+        }
+
+        private int GetSelectedSensorSizeWidth()
+        {
+            return int.Parse(iSensorSize[0].text);
+        }
+
+        private int GetSelectedSensorSizeHeight()
+        {
+            return int.Parse(iSensorSize[1].text);
+        }
+
+        private int GetSelectedSensorDynamicRange()
+        {
+            return int.Parse(iSensorDynamicRange.text);
+        }
+
+        private string GetSelectedOptionalScreen()
+        {
+            return dOptionalScreenSource.captionText.text;
+        }
+
+        private string GetSelectedOutputPath()
+        {
+            return iOutputPath.text;
+        }
+
+        private string GetSelectedOuputCodec()
+        {
+            return dOutputCodec.captionText.text;
+        }
+
         // button util methods
 
         private void EnableButtonApplyA(bool toggle)
         {
             if (toggle == true)
-            {
-                bApplyA.targetGraphic.color = new Color(0, 184, 148);
                 bApplyA.interactable = true;
-            }
             else
-            {
-                bApplyA.targetGraphic.color = new Color(138, 184, 175);
                 bApplyA.interactable = false;
-            }
         }
 
         private void EnableButtonResetA(bool toggle)
         {
             if (toggle == true)
-            {
-                bResetA.targetGraphic.color = new Color(214, 48, 49);
                 bResetA.interactable = true;
-            }
             else
-            {
-                bResetA.targetGraphic.color = new Color(214, 161, 161);
                 bResetA.interactable = false;
-            }
+        }
+
+        private void EnableButtonsA(bool toggle)
+        {
+            EnableButtonApplyA(toggle);
+            EnableButtonResetA(toggle);
         }
 
         // util methods

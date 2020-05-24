@@ -3,7 +3,7 @@
 namespace MRR.Model
 {
     [System.Serializable]
-    public struct CameraSettings
+    public struct CameraSetting
     {
         // in px
         public int resolutionWidth, resolutionHeight;
@@ -30,7 +30,7 @@ namespace MRR.Model
     public class CameraPreset : ScriptableObject
     {
         public string presetName;
-        public CameraSettings cameraSettings;
+        public CameraSetting cameraSettings;
     }
 
     public enum Container
@@ -41,5 +41,16 @@ namespace MRR.Model
     public enum Codec
     {
         H246
+    }
+
+    public struct Settings
+    {
+        public string physicalCameraSource;
+        public string targetObject;
+        public string cameraPreset;
+        public CameraSetting cameraSettings;
+        public string optionalScreenSource;
+        public string outputPath;
+        public string outputCodec;
     }
 }
