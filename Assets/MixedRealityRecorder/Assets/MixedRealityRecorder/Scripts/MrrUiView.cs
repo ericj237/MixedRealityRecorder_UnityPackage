@@ -153,6 +153,11 @@ namespace MRR.View
                 OnButtonResetAClicked(bResetA);
             });
 
+            bRecord.onClick.AddListener(delegate
+            {
+                OnButtonRecordClicked();
+            });
+
             // events offset position
             iSensorOffsetPosition[0].onEndEdit.AddListener(delegate
             {
@@ -408,6 +413,11 @@ namespace MRR.View
             SetOutputCodecPresets();
 
             SetFooterValues(appController.GetVirtualCameraController().GetCameraSettings());
+        }
+
+        private void OnButtonRecordClicked()
+        {
+            appController.ToggleRecord();
         }
 
         // update methods

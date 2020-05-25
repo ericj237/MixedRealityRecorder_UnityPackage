@@ -3,6 +3,7 @@ using MRR.Model;
 using MRR.View;
 using System.Collections.Generic;
 using System.Diagnostics;
+using MRR.Video;
 
 namespace MRR.Controller
 {
@@ -24,9 +25,20 @@ namespace MRR.Controller
         private RenderTexture foregroundMaskTexture;
         private WebCamTexture rawPhysicalCameraTexture;
 
+        public MrrVideoRecorder videoRecorder;
+
+        public void ToggleRecord()
+        {
+            if(!videoRecorder.IsRecording())
+                videoRecorder.StartRecording(settings.outputPath, new Vector2Int(virtualCamera.GetCameraSettings().resolutionWidth, virtualCamera.GetCameraSettings().resolutionHeight));
+            else
+                videoRecorder.StopRecording();
+        }
+
         public void ApplySettings(Settings settings)
         {
             this.settings = settings;
+            settings.outputPath = Application.persistentDataPath;
 
             CancelInvoke();
 
@@ -50,28 +62,14 @@ namespace MRR.Controller
 
         void Start()
         {
+            settings.outputPath = Application.persistentDataPath;
+
             CacheWebcamDevices();
             CacheTargetObjects();
 
             virtualCamera.Init(cameraPresets[0].cameraSettings, targetObjects[0]);
 
-            // screen size
-            Vector2Int screenSize = new Vector2Int(virtualCamera.GetCameraSettings().resolutionWidth, virtualCamera.GetCameraSettings().resolutionHeight);
-
-            foregroundMaskTexture = new RenderTexture(screenSize.x, screenSize.y, 0, RenderTextureFormat.ARGBHalf);
-
-            rawPhysicalCameraTexture = new WebCamTexture();
-            rawPhysicalCameraTexture.Play();
-
-            // set foreground shader depth texture
-            matForegroundMask.SetTexture("_DepthTex", virtualCamera.GetDepthTexture());
-
-            // assign the textures to the ui raw image component
-            uiView.SetScreenVirtualCamera(virtualCamera.GetColorTexture());
-            uiView.SetScreenForegroundMask(foregroundMaskTexture);
-            uiView.SetScreenPhysicalCamera(rawPhysicalCameraTexture);
-            uiView.SetOptionalScreen(virtualCamera.GetDepthTexture());
-
+            UpdateInternalTextures();
             uiView.Init();
 
             StartCycle();
@@ -84,8 +82,15 @@ namespace MRR.Controller
 
             foregroundMaskTexture = new RenderTexture(screenSize.x, screenSize.y, 0, RenderTextureFormat.ARGBHalf);
 
-            rawPhysicalCameraTexture.Stop();
-            rawPhysicalCameraTexture = new WebCamTexture(settings.physicalCameraSource);
+            if(rawPhysicalCameraTexture != null && rawPhysicalCameraTexture.isPlaying)
+            {
+                rawPhysicalCameraTexture.Stop();
+            }
+            else
+            {
+                rawPhysicalCameraTexture = new WebCamTexture(settings.physicalCameraSource);
+            }
+
             rawPhysicalCameraTexture.Play();
 
             // set foreground shader depth texture
@@ -96,8 +101,6 @@ namespace MRR.Controller
             uiView.SetScreenForegroundMask(foregroundMaskTexture);
             uiView.SetScreenPhysicalCamera(rawPhysicalCameraTexture);
             uiView.SetOptionalScreen(virtualCamera.GetDepthTexture());
-
-            InvokeRepeating("RunCycle", 0.0f, ((float)1 / virtualCamera.GetCameraSettings().framerate));
         }
 
         // main loop
@@ -113,6 +116,8 @@ namespace MRR.Controller
 
             virtualCamera.Render();
             UpdateForegroundMask();
+
+            videoRecorder.RecordFrame(virtualCamera.GetColorTexture());
 
             long frameTime = stopWatch.ElapsedMilliseconds;
 
