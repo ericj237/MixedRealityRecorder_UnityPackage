@@ -63,7 +63,7 @@ namespace MRR.View
             SetTargetObjects();
             SetCameraPresets();
 
-            UpdateCameraValues();
+            SetCameraValues(appController.GetCameraSettingByPresetName(dCameraPresetDevice.captionText.text));
 
             SetOptionalScreenInputSources();
 
@@ -214,7 +214,7 @@ namespace MRR.View
             int width = ReturnValidIntFromString(iResolutionWidth.text);
 
             if (width == 0)
-                UpdateCameraResolutionWidth();
+                SetCameraResolutionWidth(appController.GetVirtualCameraController().GetCameraSettings().resolutionWidth);
             else
             {
                 Debug.Log("Changed camera resolution width!");
@@ -228,7 +228,7 @@ namespace MRR.View
             int height = ReturnValidIntFromString(iResolutionHeight.text);
 
             if (height == 0)
-                UpdateCameraResolutionHeight();
+                SetCameraResolutionHeight(appController.GetVirtualCameraController().GetCameraSettings().resolutionHeight);
             else
             {
                 Debug.Log("Changed camera resolution height!");
@@ -243,7 +243,7 @@ namespace MRR.View
             int framerate = ReturnValidIntFromString(iFramerate.text);
 
             if (framerate == 0)
-                UpdateCameraFramerate();
+                SetCameraFramerate(appController.GetVirtualCameraController().GetCameraSettings().framerate);
             else
             {
                 Debug.Log("Changed camera framerate!");
@@ -257,7 +257,7 @@ namespace MRR.View
             int focalLength = ReturnValidIntFromString(iFocalLength.text);
 
             if (focalLength == 0)
-                UpdateCameraFocalLength();
+                SetCameraFocalLength(appController.GetVirtualCameraController().GetCameraSettings().focalLenth);
             else
             {
                 Debug.Log("Changed camera focal length!");
@@ -271,7 +271,7 @@ namespace MRR.View
             int sensorWidth = ReturnValidIntFromString(iSensorWidth.text);
 
             if (sensorWidth == 0)
-                UpdateSensorWidth();
+                SetSensorWidth(appController.GetVirtualCameraController().GetCameraSettings().sensorWidth);
             else
             {
                 Debug.Log("Changed sensor size width!");
@@ -285,7 +285,7 @@ namespace MRR.View
             int sensorHeight = ReturnValidIntFromString(iSensorHeight.text);
 
             if (sensorHeight == 0)
-                UpdateSensorHeight();
+                SetSensorHeight(appController.GetVirtualCameraController().GetCameraSettings().sensorHeight);
             else
             {
                 Debug.Log("Changed sensor size heigth!");
@@ -299,7 +299,7 @@ namespace MRR.View
             int sensorDynamicRange = ReturnValidIntFromString(iSensorDynamicRange.text);
 
             if (sensorDynamicRange == 0)
-                UpdateSensorDynamicRange();
+                SetSensorDynamicRange(appController.GetVirtualCameraController().GetCameraSettings().dynamicRange);
             else
             {
                 Debug.Log("Changed sensor dynamic range!");
@@ -400,7 +400,7 @@ namespace MRR.View
             SetTargetObjects();
             SetCameraPresets();
 
-            UpdateCameraValues();
+            SetCameraValues(appController.GetCameraSettingByPresetName(dCameraPresetDevice.captionText.text));
 
             SetOptionalScreenInputSources();
 
@@ -411,41 +411,6 @@ namespace MRR.View
         }
 
         // update methods
-
-        private void UpdateCameraResolutionWidth()
-        {
-            iCameraResolution[0].SetTextWithoutNotify(appController.GetVirtualCameraController().GetCameraSettings().resolutionWidth.ToString());
-        }
-
-        private void UpdateCameraResolutionHeight()
-        {
-            iCameraResolution[1].SetTextWithoutNotify(appController.GetVirtualCameraController().GetCameraSettings().resolutionHeight.ToString());
-        }
-
-        private void UpdateCameraFramerate()
-        {
-            iCameraFramerate.SetTextWithoutNotify(appController.GetVirtualCameraController().GetCameraSettings().framerate.ToString());
-        }
-
-        private void UpdateCameraFocalLength()
-        {
-            iCameraFocalLenth.SetTextWithoutNotify(appController.GetVirtualCameraController().GetCameraSettings().focalLenth.ToString());
-        }
-
-        private void UpdateSensorHeight()
-        {
-            iSensorSize[0].SetTextWithoutNotify(appController.GetVirtualCameraController().GetCameraSettings().sensorHeight.ToString());
-        }
-
-        private void UpdateSensorWidth()
-        {
-            iSensorSize[1].SetTextWithoutNotify(appController.GetVirtualCameraController().GetCameraSettings().sensorWidth.ToString());
-        }
-
-        private void UpdateSensorDynamicRange()
-        {
-            iSensorDynamicRange.SetTextWithoutNotify(appController.GetVirtualCameraController().GetCameraSettings().dynamicRange.ToString());
-        }
 
         private void UpdateSensorOffsetPosition()
         {
@@ -492,7 +457,7 @@ namespace MRR.View
 
         private void SetSensorWidth(int sensorWidth)
         {
-            iSensorSize[1].SetTextWithoutNotify(sensorWidth.ToString());
+            iSensorSize[0].SetTextWithoutNotify(sensorWidth.ToString());
         }
 
         private void SetSensorDynamicRange(int dynamicRange)
@@ -598,20 +563,6 @@ namespace MRR.View
             SetSensorHeight(cameraSetting.sensorHeight);
             SetSensorWidth(cameraSetting.sensorWidth);
             SetSensorDynamicRange(cameraSetting.dynamicRange);
-        }
-
-        private void UpdateCameraValues()
-        {
-            UpdateCameraResolutionWidth();
-            UpdateCameraResolutionHeight();
-            UpdateCameraFramerate();
-            UpdateCameraFocalLength();
-            UpdateSensorHeight();
-            UpdateSensorWidth();
-            UpdateSensorDynamicRange();
-
-            UpdateSensorOffsetPosition();
-            UpdateSensorOffsetRotation();
         }
 
         private void SetFooterValues(CameraSetting cameraSettings)
