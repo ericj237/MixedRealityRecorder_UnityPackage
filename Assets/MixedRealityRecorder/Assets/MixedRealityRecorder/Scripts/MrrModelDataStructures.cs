@@ -33,14 +33,11 @@ namespace MRR.Model
         public CameraSetting cameraSettings;
     }
 
-    public enum Container
+    public enum OutputFormat
     {
-        MP4
-    }
-
-    public enum Codec
-    {
-        H246
+        ManualScreencapture,
+        TgaImageSequence,
+        BmpImageSequence
     }
 
     public struct Settings

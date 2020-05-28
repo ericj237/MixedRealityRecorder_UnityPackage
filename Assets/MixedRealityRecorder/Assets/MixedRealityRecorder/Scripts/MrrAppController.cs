@@ -141,11 +141,21 @@ namespace MRR.Controller
 
         private void CacheTargetObjects()
         {
-            Camera[] cameras = FindObjectsOfType<Camera>();
 
-            foreach (Camera camera in cameras)
-                if (camera.gameObject.name != "cam_virtual" && camera.gameObject.name != "cam_ui")
-                    targetObjects.Add(camera.gameObject);
+            if (GameObject.FindGameObjectsWithTag("Target").Length > 0)
+            {
+                GameObject[] targets = GameObject.FindGameObjectsWithTag("Target");
+
+                foreach (GameObject target in targets)
+                    targetObjects.Add(target);
+            }
+            else
+            {
+                GameObject debugTarget = new GameObject();
+                debugTarget.name = "debugTarget";
+                debugTarget.transform.position = virtualCamera.gameObject.transform.position + virtualCamera.gameObject.transform.forward * 100;
+                targetObjects.Add(debugTarget);
+            }
         }
 
         // getter methods

@@ -44,10 +44,9 @@ namespace MRR.View
         [Header("Footer")]
         public Text[] tCameraResolution = new Text[2];
         public Text tCameraFramerate;
-        public Text tOutputContainer;
-        public Text tOutputCodec;
+        public Text tOutputFormat;
         public Text tFrameTime;
-        public Text tAllocatedMemory;
+        public Text tMaxFrameTime;
 
         [Header("Screens")]
         public RawImage screenVirtualCamera;
@@ -68,7 +67,10 @@ namespace MRR.View
             SetOptionalScreenInputSources();
 
             SetOutputPath(Application.persistentDataPath);
-            SetOutputCodecPresets();
+            SetOutputFormatPresets();
+
+            UpdateSensorOffsetPosition();
+            UpdateSensorOffsetRotation();
 
             SetFooterValues(appController.GetVirtualCameraController().GetCameraSettings());
 
@@ -410,7 +412,7 @@ namespace MRR.View
             SetOptionalScreenInputSources();
 
             SetOutputPath(Application.persistentDataPath);
-            SetOutputCodecPresets();
+            SetOutputFormatPresets();
 
             SetFooterValues(appController.GetVirtualCameraController().GetCameraSettings());
         }
@@ -552,14 +554,14 @@ namespace MRR.View
             dOptionalScreenSource.AddOptions(optionData);
         }
 
-        private void SetOutputCodecPresets()
+        private void SetOutputFormatPresets()
         {
             dOutputCodec.ClearOptions();
 
             List<Dropdown.OptionData> optionData = new List<Dropdown.OptionData>();
 
-            foreach (Codec codec in (Codec[])System.Enum.GetValues(typeof(Codec)))
-                optionData.Add(new Dropdown.OptionData(GetCodecName(codec)));
+            foreach (OutputFormat outputFormat in (OutputFormat[])System.Enum.GetValues(typeof(OutputFormat)))
+                optionData.Add(new Dropdown.OptionData(GetOutputFormatName(outputFormat)));
 
             dOutputCodec.AddOptions(optionData);
         }
@@ -580,8 +582,8 @@ namespace MRR.View
             SetFooterResolutionWidth(cameraSettings.resolutionWidth);
             SetFooterResolutionHeight(cameraSettings.resolutionHeight);
             SetFooterFramerate(cameraSettings.framerate);
-            SetFooterOutputContainer(Container.MP4);
-            SetFooterOutputCodec(Codec.H246);
+            SetFooterOutputFormat(OutputFormat.TgaImageSequence);
+            SetFooterMaxFrameTime(1000 / cameraSettings.framerate);
         }
 
         private void SetOutputPath(string path)
@@ -606,21 +608,27 @@ namespace MRR.View
             tCameraFramerate.text = framerate.ToString();
         }
 
-        private void SetFooterOutputContainer(Container container)
+        private void SetFooterOutputFormat(OutputFormat format)
         {
-            switch (container)
+            switch (format)
             {
-                case Container.MP4:
-                    tOutputContainer.text = "MP4";
+                case OutputFormat.ManualScreencapture:
+                    tOutputFormat.text = "Manual Screencapture";
+                    break;
+                case OutputFormat.TgaImageSequence:
+                    tOutputFormat.text = "TGA Image Sequence";
+                    break;
+                case OutputFormat.BmpImageSequence:
+                    tOutputFormat.text = "BMP Image Sequence";
                     break;
                 default:
                     break;
             }
         }
 
-        private void SetFooterOutputCodec(Codec codec)
+        private void SetFooterMaxFrameTime(int maxFrameTime)
         {
-            tOutputCodec.text = GetCodecName(codec);
+            tMaxFrameTime.text = maxFrameTime.ToString();
         }
 
         public void SetFooterFrameTime(long frameTime)
@@ -643,11 +651,6 @@ namespace MRR.View
                 tFrameTime.color = new Color(225, 112, 85);
             else
                 tFrameTime.color = new Color(214, 48, 49);
-        }
-
-        public void SetFooterAllocatedMemory(int memory)
-        {
-            tAllocatedMemory.text = memory.ToString();
         }
 
         // setter screens methods
@@ -780,12 +783,16 @@ namespace MRR.View
 
         // util methods
 
-        private string GetCodecName(Codec codec)
+        private string GetOutputFormatName(OutputFormat outputFormat)
         {
-            switch (codec)
+            switch (outputFormat)
             {
-                case Codec.H246:
-                    return "H.246";
+                case OutputFormat.ManualScreencapture:
+                    return "Manual Screencapture";
+                case OutputFormat.TgaImageSequence:
+                    return "TGA Image Sequence";
+                case OutputFormat.BmpImageSequence:
+                    return "BMP Image Sequence";
                 default:
                     return "None";
             }
