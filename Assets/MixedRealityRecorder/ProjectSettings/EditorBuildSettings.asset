@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/MixedRealityRecorder/Scenes/scene_mrrDev.unity
+    guid: abd0ecacbeda6364fa41f03ed1c85d6c
   m_configObjects: {}

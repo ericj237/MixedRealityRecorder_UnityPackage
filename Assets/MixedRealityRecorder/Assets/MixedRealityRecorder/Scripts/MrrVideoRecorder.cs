@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MRR.Model;
+using System;
 using System.IO;
 using UnityEngine;
 
@@ -12,10 +13,12 @@ namespace MRR.Video
         private string outPath;
         private Texture2D outFrame;
         private Vector2Int outResolution;
+        private OutputFormat outFormat;
         private long frameCount;
 
-        public void StartRecording(string outPath, Vector2Int outResolution)
+        public void StartRecording(string outPath, OutputFormat outFormat, Vector2Int outResolution)
         {
+            this.outFormat = outFormat;
             this.outPath = outPath;
             this.outResolution = outResolution;
             frameCount = 0;
@@ -28,7 +31,6 @@ namespace MRR.Video
         public void StopRecording()
         {
             isRecording = false;
-            outFrame = null;
             Debug.Log("Stopped Recording!");
         }
 
@@ -36,7 +38,6 @@ namespace MRR.Video
         {
             if (isRecording)
             {
-
                 RenderTexture.active = frame;
 
                 outFrame.ReadPixels(new Rect(0, 0, outResolution.x, outResolution.y), 0, 0);
@@ -44,8 +45,7 @@ namespace MRR.Video
 
                 RenderTexture.active = null;
 
-                SaveFrameAsBmp(outFrame);
-
+                SaveFrame(outFrame);
             }
         }
 
@@ -53,7 +53,22 @@ namespace MRR.Video
         {
             if(isRecording)
             {
-                SaveFrameAsBmp(frame);
+                SaveFrame(frame);
+            }
+        }
+
+        private void SaveFrame(Texture2D frame)
+        {
+            switch(outFormat)
+            {
+                case OutputFormat.BmpImageSequence:
+                    SaveFrameAsBmp(frame);
+                    break;
+                case OutputFormat.TgaImageSequence:
+                    SaveFrameAsTga(frame);
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -81,24 +96,24 @@ namespace MRR.Video
                     {
 
                         // define the bitmap file header
-                        bw.Write((UInt16)0x4D42);                               // bfType;
-                        bw.Write((UInt32)(14 + 40 + (outResolution.x * outResolution.y * 4)));     // bfSize;
-                        bw.Write((UInt16)0);                                    // bfReserved1;
-                        bw.Write((UInt16)0);                                    // bfReserved2;
-                        bw.Write((UInt32)14 + 40);                              // bfOffBits;
+                        bw.Write((UInt16)0x4D42);                                                   // bfType;
+                        bw.Write((UInt32)(14 + 40 + (outResolution.x * outResolution.y * 4)));      // bfSize;
+                        bw.Write((UInt16)0);                                                        // bfReserved1;
+                        bw.Write((UInt16)0);                                                        // bfReserved2;
+                        bw.Write((UInt32)14 + 40);                                                  // bfOffBits;
 
                         // define the bitmap information header
-                        bw.Write((UInt32)40);                               // biSize;
-                        bw.Write((Int32)outResolution.x);                                 // biWidth;
-                        bw.Write((Int32)outResolution.y);                                // biHeight;
-                        bw.Write((UInt16)1);                                    // biPlanes;
-                        bw.Write((UInt16)32);                                   // biBitCount;
-                        bw.Write((UInt32)0);                                    // biCompression;
-                        bw.Write((UInt32)(outResolution.x * outResolution.y * 4));                 // biSizeImage;
-                        bw.Write((Int32)0);                                     // biXPelsPerMeter;
-                        bw.Write((Int32)0);                                     // biYPelsPerMeter;
-                        bw.Write((UInt32)0);                                    // biClrUsed;
-                        bw.Write((UInt32)0);                                    // biClrImportant;
+                        bw.Write((UInt32)40);                                                       // biSize;
+                        bw.Write((Int32)outResolution.x);                                           // biWidth;
+                        bw.Write((Int32)outResolution.y);                                           // biHeight;
+                        bw.Write((UInt16)1);                                                        // biPlanes;
+                        bw.Write((UInt16)32);                                                       // biBitCount;
+                        bw.Write((UInt32)0);                                                        // biCompression;
+                        bw.Write((UInt32)(outResolution.x * outResolution.y * 4));                  // biSizeImage;
+                        bw.Write((Int32)0);                                                         // biXPelsPerMeter;
+                        bw.Write((Int32)0);                                                         // biYPelsPerMeter;
+                        bw.Write((UInt32)0);                                                        // biClrUsed;
+                        bw.Write((UInt32)0);                                                        // biClrImportant;
 
                         // switch the image data from RGB to BGR
                         for (int imageIdx = 0; imageIdx < bytes.Length; imageIdx += 3)

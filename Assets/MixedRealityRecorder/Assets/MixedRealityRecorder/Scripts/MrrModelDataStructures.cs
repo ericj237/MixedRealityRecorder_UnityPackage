@@ -48,6 +48,6 @@ namespace MRR.Model
         public CameraSetting cameraSettings;
         public string optionalScreenSource;
         public string outputPath;
-        public string outputCodec;
+        public string outputFormat;
     }
 }

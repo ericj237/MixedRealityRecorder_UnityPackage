@@ -72,7 +72,7 @@ namespace MRR.View
             UpdateSensorOffsetPosition();
             UpdateSensorOffsetRotation();
 
-            SetFooterValues(appController.GetVirtualCameraController().GetCameraSettings());
+            ApplySettings();
 
             RegisterEvents();
         }
@@ -378,6 +378,11 @@ namespace MRR.View
             Debug.Log("Clicked button apply A!");
             EnableButtonsA(false);
 
+            ApplySettings();
+        }
+
+        private void ApplySettings()
+        {
             Settings settings = new Settings();
             settings.cameraSettings = new CameraSetting();
 
@@ -392,7 +397,7 @@ namespace MRR.View
             settings.cameraSettings.sensorHeight = GetSelectedSensorSizeHeight();
             settings.cameraSettings.dynamicRange = GetSelectedSensorDynamicRange();
             settings.outputPath = GetSelectedOutputPath();
-            settings.outputCodec = GetSelectedOuputCodec();
+            settings.outputFormat = GetSelectedOuputCodec();
 
             appController.ApplySettings(settings);
             SetFooterValues(settings.cameraSettings);

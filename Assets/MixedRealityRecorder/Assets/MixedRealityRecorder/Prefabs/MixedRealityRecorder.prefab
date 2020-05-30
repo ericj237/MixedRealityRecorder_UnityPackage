@@ -13028,7 +13028,7 @@ MonoBehaviour:
   uiView: {fileID: 6701903564010593674}
   matForegroundMask: {fileID: 2100000, guid: 39e54473b0e74214d804fe360cd2c86a, type: 2}
   cameraPresets:
-  - {fileID: 11400000, guid: ee1b237ceed1fd440b4a5f72edf83e8b, type: 2}
+  - {fileID: 11400000, guid: d5366cea7c7f5c6489823b3d1c1ae076, type: 2}
   targetObjects: []
   videoRecorder: {fileID: 6148841861028112752}
 --- !u!1 &6729394067924925621

@@ -29,8 +29,8 @@ namespace MRR.Controller
 
         public void ToggleRecord()
         {
-            if(!videoRecorder.IsRecording())
-                videoRecorder.StartRecording(settings.outputPath, new Vector2Int(virtualCamera.GetCameraSettings().resolutionWidth, virtualCamera.GetCameraSettings().resolutionHeight));
+            if (!videoRecorder.IsRecording())
+                videoRecorder.StartRecording(settings.outputPath, GetOutputFormat(settings.outputFormat), new Vector2Int(virtualCamera.GetCameraSettings().resolutionWidth, virtualCamera.GetCameraSettings().resolutionHeight));
             else
                 videoRecorder.StopRecording();
         }
@@ -38,7 +38,7 @@ namespace MRR.Controller
         public void ApplySettings(Settings settings)
         {
             this.settings = settings;
-            settings.outputPath = Application.persistentDataPath;
+            //settings.outputPath = Application.persistentDataPath;
 
             CancelInvoke();
 
@@ -62,8 +62,6 @@ namespace MRR.Controller
 
         void Start()
         {
-            settings.outputPath = Application.persistentDataPath;
-
             CacheWebcamDevices();
             CacheTargetObjects();
 
@@ -182,6 +180,19 @@ namespace MRR.Controller
                     return cameraPreset.cameraSettings;
 
             return cameraPresets[0].cameraSettings;
+        }
+
+        public OutputFormat GetOutputFormat(string input)
+        {
+            switch (input)
+            {
+                case "TGA Image Sequence":
+                    return OutputFormat.TgaImageSequence;
+                case "BMP Image Sequence":
+                    return OutputFormat.BmpImageSequence;
+                default:
+                    return OutputFormat.ManualScreencapture;
+            }
         }
 
         public MrrVirtualCameraController GetVirtualCameraController()

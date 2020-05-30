@@ -17,7 +17,7 @@ MonoBehaviour:
     resolutionWidth: 1280
     resolutionHeight: 720
     framerate: 25
-    sensorWidth: 3
-    sensorHeight: 4
+    sensorWidth: 4
+    sensorHeight: 3
     dynamicRange: 8
     focalLenth: 6
