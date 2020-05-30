@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace MRR.Video
 {
-
     public class MrrVideoRecorder : MonoBehaviour
     {
 

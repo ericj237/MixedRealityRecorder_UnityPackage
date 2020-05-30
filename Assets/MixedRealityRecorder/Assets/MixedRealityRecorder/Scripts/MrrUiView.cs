@@ -142,7 +142,7 @@ namespace MRR.View
 
             dOutputCodec.onValueChanged.AddListener(delegate
             {
-                OnOuputCodecChanged(dOutputCodec.captionText.text);
+                OnOutputFormatChanged(dOutputCodec.captionText.text);
             });
 
             bApplyA.onClick.AddListener(delegate
@@ -197,14 +197,20 @@ namespace MRR.View
 
         private void OnPhysicalCameraChanged(string sourceName)
         {
-            Debug.Log("Changed physical camera source!");
-            EnableButtonsA(true);
+            if(sourceName != appController.GetSettings().physicalCameraSource)
+            {
+                Debug.Log("Changed physical camera source!");
+                EnableButtonsA(true);
+            }
         }
 
         private void OnTargetObjectChanged(string targetName)
         {
-            Debug.Log("Changed target object!");
-            EnableButtonsA(true);
+            if (targetName != appController.GetSettings().targetObject)
+            {
+                Debug.Log("Changed target object!");
+                EnableButtonsA(true);
+            }
         }
 
         private void OnCameraPresetChanged(string presetName)
@@ -317,20 +323,29 @@ namespace MRR.View
 
         private void OnOptionalScreenChanged(string sourceName)
         {
-            Debug.Log("Changed optional screen source!");
-            EnableButtonsA(true);
+            if (sourceName != appController.GetSettings().optionalScreenSource)
+            {
+                Debug.Log("Changed optional screen source!");
+                EnableButtonsA(true);
+            }
         }
 
         private void OnOutputPathChanged(string path)
         {
-            Debug.Log("Changed output path!");
-            EnableButtonsA(true);
+            if (path != appController.GetSettings().outputPath)
+            {
+                Debug.Log("Changed output path!");
+                EnableButtonsA(true);
+            }
         } 
 
-        private void OnOuputCodecChanged(string codecName)
+        private void OnOutputFormatChanged(string outputFormatName)
         {
-            Debug.Log("Changed output codec!");
-            EnableButtonsA(true);
+            if (outputFormatName != appController.GetSettings().outputFormat)
+            {
+                Debug.Log("Changed output codec!");
+                EnableButtonsA(true);
+            }
         } 
 
         // event callback sensor offset - REALTIME
@@ -400,7 +415,7 @@ namespace MRR.View
             settings.outputFormat = GetSelectedOuputCodec();
 
             appController.ApplySettings(settings);
-            SetFooterValues(settings.cameraSettings);
+            SetFooterValues(settings);
         }
 
         private void OnButtonResetAClicked(Button bResetA)
@@ -419,7 +434,7 @@ namespace MRR.View
             SetOutputPath(Application.persistentDataPath);
             SetOutputFormatPresets();
 
-            SetFooterValues(appController.GetVirtualCameraController().GetCameraSettings());
+            SetFooterValues(appController.GetSettings());
         }
 
         private void OnButtonRecordClicked()
@@ -582,13 +597,13 @@ namespace MRR.View
             SetSensorDynamicRange(cameraSetting.dynamicRange);
         }
 
-        private void SetFooterValues(CameraSetting cameraSettings)
+        private void SetFooterValues(Settings settings)
         {
-            SetFooterResolutionWidth(cameraSettings.resolutionWidth);
-            SetFooterResolutionHeight(cameraSettings.resolutionHeight);
-            SetFooterFramerate(cameraSettings.framerate);
-            SetFooterOutputFormat(OutputFormat.TgaImageSequence);
-            SetFooterMaxFrameTime(1000 / cameraSettings.framerate);
+            SetFooterResolutionWidth(settings.cameraSettings.resolutionWidth);
+            SetFooterResolutionHeight(settings.cameraSettings.resolutionHeight);
+            SetFooterFramerate(settings.cameraSettings.framerate);
+            SetFooterOutputFormat(GetOutputFormat(settings.outputFormat));
+            SetFooterMaxFrameTime(1000 / settings.cameraSettings.framerate);
         }
 
         private void SetOutputPath(string path)
@@ -800,6 +815,19 @@ namespace MRR.View
                     return "BMP Image Sequence";
                 default:
                     return "None";
+            }
+        }
+
+        private OutputFormat GetOutputFormat(string input)
+        {
+            switch (input)
+            {
+                case "TGA Image Sequence":
+                    return OutputFormat.TgaImageSequence;
+                case "BMP Image Sequence":
+                    return OutputFormat.BmpImageSequence;
+                default:
+                    return OutputFormat.ManualScreencapture;
             }
         }
 

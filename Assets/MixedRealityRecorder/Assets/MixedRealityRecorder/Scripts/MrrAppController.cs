@@ -27,6 +27,14 @@ namespace MRR.Controller
 
         public MrrVideoRecorder videoRecorder;
 
+        public Mesh targetMesh;
+        public Material targetMaterial;
+
+        public Settings GetSettings()
+        {
+            return settings;
+        }
+
         public void ToggleRecord()
         {
             if (!videoRecorder.IsRecording())
@@ -37,17 +45,44 @@ namespace MRR.Controller
 
         public void ApplySettings(Settings settings)
         {
+
+            string oldTargetObjectName = this.settings.targetObject;
             this.settings = settings;
-            //settings.outputPath = Application.persistentDataPath;
 
             CancelInvoke();
 
+            SetTargetObject(oldTargetObjectName, settings.targetObject);
             virtualCamera.SetCameraSettings(settings.cameraSettings);
             virtualCamera.SetTargetObject(GetTargetObjectByName(settings.targetObject));
             UpdateInternalTextures();
             StartCycle();
 
             UnityEngine.Debug.Log("Applyed Settings!");
+        }
+
+        private void SetTargetObject(string oldTarget, string newTarget)
+        {
+
+            GameObject oldTargetObject = GameObject.Find(oldTarget);
+
+            if(oldTargetObject != null)
+            {
+                Destroy(oldTargetObject.GetComponent<SphereCollider>());
+                Destroy(oldTargetObject.GetComponent<MeshRenderer>());
+                Destroy(oldTargetObject.GetComponent<MeshFilter>());
+            }
+
+            GameObject newTargetObject = GameObject.Find(newTarget);
+
+            if(newTargetObject.GetComponent<MeshFilter>() == null)
+                newTargetObject.AddComponent<MeshFilter>().mesh = targetMesh;
+
+            if (newTargetObject.GetComponent<MeshRenderer>() == null)
+                newTargetObject.AddComponent<MeshRenderer>().material = targetMaterial;
+
+            if (newTargetObject.GetComponent<SphereCollider>() == null)
+                newTargetObject.AddComponent<SphereCollider>();
+
         }
 
         private GameObject GetTargetObjectByName(string name)
