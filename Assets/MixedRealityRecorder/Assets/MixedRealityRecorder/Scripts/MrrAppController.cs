@@ -149,7 +149,7 @@ namespace MRR.Controller
             virtualCamera.Render();
             UpdateForegroundMask();
 
-            videoRecorder.RecordFrame(virtualCamera.GetColorTexture());
+            videoRecorder.RecordFrame(virtualCamera.GetColorTexture(), foregroundMaskTexture);
 
             long frameTime = stopWatch.ElapsedMilliseconds;
 

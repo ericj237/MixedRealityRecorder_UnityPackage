@@ -10,7 +10,8 @@ namespace MRR.Video
 
         private bool isRecording = false;
         private string outPath;
-        private Texture2D outFrame;
+        private Texture2D outColorFrame;
+        private Texture2D outMaskFrame;
         private Vector2Int outResolution;
         private OutputFormat outFormat;
         private long frameCount;
@@ -33,7 +34,9 @@ namespace MRR.Video
             recordingCount++;
             File.WriteAllText(outPath + "/mrrConf.txt", recordingCount.ToString());
 
-            outFrame = new Texture2D(outResolution.x, outResolution.y, TextureFormat.RGB24, false);
+            outColorFrame = new Texture2D(outResolution.x, outResolution.y, TextureFormat.RGB24, false);
+            outMaskFrame = new Texture2D(outResolution.x, outResolution.y, TextureFormat.RGB24, false);
+
             isRecording = true;                      
 
             this.outPath += "/recording_" + recordingCount.ToString();
@@ -49,63 +52,74 @@ namespace MRR.Video
             Debug.Log("Stopped Recording!");
         }
 
-        public void RecordFrame(RenderTexture frame)
+        public void RecordFrame(RenderTexture colorFrame, RenderTexture maskFrame)
         {
             if (isRecording)
             {
-                RenderTexture.active = frame;
+                RenderTexture.active = colorFrame;
 
-                outFrame.ReadPixels(new Rect(0, 0, outResolution.x, outResolution.y), 0, 0);
-                outFrame.Apply();
+                outColorFrame.ReadPixels(new Rect(0, 0, outResolution.x, outResolution.y), 0, 0);
+                outColorFrame.Apply();
+
+                RenderTexture.active = maskFrame;
+
+                outMaskFrame.ReadPixels(new Rect(0, 0, outResolution.x, outResolution.y), 0, 0);
+                outMaskFrame.Apply();
 
                 RenderTexture.active = null;
 
-                SaveFrame(outFrame);
+                SaveFrame(outColorFrame, outMaskFrame);
             }
         }
 
-        public void RecordFrame(Texture2D frame)
+        public void RecordFrame(Texture2D colorFrame, Texture2D maskFrame)
         {
             if(isRecording)
             {
-                SaveFrame(frame);
+                SaveFrame(colorFrame, maskFrame);
             }
         }
 
-        private void SaveFrame(Texture2D frame)
+        private void SaveFrame(Texture2D colorFrame, Texture2D maskFrame)
         {
             switch(outFormat)
             {
                 case OutputFormat.BmpImageSequence:
-                    SaveFrameAsBmp(frame);
+                    SaveFrameAsBmp(colorFrame, maskFrame);
                     break;
                 case OutputFormat.TgaImageSequence:
-                    SaveFrameAsTga(frame);
+                    SaveFrameAsTga(colorFrame, maskFrame);
                     break;
                 default:
                     break;
             }
         }
 
-        private void SaveFrameAsTga(Texture2D frame)
+        private void SaveFrameAsTga(Texture2D colorFrame, Texture2D maskFrame)
         {
             frameCount++;
-            byte[] bytes = ImageConversion.EncodeToTGA(frame);
+            byte[] bytesColorFrame = ImageConversion.EncodeToTGA(colorFrame);
+            byte[] bytesMaskFrame = ImageConversion.EncodeToTGA(maskFrame);
 
             new System.Threading.Thread(() =>
             {
-                File.WriteAllBytes(outPath + "/frame_" + frameCount + ".tga", bytes);
+                File.WriteAllBytes(outPath + "/colorFrame_" + frameCount + ".tga", bytesColorFrame);
+            }).Start();
+            new System.Threading.Thread(() =>
+            {
+                File.WriteAllBytes(outPath + "/maskFrame_" + frameCount + ".tga", bytesMaskFrame);
             }).Start();
         }
 
-        private void SaveFrameAsBmp(Texture2D frame)
+        private void SaveFrameAsBmp(Texture2D colorFrame, Texture2D maskFrame)
         {
             frameCount++;
-            byte[] bytes = frame.GetRawTextureData();
+            byte[] bytesColorFrame = colorFrame.GetRawTextureData();
+            byte[] bytesMaskFrame = maskFrame.GetRawTextureData();
 
             new System.Threading.Thread(() =>
             {
-                using (FileStream fileStream = new FileStream(outPath + "/frame_" + frameCount + ".bmp", FileMode.Create))
+                using (FileStream fileStream = new FileStream(outPath + "/colorFrame_" + frameCount + ".bmp", FileMode.Create))
                 {
                     using (BinaryWriter bw = new BinaryWriter(fileStream))
                     {
@@ -131,11 +145,52 @@ namespace MRR.Video
                         bw.Write((UInt32)0);                                                        // biClrImportant;
 
                         // switch the image data from RGB to BGR
-                        for (int imageIdx = 0; imageIdx < bytes.Length; imageIdx += 3)
+                        for (int imageIdx = 0; imageIdx < bytesColorFrame.Length; imageIdx += 3)
                         {
-                            bw.Write(bytes[imageIdx + 2]);
-                            bw.Write(bytes[imageIdx + 1]);
-                            bw.Write(bytes[imageIdx + 0]);
+                            bw.Write(bytesColorFrame[imageIdx + 2]);
+                            bw.Write(bytesColorFrame[imageIdx + 1]);
+                            bw.Write(bytesColorFrame[imageIdx + 0]);
+                            bw.Write((byte)255);
+                        }
+
+                        bw.Close();
+                    }
+                    fileStream.Close();
+                }
+            }).Start();
+            new System.Threading.Thread(() =>
+            {
+                using (FileStream fileStream = new FileStream(outPath + "/maskFrame_" + frameCount + ".bmp", FileMode.Create))
+                {
+                    using (BinaryWriter bw = new BinaryWriter(fileStream))
+                    {
+
+                        // define the bitmap file header
+                        bw.Write((UInt16)0x4D42);                                                   // bfType;
+                        bw.Write((UInt32)(14 + 40 + (outResolution.x * outResolution.y * 4)));      // bfSize;
+                        bw.Write((UInt16)0);                                                        // bfReserved1;
+                        bw.Write((UInt16)0);                                                        // bfReserved2;
+                        bw.Write((UInt32)14 + 40);                                                  // bfOffBits;
+
+                        // define the bitmap information header
+                        bw.Write((UInt32)40);                                                       // biSize;
+                        bw.Write((Int32)outResolution.x);                                           // biWidth;
+                        bw.Write((Int32)outResolution.y);                                           // biHeight;
+                        bw.Write((UInt16)1);                                                        // biPlanes;
+                        bw.Write((UInt16)32);                                                       // biBitCount;
+                        bw.Write((UInt32)0);                                                        // biCompression;
+                        bw.Write((UInt32)(outResolution.x * outResolution.y * 4));                  // biSizeImage;
+                        bw.Write((Int32)0);                                                         // biXPelsPerMeter;
+                        bw.Write((Int32)0);                                                         // biYPelsPerMeter;
+                        bw.Write((UInt32)0);                                                        // biClrUsed;
+                        bw.Write((UInt32)0);                                                        // biClrImportant;
+
+                        // switch the image data from RGB to BGR
+                        for (int imageIdx = 0; imageIdx < bytesMaskFrame.Length; imageIdx += 3)
+                        {
+                            bw.Write(bytesMaskFrame[imageIdx + 2]);
+                            bw.Write(bytesMaskFrame[imageIdx + 1]);
+                            bw.Write(bytesMaskFrame[imageIdx + 0]);
                             bw.Write((byte)255);
                         }
 
