@@ -11,6 +11,8 @@ namespace MRR.View
     {
         public MrrAppController appController;
 
+        public Canvas canvasMain;
+
         [Header("Physical Camera")]
         public Dropdown dPhysicalCameraSource;
         [Header("Target")]
@@ -24,7 +26,6 @@ namespace MRR.View
         public InputField iCameraFocalLenth;
         [Header("Sensor Settings")]
         public InputField[] iSensorSize = new InputField[2];
-        public InputField iSensorDynamicRange;
         [Header("Optional Screen")]
         public Dropdown dOptionalScreenSource;
         [Header("Output Settings")]
@@ -53,6 +54,13 @@ namespace MRR.View
         public RawImage screenForegroundMask;
         public RawImage screenPhysicalCamera;
         public RawImage screenOptional;
+
+        [Header("Manual Screencapture")]
+        public Canvas canvasScreencapture;
+        public RawImage screenVirtualCameraScreencapture;
+        public RawImage screenForegroundMaskScreencapture;
+        public RawImage screenPhysicalCameraScreencapture;
+        public RawImage screenOptionalScreencapture;
 
         public void Init()
         {
@@ -123,11 +131,6 @@ namespace MRR.View
             iSensorSize[1].onEndEdit.AddListener(delegate
             {
                 OnSensorSizeHeightChanged(iSensorSize[1]);
-            });
-
-            iSensorDynamicRange.onEndEdit.AddListener(delegate
-            {
-                OnSensorDynamicRangeChanged(iSensorDynamicRange);
             });
 
             dOptionalScreenSource.onValueChanged.AddListener(delegate
@@ -307,20 +310,6 @@ namespace MRR.View
             }
         }
 
-        private void OnSensorDynamicRangeChanged(InputField iSensorDynamicRange)
-        {
-            int sensorDynamicRange = ReturnValidIntFromString(iSensorDynamicRange.text);
-
-            if (sensorDynamicRange == 0)
-                SetSensorDynamicRange(appController.GetVirtualCameraController().GetCameraSettings().dynamicRange);
-            else
-            {
-                Debug.Log("Changed sensor dynamic range!");
-                SetCustomCameraPreset();
-                EnableButtonsA(true);
-            }
-        }
-
         private void OnOptionalScreenChanged(string sourceName)
         {
             if (sourceName != appController.GetSettings().optionalScreenSource)
@@ -332,10 +321,14 @@ namespace MRR.View
 
         private void OnOutputPathChanged(string path)
         {
-            if (path != appController.GetSettings().outputPath)
+            if (path != appController.GetSettings().outputPath && System.IO.Directory.Exists(path))
             {
                 Debug.Log("Changed output path!");
                 EnableButtonsA(true);
+            }
+            else
+            {
+                SetOutputPath(appController.GetSettings().outputPath);
             }
         } 
 
@@ -410,7 +403,6 @@ namespace MRR.View
             settings.cameraSettings.focalLenth = GetSelectedCameraFocalLength();
             settings.cameraSettings.sensorWidth = GetSelectedSensorSizeWidth();
             settings.cameraSettings.sensorHeight = GetSelectedSensorSizeHeight();
-            settings.cameraSettings.dynamicRange = GetSelectedSensorDynamicRange();
             settings.outputPath = GetSelectedOutputPath();
             settings.outputFormat = GetSelectedOuputCodec();
 
@@ -423,6 +415,11 @@ namespace MRR.View
             Debug.Log("Clicked button reset A!");
             EnableButtonsA(false);
 
+            ResetSettings();
+        }
+
+        private void ResetSettings()
+        {
             SetPhysicalCameraInputSources();
             SetTargetObjects();
             SetCameraPresets();
@@ -439,7 +436,27 @@ namespace MRR.View
 
         private void OnButtonRecordClicked()
         {
-            appController.ToggleRecord();
+            if (HasSettingsChanged())
+            {
+                EnableButtonsA(false);
+                ResetSettings();
+            }
+
+            if (GetOutputFormat(appController.GetSettings().outputFormat) == OutputFormat.ManualScreencapture)
+                canvasScreencapture.enabled = true;
+            else
+                appController.ToggleRecord();               
+        }
+
+        private bool HasSettingsChanged()
+        {
+            return bResetA.enabled;
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape) && canvasScreencapture.enabled)
+                canvasScreencapture.enabled = false;
         }
 
         // update methods
@@ -490,11 +507,6 @@ namespace MRR.View
         private void SetSensorWidth(int sensorWidth)
         {
             iSensorSize[0].SetTextWithoutNotify(sensorWidth.ToString());
-        }
-
-        private void SetSensorDynamicRange(int dynamicRange)
-        {
-            iSensorDynamicRange.SetTextWithoutNotify(dynamicRange.ToString());
         }
 
         private void SetPhysicalCameraInputSources()
@@ -594,7 +606,6 @@ namespace MRR.View
             SetCameraFocalLength(cameraSetting.focalLenth);
             SetSensorHeight(cameraSetting.sensorHeight);
             SetSensorWidth(cameraSetting.sensorWidth);
-            SetSensorDynamicRange(cameraSetting.dynamicRange);
         }
 
         private void SetFooterValues(Settings settings)
@@ -678,36 +689,43 @@ namespace MRR.View
         public void SetScreenVirtualCamera(RenderTexture colorTexture)
         {
             screenVirtualCamera.texture = colorTexture;
+            screenVirtualCameraScreencapture.texture = colorTexture;
         }
 
         public void SetScreenForegroundMask(RenderTexture foregroundMaskTexture)
         {
             screenForegroundMask.texture = foregroundMaskTexture;
+            screenForegroundMaskScreencapture.texture = foregroundMaskTexture;
         }
 
         public void SetScreenPhysicalCamera(RenderTexture physicalCameraTexture)
         {
             screenPhysicalCamera.texture = physicalCameraTexture;
+            screenPhysicalCameraScreencapture.texture = physicalCameraTexture;
         }
 
         public void SetScreenPhysicalCamera(WebCamTexture rawPhysicalCameraTexture)
         {
             screenPhysicalCamera.texture = rawPhysicalCameraTexture;
+            screenPhysicalCameraScreencapture.texture = rawPhysicalCameraTexture;
         }
 
         public void SetOptionalScreen(RenderTexture renderTexture)
         {
             screenOptional.texture = renderTexture;
+            screenOptionalScreencapture.texture = renderTexture;
         }
 
         public void SetOptionalScreen(WebCamTexture webCamTexture)
         {
             screenOptional.texture = webCamTexture;
+            screenOptionalScreencapture.texture = webCamTexture;
         }
 
         public void SetOptionalScreen(Texture2D texture2D)
         {
             screenOptional.texture = texture2D;
+            screenOptionalScreencapture.texture = texture2D;
         }
 
         // getter methods
@@ -755,11 +773,6 @@ namespace MRR.View
         private int GetSelectedSensorSizeHeight()
         {
             return int.Parse(iSensorSize[1].text);
-        }
-
-        private int GetSelectedSensorDynamicRange()
-        {
-            return int.Parse(iSensorDynamicRange.text);
         }
 
         private string GetSelectedOptionalScreen()

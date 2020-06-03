@@ -12,8 +12,6 @@ namespace MRR.Model
 
         // in mm
         public int sensorWidth, sensorHeight;
-        // in stops
-        public int dynamicRange;
 
         // in mm
         public int focalLenth;

@@ -178,11 +178,6 @@ namespace MRR.Controller
             cameraSettings.sensorHeight = sensorWidth;
         }
 
-        private void SetSensorDynamicRange(int stops)
-        {
-            cameraSettings.dynamicRange = stops;
-        }
-
         public void SetSensorOffsetPosition(float value, Vector3Component component)
         {
             switch (component)

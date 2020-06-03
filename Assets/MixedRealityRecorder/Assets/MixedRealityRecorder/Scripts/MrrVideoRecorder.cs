@@ -14,15 +14,31 @@ namespace MRR.Video
         private Vector2Int outResolution;
         private OutputFormat outFormat;
         private long frameCount;
+        private int recordingCount = 0;
 
         public void StartRecording(string outPath, OutputFormat outFormat, Vector2Int outResolution)
         {
-            this.outFormat = outFormat;
+            this.outFormat = outFormat;            
+
             this.outPath = outPath;
+            if (System.IO.File.Exists(outPath + "/mrrConf.txt"))
+                recordingCount = int.Parse(File.ReadAllText(outPath + "/mrrConf.txt"));
+            else
+                File.WriteAllText(outPath + "/mrrConf.txt", "0");
+
             this.outResolution = outResolution;
+
             frameCount = 0;
+
+            recordingCount++;
+            File.WriteAllText(outPath + "/mrrConf.txt", recordingCount.ToString());
+
             outFrame = new Texture2D(outResolution.x, outResolution.y, TextureFormat.RGB24, false);
-            isRecording = true;
+            isRecording = true;                      
+
+            this.outPath += "/recording_" + recordingCount.ToString();
+            if (!System.IO.Directory.Exists(this.outPath))
+                System.IO.Directory.CreateDirectory(this.outPath);
 
             Debug.Log("Started Recording!");
         }

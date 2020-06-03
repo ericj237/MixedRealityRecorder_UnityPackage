@@ -45,7 +45,6 @@ namespace MRR.Controller
 
         public void ApplySettings(Settings settings)
         {
-
             string oldTargetObjectName = this.settings.targetObject;
             this.settings = settings;
 
