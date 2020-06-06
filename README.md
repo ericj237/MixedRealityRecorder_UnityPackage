@@ -14,7 +14,7 @@ Mixed Reality Recorder (MRR) is a Package for the Unity Engine that lets you rec
 
 ## Quick Start
 
-A [quick start guide](/Documentation/QUICKSTART.md) can be found in the `Documentation` folder.
+The [quick start guide](./Documentation/QUICKSTART.md) can be found in the `Documentation` folder.
 
 ## Requirements
 
@@ -43,7 +43,7 @@ Listed Hardware is Required to use MMR.
 
 Clone the repository and open the Unity project `MixedRealityRecorder` located in the `Assets` folder.
 
-- MRR is developed with **Unity 2019.3**.
+- MRR is developed with **Unity 2019.1**.
 
 ## Tested Systems
 
@@ -64,7 +64,7 @@ MRR was tested with the listed VR systems.
 
 ## Acknowledgment
 
-- **DashW** [ScreenRecorder](https://gist.github.com/DashW/74d726293c0d3aeb53f4) *For custom Texture2D to BMP image file encoding.*
+- **DashW**: [ScreenRecorder](https://gist.github.com/DashW/74d726293c0d3aeb53f4) - *For custom Texture2D to BMP image file encoding.*
 
 ## License
 
