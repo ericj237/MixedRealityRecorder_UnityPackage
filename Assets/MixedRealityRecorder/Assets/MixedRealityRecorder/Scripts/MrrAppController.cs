@@ -13,6 +13,7 @@ namespace MRR.Controller
 
         public MrrVirtualCameraController virtualCamera;
         public MrrUiView uiView;
+        public Camera uiCamera;
 
         public Material matForegroundMask;
 
@@ -29,6 +30,12 @@ namespace MRR.Controller
 
         public Mesh targetMesh;
         public Material targetMaterial;
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.F11))
+                uiCamera.enabled = !uiCamera.enabled;
+        }
 
         public Settings GetSettings()
         {

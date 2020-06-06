@@ -41,6 +41,8 @@ namespace MRR.View
 
         [Header("Controls")]
         public Button bRecord;
+        public RawImage imgRecord;
+        public RawImage imgStop;
 
         [Header("Footer")]
         public Text[] tCameraResolution = new Text[2];
@@ -445,7 +447,12 @@ namespace MRR.View
             if (GetOutputFormat(appController.GetSettings().outputFormat) == OutputFormat.ManualScreencapture)
                 canvasScreencapture.enabled = true;
             else
-                appController.ToggleRecord();               
+            {
+                imgRecord.enabled = !imgRecord.enabled;
+                imgStop.enabled = !imgStop.enabled;
+
+                appController.ToggleRecord();                
+            }
         }
 
         private bool HasSettingsChanged()
@@ -455,7 +462,7 @@ namespace MRR.View
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Escape) && canvasScreencapture.enabled)
+            if (Input.GetKeyDown(KeyCode.F10) && canvasScreencapture.enabled)
                 canvasScreencapture.enabled = false;
         }
 

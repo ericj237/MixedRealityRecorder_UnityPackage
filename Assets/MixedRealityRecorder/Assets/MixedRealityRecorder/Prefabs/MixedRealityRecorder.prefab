@@ -1702,6 +1702,8 @@ MonoBehaviour:
   - {fileID: 9188590539794627214}
   - {fileID: 2318827926750472418}
   bRecord: {fileID: 6447250418181772153}
+  imgRecord: {fileID: 7901247815134897381}
+  imgStop: {fileID: 8322538176022146693}
   tCameraResolution:
   - {fileID: 6920401651999940339}
   - {fileID: 7789013959606917491}
@@ -12153,7 +12155,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8374331377514746584
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12171,7 +12173,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 60, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4342020912146600612
 CanvasRenderer:
@@ -12188,7 +12190,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6072131291994844809}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: -98529514, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
@@ -13483,6 +13485,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   virtualCamera: {fileID: 1635771267612320462}
   uiView: {fileID: 6701903564010593674}
+  uiCamera: {fileID: 5804706171241315711}
   matForegroundMask: {fileID: 2100000, guid: 39e54473b0e74214d804fe360cd2c86a, type: 2}
   cameraPresets:
   - {fileID: 11400000, guid: d5366cea7c7f5c6489823b3d1c1ae076, type: 2}
