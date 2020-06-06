@@ -676,19 +676,14 @@ namespace MRR.View
 
             tFrameTime.text = frameTime.ToString();
 
-            double currFps = 0;
+            int maxFrameTime = 1000 / appController.GetSettings().cameraSettings.framerate;
 
-            if (frameTime > 0)
-                currFps = (double)(1 / (frameTime * 1000));
-
-            double currFramerate = (double)appController.GetVirtualCameraController().GetCameraSettings().framerate;
-
-            if (currFps < (double)(currFramerate * 0.9f))
+            if (frameTime < maxFrameTime * 0.9f)
                 tFrameTime.color = new Color(0, 184, 148);
-            else if (currFps < currFramerate)
-                tFrameTime.color = new Color(225, 112, 85);
+            else if (frameTime < maxFrameTime)
+                tFrameTime.color = Color.yellow;
             else
-                tFrameTime.color = new Color(214, 48, 49);
+                tFrameTime.color = Color.red;
         }
 
         // setter screens methods
