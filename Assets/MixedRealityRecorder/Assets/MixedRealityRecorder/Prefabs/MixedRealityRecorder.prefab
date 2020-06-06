@@ -13490,7 +13490,6 @@ MonoBehaviour:
   cameraPresets:
   - {fileID: 11400000, guid: d5366cea7c7f5c6489823b3d1c1ae076, type: 2}
   - {fileID: 11400000, guid: 311f7bd6789a5514e8b1e4f1df8d4b83, type: 2}
-  targetObjects: []
   videoRecorder: {fileID: 6148841861028112752}
   targetMesh: {fileID: -2432090755550338912, guid: 09fb25138d5ebce479dd957cdb3de5cd,
     type: 3}

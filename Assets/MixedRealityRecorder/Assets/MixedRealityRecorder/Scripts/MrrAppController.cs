@@ -17,8 +17,8 @@ namespace MRR.Controller
 
         public Material matForegroundMask;
 
-        public List<CameraPreset> cameraPresets = new List<CameraPreset>();
-        public List<GameObject> targetObjects = new List<GameObject>();
+        public CameraPreset[] cameraPresets;
+        private List<GameObject> targetObjects;
         private WebCamDevice[] webCamDevices;
 
         private Settings settings = new Settings();
@@ -31,77 +31,14 @@ namespace MRR.Controller
         public Mesh targetMesh;
         public Material targetMaterial;
 
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.F11))
-                uiCamera.enabled = !uiCamera.enabled;
-        }
-
-        public Settings GetSettings()
-        {
-            return settings;
-        }
-
-        public void ToggleRecord()
-        {
-            if (!videoRecorder.IsRecording())
-                videoRecorder.StartRecording(settings.outputPath, Utility.Util.GetOutputFormat(settings.outputFormat), new Vector2Int(virtualCamera.GetCameraSettings().resolutionWidth, virtualCamera.GetCameraSettings().resolutionHeight));
-            else
-                videoRecorder.StopRecording();
-        }
-
-        public void ApplySettings(Settings settings)
-        {
-            string oldTargetObjectName = this.settings.targetObject;
-            this.settings = settings;
-
-            CancelInvoke();
-
-            SetTargetObject(oldTargetObjectName, settings.targetObject);
-            virtualCamera.SetCameraSettings(settings.cameraSettings);
-            virtualCamera.SetTargetObject(GetTargetObjectByName(settings.targetObject));
-            UpdateInternalTextures();
-            StartCycle();
-
-            //UnityEngine.Debug.Log("Applyed Settings!");
-        }
-
-        private void SetTargetObject(string oldTarget, string newTarget)
-        {
-
-            GameObject oldTargetObject = GameObject.Find(oldTarget);
-
-            if(oldTargetObject != null)
-            {
-                Destroy(oldTargetObject.GetComponent<SphereCollider>());
-                Destroy(oldTargetObject.GetComponent<MeshRenderer>());
-                Destroy(oldTargetObject.GetComponent<MeshFilter>());
-            }
-
-            GameObject newTargetObject = GameObject.Find(newTarget);
-
-            if(newTargetObject.GetComponent<MeshFilter>() == null)
-                newTargetObject.AddComponent<MeshFilter>().mesh = targetMesh;
-
-            if (newTargetObject.GetComponent<MeshRenderer>() == null)
-                newTargetObject.AddComponent<MeshRenderer>().material = targetMaterial;
-
-            if (newTargetObject.GetComponent<SphereCollider>() == null)
-                newTargetObject.AddComponent<SphereCollider>();
-
-        }
-
-        private GameObject GetTargetObjectByName(string name)
-        {
-            foreach (GameObject target in targetObjects)
-                if (target.name == name)
-                    return target;
-            return null;
-        }
-
         // init methods - entry point for MixedRealtiyRecorder
 
         void Start()
+        {
+            Invoke("Init", 0.0f);
+        }
+
+        private void Init()
         {
             CacheWebcamDevices();
             CacheTargetObjects();
@@ -171,6 +108,40 @@ namespace MRR.Controller
             Graphics.Blit(virtualCamera.GetDepthTexture(), foregroundMaskTexture, matForegroundMask);
         }
 
+        // user input
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.F11))
+                uiCamera.enabled = !uiCamera.enabled;
+        }
+
+        public void ToggleRecord()
+        {
+            if (!videoRecorder.IsRecording())
+                videoRecorder.StartRecording(settings.outputPath, Utility.Util.GetOutputFormat(settings.outputFormat), new Vector2Int(virtualCamera.GetCameraSettings().resolutionWidth, virtualCamera.GetCameraSettings().resolutionHeight));
+            else
+                videoRecorder.StopRecording();
+        }
+
+        // update methods
+
+        public void ApplySettings(Settings settings)
+        {
+            string oldTargetObjectName = this.settings.targetObject;
+            this.settings = settings;
+
+            CancelInvoke();
+
+            SetTargetObject(oldTargetObjectName, settings.targetObject);
+            virtualCamera.SetCameraSettings(settings.cameraSettings);
+            virtualCamera.SetTargetObject(GetTargetObjectByName(settings.targetObject));
+            UpdateInternalTextures();
+            StartCycle();
+
+            //UnityEngine.Debug.Log("Applyed Settings!");
+        }
+
         // caching methods
 
         private void CacheWebcamDevices()
@@ -180,6 +151,7 @@ namespace MRR.Controller
 
         private void CacheTargetObjects()
         {
+            targetObjects = new List<GameObject>();
 
             if (GameObject.FindGameObjectsWithTag("Target").Length > 0)
             {
@@ -197,6 +169,33 @@ namespace MRR.Controller
             }
         }
 
+        // setter methods
+
+        private void SetTargetObject(string oldTarget, string newTarget)
+        {
+
+            GameObject oldTargetObject = GameObject.Find(oldTarget);
+
+            if (oldTargetObject != null)
+            {
+                Destroy(oldTargetObject.GetComponent<SphereCollider>());
+                Destroy(oldTargetObject.GetComponent<MeshRenderer>());
+                Destroy(oldTargetObject.GetComponent<MeshFilter>());
+            }
+
+            GameObject newTargetObject = GameObject.Find(newTarget);
+
+            if (newTargetObject.GetComponent<MeshFilter>() == null)
+                newTargetObject.AddComponent<MeshFilter>().mesh = targetMesh;
+
+            if (newTargetObject.GetComponent<MeshRenderer>() == null)
+                newTargetObject.AddComponent<MeshRenderer>().material = targetMaterial;
+
+            if (newTargetObject.GetComponent<SphereCollider>() == null)
+                newTargetObject.AddComponent<SphereCollider>();
+
+        }
+
         // getter methods
 
         public WebCamDevice[] GetWebCamDevices()
@@ -209,9 +208,22 @@ namespace MRR.Controller
             return targetObjects;
         }
 
-        public List<CameraPreset> GetCameraPresets()
+        private GameObject GetTargetObjectByName(string name)
+        {
+            foreach (GameObject target in targetObjects)
+                if (target.name == name)
+                    return target;
+            return null;
+        }
+
+        public CameraPreset[] GetCameraPresets()
         {
             return cameraPresets;
+        }
+
+        public Settings GetSettings()
+        {
+            return settings;
         }
 
         public CameraSetting GetCameraSettingByPresetName(string name)

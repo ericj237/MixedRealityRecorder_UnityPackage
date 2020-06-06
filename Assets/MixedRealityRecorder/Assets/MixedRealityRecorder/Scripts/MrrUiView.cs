@@ -549,7 +549,7 @@ namespace MRR.View
         {
             dCameraPresetDevice.ClearOptions();
 
-            List<CameraPreset> cameraPresets = appController.GetCameraPresets();
+            CameraPreset[] cameraPresets = appController.GetCameraPresets();
 
             List<Dropdown.OptionData> optionData = new List<Dropdown.OptionData>();
 
@@ -563,7 +563,7 @@ namespace MRR.View
         {
             dCameraPresetDevice.ClearOptions();
 
-            List<CameraPreset> cameraPresets = appController.GetCameraPresets();
+            CameraPreset[] cameraPresets = appController.GetCameraPresets();
 
             List<Dropdown.OptionData> optionData = new List<Dropdown.OptionData>();
 

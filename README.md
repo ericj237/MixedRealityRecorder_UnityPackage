@@ -2,6 +2,20 @@
 
 Mixed Reality Recorder (MRR) is a Package for the Unity Engine that lets you record users of Virtual Reality application inside the digital environments.
 
+## Features
+
+- tracked camera with Vive tracker
+- opaque dynamic obstruction mask
+- user interface with camera settings and video layers
+- camera presets
+- capture video layers in unity
+- TGA and BMP image sequence output
+- manual screen capture layout for open broadcaster or other recording software
+
+## Quick Start
+
+A [quick start guide](/Documentation/QUICKSTART.md) can be found in the `Documentation` folder.
+
 ## Requirements
 
 Currently MRR is tested only on Microsoft Windows operating systems.
@@ -21,8 +35,8 @@ Listed Hardware is Required to use MMR.
 
 - **[HMD](https://store.steampowered.com/steamvr#WhatYouNeed)** *(Compatible with SteamVR)*
 - **[Vive Tracker](https://www.vive.com/eu/vive-tracker/)**
-- **Camera** *(With HDMI Output)*
-- **HDMI Capture Card**
+- **Webcam** or **Camera** *(With HDMI Output)*
+- **(HDMI Capture Card)**
 - **Greenscreen**
 
 ## Setup
@@ -30,10 +44,6 @@ Listed Hardware is Required to use MMR.
 Clone the repository and open the Unity project `MixedRealityRecorder` located in the `Assets` folder.
 
 - MRR is developed with **Unity 2019.3**.
-
-## Documentation
-
-The user documentation can be found in the `Documentation` folder.
 
 ## Tested Systems
 
@@ -45,13 +55,16 @@ MRR was tested with the listed VR systems.
 
 ## Authors
 
-- **ericj237**- Developer
+- **ericj237** - Developer
 
 ## Build with
 
 - [Unity](https://unity.com/)
 - [SteamVR](https://store.steampowered.com/steamvr)
-- [FFmpeg](https://www.ffmpeg.org/)
+
+## Acknowledgment
+
+- **DashW** [ScreenRecorder](https://gist.github.com/DashW/74d726293c0d3aeb53f4) *For custom Texture2D to BMP image file encoding.*
 
 ## License
 
