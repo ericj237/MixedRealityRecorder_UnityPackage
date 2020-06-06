@@ -35,13 +35,13 @@ namespace MRR.Video
 
             isRecording = true;
 
-            Debug.Log("Started Recording!");
+            //Debug.Log("Started Recording!");
         }
 
         public void StopRecording()
         {
             isRecording = false;
-            Debug.Log("Stopped Recording!");
+            //Debug.Log("Stopped Recording!");
         }
 
         public void RecordFrame(RenderTexture colorFrame, RenderTexture maskFrame)

@@ -63,7 +63,7 @@ namespace MRR.Controller
             UpdateInternalTextures();
             StartCycle();
 
-            UnityEngine.Debug.Log("Applyed Settings!");
+            //UnityEngine.Debug.Log("Applyed Settings!");
         }
 
         private void SetTargetObject(string oldTarget, string newTarget)

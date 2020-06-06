@@ -204,7 +204,7 @@ namespace MRR.View
         {
             if(sourceName != appController.GetSettings().physicalCameraSource)
             {
-                Debug.Log("Changed physical camera source!");
+                //Debug.Log("Changed physical camera source!");
                 EnableButtonsA(true);
             }
         }
@@ -213,14 +213,14 @@ namespace MRR.View
         {
             if (targetName != appController.GetSettings().targetObject)
             {
-                Debug.Log("Changed target object!");
+                //Debug.Log("Changed target object!");
                 EnableButtonsA(true);
             }
         }
 
         private void OnCameraPresetChanged(string presetName)
         {
-            Debug.Log("Changed camera preset!");
+            //Debug.Log("Changed camera preset!");
 
             SetCameraValues(appController.GetCameraSettingByPresetName(presetName));
 
@@ -235,7 +235,7 @@ namespace MRR.View
                 SetCameraResolutionWidth(appController.GetVirtualCameraController().GetCameraSettings().resolutionWidth);
             else
             {
-                Debug.Log("Changed camera resolution width!");
+                //Debug.Log("Changed camera resolution width!");
                 SetCustomCameraPreset();
                 EnableButtonsA(true);
             }
@@ -249,7 +249,7 @@ namespace MRR.View
                 SetCameraResolutionHeight(appController.GetVirtualCameraController().GetCameraSettings().resolutionHeight);
             else
             {
-                Debug.Log("Changed camera resolution height!");
+                //Debug.Log("Changed camera resolution height!");
                 SetCustomCameraPreset();
                 EnableButtonsA(true);
             }
@@ -264,7 +264,7 @@ namespace MRR.View
                 SetCameraFramerate(appController.GetVirtualCameraController().GetCameraSettings().framerate);
             else
             {
-                Debug.Log("Changed camera framerate!");
+                //Debug.Log("Changed camera framerate!");
                 SetCustomCameraPreset();
                 EnableButtonsA(true);
             }
@@ -278,7 +278,7 @@ namespace MRR.View
                 SetCameraFocalLength(appController.GetVirtualCameraController().GetCameraSettings().focalLenth);
             else
             {
-                Debug.Log("Changed camera focal length!");
+                //Debug.Log("Changed camera focal length!");
                 SetCustomCameraPreset();
                 EnableButtonsA(true);
             }
@@ -292,7 +292,7 @@ namespace MRR.View
                 SetSensorWidth(appController.GetVirtualCameraController().GetCameraSettings().sensorWidth);
             else
             {
-                Debug.Log("Changed sensor size width!");
+                //Debug.Log("Changed sensor size width!");
                 SetCustomCameraPreset();
                 EnableButtonsA(true);
             }
@@ -306,7 +306,7 @@ namespace MRR.View
                 SetSensorHeight(appController.GetVirtualCameraController().GetCameraSettings().sensorHeight);
             else
             {
-                Debug.Log("Changed sensor size heigth!");
+                //Debug.Log("Changed sensor size heigth!");
                 SetCustomCameraPreset();
                 EnableButtonsA(true);
             }
@@ -316,7 +316,7 @@ namespace MRR.View
         {
             if (sourceName != appController.GetSettings().optionalScreenSource)
             {
-                Debug.Log("Changed optional screen source!");
+                //Debug.Log("Changed optional screen source!");
                 EnableButtonsA(true);
             }
         }
@@ -325,7 +325,7 @@ namespace MRR.View
         {
             if (path != appController.GetSettings().outputPath && System.IO.Directory.Exists(path))
             {
-                Debug.Log("Changed output path!");
+                //Debug.Log("Changed output path!");
                 EnableButtonsA(true);
             }
             else
@@ -338,7 +338,7 @@ namespace MRR.View
         {
             if (outputFormatName != appController.GetSettings().outputFormat)
             {
-                Debug.Log("Changed output codec!");
+                //Debug.Log("Changed output codec!");
                 EnableButtonsA(true);
             }
         } 
@@ -385,7 +385,7 @@ namespace MRR.View
 
         private void OnButtonApplyAClicked(Button bApplyA)
         {
-            Debug.Log("Clicked button apply A!");
+            //Debug.Log("Clicked button apply A!");
             EnableButtonsA(false);
 
             ApplySettings();
@@ -414,7 +414,7 @@ namespace MRR.View
 
         private void OnButtonResetAClicked(Button bResetA)
         {
-            Debug.Log("Clicked button reset A!");
+            //Debug.Log("Clicked button reset A!");
             EnableButtonsA(false);
 
             ResetSettings();
