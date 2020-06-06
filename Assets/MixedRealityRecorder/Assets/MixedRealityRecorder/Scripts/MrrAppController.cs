@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using MRR.Model;
 using MRR.View;
+using MRR.Utility;
 using System.Collections.Generic;
 using System.Diagnostics;
 using MRR.Video;
@@ -10,7 +11,6 @@ namespace MRR.Controller
 
     public class MrrAppController : MonoBehaviour
     {
-
         public MrrVirtualCameraController virtualCamera;
         public MrrUiView uiView;
         public Camera uiCamera;
@@ -45,7 +45,7 @@ namespace MRR.Controller
         public void ToggleRecord()
         {
             if (!videoRecorder.IsRecording())
-                videoRecorder.StartRecording(settings.outputPath, GetOutputFormat(settings.outputFormat), new Vector2Int(virtualCamera.GetCameraSettings().resolutionWidth, virtualCamera.GetCameraSettings().resolutionHeight));
+                videoRecorder.StartRecording(settings.outputPath, Utility.Util.GetOutputFormat(settings.outputFormat), new Vector2Int(virtualCamera.GetCameraSettings().resolutionWidth, virtualCamera.GetCameraSettings().resolutionHeight));
             else
                 videoRecorder.StopRecording();
         }
@@ -221,19 +221,6 @@ namespace MRR.Controller
                     return cameraPreset.cameraSettings;
 
             return cameraPresets[0].cameraSettings;
-        }
-
-        public OutputFormat GetOutputFormat(string input)
-        {
-            switch (input)
-            {
-                case "TGA Image Sequence":
-                    return OutputFormat.TgaImageSequence;
-                case "BMP Image Sequence":
-                    return OutputFormat.BmpImageSequence;
-                default:
-                    return OutputFormat.ManualScreencapture;
-            }
         }
 
         public MrrVirtualCameraController GetVirtualCameraController()

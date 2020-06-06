@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using MRR.Model;
 using MRR.Controller;
 using System.Collections.Generic;
+using MRR.Utility;
 
 namespace MRR.View
 {
@@ -168,33 +169,33 @@ namespace MRR.View
             // events offset position
             iSensorOffsetPosition[0].onEndEdit.AddListener(delegate
             {
-                OnSensorOffsetPositionXChanged(ReturnValidFloatFromString(iSensorOffsetPosition[0].text));
+                OnSensorOffsetPositionXChanged(Utility.Util.ReturnValidFloatFromString(iSensorOffsetPosition[0].text));
             });
 
             iSensorOffsetPosition[1].onEndEdit.AddListener(delegate
             {
-                OnSensorOffsetPositionYChanged(ReturnValidFloatFromString(iSensorOffsetPosition[1].text));
+                OnSensorOffsetPositionYChanged(Utility.Util.ReturnValidFloatFromString(iSensorOffsetPosition[1].text));
             });
 
             iSensorOffsetPosition[2].onEndEdit.AddListener(delegate
             {
-                OnSensorOffsetPositionZChanged(ReturnValidFloatFromString(iSensorOffsetPosition[2].text));
+                OnSensorOffsetPositionZChanged(Utility.Util.ReturnValidFloatFromString(iSensorOffsetPosition[2].text));
             });
 
             // events offset rotation
             iSensorOffsetRotation[0].onEndEdit.AddListener(delegate
             {
-                OnSensorOffsetRotationXChanged(ReturnValidFloatFromString(iSensorOffsetRotation[0].text));
+                OnSensorOffsetRotationXChanged(Utility.Util.ReturnValidFloatFromString(iSensorOffsetRotation[0].text));
             });
 
             iSensorOffsetRotation[1].onEndEdit.AddListener(delegate
             {
-                OnSensorOffsetRotationYChanged(ReturnValidFloatFromString(iSensorOffsetRotation[1].text));
+                OnSensorOffsetRotationYChanged(Utility.Util.ReturnValidFloatFromString(iSensorOffsetRotation[1].text));
             });
 
             iSensorOffsetRotation[2].onEndEdit.AddListener(delegate
             {
-                OnSensorOffsetRotationZChanged(ReturnValidFloatFromString(iSensorOffsetRotation[2].text));
+                OnSensorOffsetRotationZChanged(Utility.Util.ReturnValidFloatFromString(iSensorOffsetRotation[2].text));
             });
         }
 
@@ -229,7 +230,7 @@ namespace MRR.View
 
         private void OnCameraResolutionWidthChanged(InputField iResolutionWidth)
         {
-            int width = ReturnValidIntFromString(iResolutionWidth.text);
+            int width = Utility.Util.ReturnValidIntFromString(iResolutionWidth.text);
 
             if (width == 0)
                 SetCameraResolutionWidth(appController.GetVirtualCameraController().GetCameraSettings().resolutionWidth);
@@ -243,7 +244,7 @@ namespace MRR.View
 
         private void OnCameraResolutionHeightChanged(InputField iResolutionHeight)
         {
-            int height = ReturnValidIntFromString(iResolutionHeight.text);
+            int height = Utility.Util.ReturnValidIntFromString(iResolutionHeight.text);
 
             if (height == 0)
                 SetCameraResolutionHeight(appController.GetVirtualCameraController().GetCameraSettings().resolutionHeight);
@@ -258,7 +259,7 @@ namespace MRR.View
 
         private void OnCameraFramerateChanged(InputField iFramerate)
         {
-            int framerate = ReturnValidIntFromString(iFramerate.text);
+            int framerate = Utility.Util.ReturnValidIntFromString(iFramerate.text);
 
             if (framerate == 0)
                 SetCameraFramerate(appController.GetVirtualCameraController().GetCameraSettings().framerate);
@@ -272,7 +273,7 @@ namespace MRR.View
 
         private void OnCameraFocalLengthChanged(InputField iFocalLength)
         {
-            int focalLength = ReturnValidIntFromString(iFocalLength.text);
+            int focalLength = Utility.Util.ReturnValidIntFromString(iFocalLength.text);
 
             if (focalLength == 0)
                 SetCameraFocalLength(appController.GetVirtualCameraController().GetCameraSettings().focalLenth);
@@ -286,7 +287,7 @@ namespace MRR.View
 
         private void OnSensorSizeWidthChanged(InputField iSensorWidth)
         {
-            int sensorWidth = ReturnValidIntFromString(iSensorWidth.text);
+            int sensorWidth = Utility.Util.ReturnValidIntFromString(iSensorWidth.text);
 
             if (sensorWidth == 0)
                 SetSensorWidth(appController.GetVirtualCameraController().GetCameraSettings().sensorWidth);
@@ -300,7 +301,7 @@ namespace MRR.View
 
         private void OnSensorSizeHeightChanged(InputField iSensorHeight)
         {
-            int sensorHeight = ReturnValidIntFromString(iSensorHeight.text);
+            int sensorHeight = Utility.Util.ReturnValidIntFromString(iSensorHeight.text);
 
             if (sensorHeight == 0)
                 SetSensorHeight(appController.GetVirtualCameraController().GetCameraSettings().sensorHeight);
@@ -444,7 +445,7 @@ namespace MRR.View
                 ResetSettings();
             }
 
-            if (GetOutputFormat(appController.GetSettings().outputFormat) == OutputFormat.ManualScreencapture)
+            if (Utility.Util.GetOutputFormat(appController.GetSettings().outputFormat) == OutputFormat.ManualScreencapture)
                 canvasScreencapture.enabled = true;
             else
             {
@@ -600,7 +601,7 @@ namespace MRR.View
             List<Dropdown.OptionData> optionData = new List<Dropdown.OptionData>();
 
             foreach (OutputFormat outputFormat in (OutputFormat[])System.Enum.GetValues(typeof(OutputFormat)))
-                optionData.Add(new Dropdown.OptionData(GetOutputFormatName(outputFormat)));
+                optionData.Add(new Dropdown.OptionData(Utility.Util.GetOutputFormatName(outputFormat)));
 
             dOutputCodec.AddOptions(optionData);
         }
@@ -620,7 +621,7 @@ namespace MRR.View
             SetFooterResolutionWidth(settings.cameraSettings.resolutionWidth);
             SetFooterResolutionHeight(settings.cameraSettings.resolutionHeight);
             SetFooterFramerate(settings.cameraSettings.framerate);
-            SetFooterOutputFormat(GetOutputFormat(settings.outputFormat));
+            SetFooterOutputFormat(Utility.Util.GetOutputFormat(settings.outputFormat));
             SetFooterMaxFrameTime(1000 / settings.cameraSettings.framerate);
         }
 
@@ -816,50 +817,5 @@ namespace MRR.View
             EnableButtonResetA(toggle);
         }
 
-        // util methods
-
-        private string GetOutputFormatName(OutputFormat outputFormat)
-        {
-            switch (outputFormat)
-            {
-                case OutputFormat.ManualScreencapture:
-                    return "Manual Screencapture";
-                case OutputFormat.TgaImageSequence:
-                    return "TGA Image Sequence";
-                case OutputFormat.BmpImageSequence:
-                    return "BMP Image Sequence";
-                default:
-                    return "None";
-            }
-        }
-
-        private OutputFormat GetOutputFormat(string input)
-        {
-            switch (input)
-            {
-                case "TGA Image Sequence":
-                    return OutputFormat.TgaImageSequence;
-                case "BMP Image Sequence":
-                    return OutputFormat.BmpImageSequence;
-                default:
-                    return OutputFormat.ManualScreencapture;
-            }
-        }
-
-        private float ReturnValidFloatFromString(string input)
-        {
-            if (input == "" || input == "-")
-                return 0.0f;
-            else
-                return float.Parse(input);
-        }
-
-        private int ReturnValidIntFromString(string input)
-        {             
-            if(input == "" || input[0] == '-')
-                return 0;
-            else
-                return int.Parse(input);
-        }
     }
 }
