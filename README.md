@@ -1,6 +1,6 @@
 # Mixed Reality Recorder for Unity
 
-Mixed Reality Recorder (MRR) is a Package for the Unity Engine that lets you record users of Virtual Reality application inside the digital environments.
+Mixed Reality Recorder (MRR) is a Package for the Unity Engine that lets you record users of Virtual Reality applications inside the digital environments.
 
 ## Features
 
@@ -11,6 +11,8 @@ Mixed Reality Recorder (MRR) is a Package for the Unity Engine that lets you rec
 - capture video layers in unity
 - TGA and BMP image sequence output
 - manual screen capture layout for open broadcaster or other recording software
+
+BILD!
 
 ## Quick Start
 
@@ -55,7 +57,7 @@ MRR was tested with the listed VR systems.
 
 ## Authors
 
-- **ericj237** - Developer
+- **Eric Jansen** - Developer
 
 ## Build with
 
@@ -64,7 +66,7 @@ MRR was tested with the listed VR systems.
 
 ## Acknowledgment
 
-- **DashW**: [ScreenRecorder](https://gist.github.com/DashW/74d726293c0d3aeb53f4) - *For custom Texture2D to BMP image file encoding.*
+- **DashW**: [ScreenRecorder](https://gist.github.com/DashW/74d726293c0d3aeb53f4) - *For custom Texture2D to BMP image file transcoding.*
 
 ## License
 

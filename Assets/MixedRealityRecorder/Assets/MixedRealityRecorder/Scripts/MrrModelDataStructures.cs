@@ -24,8 +24,7 @@ namespace MRR.Model
         z
     }
 
-    [CreateAssetMenu(fileName = "CameraPreset", menuName = "MixedRealityRecorder/CameraPreset", order = 1)]
-    public class CameraPreset : ScriptableObject
+    public struct CameraPreset
     {
         public string presetName;
         public CameraSetting cameraSettings;
