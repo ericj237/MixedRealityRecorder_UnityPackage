@@ -530,7 +530,7 @@ GameObject:
   - component: {fileID: 1966014726}
   - component: {fileID: 1966014729}
   - component: {fileID: 1966014728}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: mesh_ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
