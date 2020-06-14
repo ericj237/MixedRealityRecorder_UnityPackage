@@ -70,4 +70,4 @@ MRR was tested with the listed VR systems.
 
 ## License
 
-Pending
+See [LICENSE.txt](LICENSE.txt) for information.
