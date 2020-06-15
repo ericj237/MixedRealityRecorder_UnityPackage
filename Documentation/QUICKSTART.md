@@ -4,7 +4,7 @@ This guide will get you ready to record users of Virtual Reality applications in
 
 ## 1. Hardware Setup
 
-1.1 [Setup a studio with greenscreen background.](https://www.wikihow.com/Set-Up-a-Green-Screening-Studio)
+1.1 [Setup a studio with greenscreen background.](https://www.wikihow.com/Set-Up-a-Green-Screening-Studio)<br/>
 1.2 Mount the Vive tracker on the camera.
 
 BILD!
@@ -25,16 +25,16 @@ BILD!
 
 <img src="./Ressources/Images/img_tagTarget.png" width="50%">
 
-2.4 Start your application.
-2.5 Select the physical camera source.
-2.6 Select the foreground target.
-2.6 Match the camera settings in the user interface.
-2.7 Select the output format and optional path.
-2.8 Apply the sensor offset ranging from the center of the Vive tracker to the center of the camera sensor in cm.
+2.4 Start your application.<br/>
+2.5 Select the physical camera source.<br/>
+2.6 Select the foreground target.<br/>
+2.6 Match the camera settings in the user interface.<br/>
+2.7 Select the output format and optional path.<br/>
+2.8 Apply the sensor offset ranging from the center of the Vive tracker to the center of the camera sensor in cm.<br/>
 
-BILD!
+BILD!<br/>
 
-2.9 Record your application.
+2.9 Record your application.<br/>
 
 ## Tested HDMI Capture Cards
 
