@@ -13,17 +13,17 @@ BILD!
 
 ## 2. Software Setup
 
-2.1 Import the package in your Unity project.
+2.1 [Import the package in your Unity project.](https://docs.unity3d.com/Manual/AssetPackagesImport.html)
 
-BILD!
+<img src="./Ressources/Images/img_importPackage01.png" width="50%">
 
 2.2 Include the prefab `MixedRealityRecorder` in your scene.
 
-BILD!
+<img src="./Ressources/Images/img_includePrefab.png" width="50%">
 
 2.3 Tag the HMD object with "Target".
 
-BILD!
+<img src="./Ressources/Images/img_tagTarget.png" width="50%">
 
 2.4 Start your application.
 2.5 Select the physical camera source.
