@@ -1,0 +1,16 @@
+{
+  "source": "Unity",
+  "applications": [
+    {
+      "app_key": "application.generated.unity.mixedrealityrecorder.exe",
+      "launch_type": "url",
+      "url": "steam://launch/",
+      "action_manifest_path": "D:\\dev\\MixedRealityRecorder_UnityPackage\\Assets\\MixedRealityRecorder\\Assets\\StreamingAssets\\SteamVR\\actions.json",
+      "strings": {
+        "en_us": {
+          "name": "MixedRealityRecorder [Testing]"
+        }
+      }
+    }
+  ]
+}
