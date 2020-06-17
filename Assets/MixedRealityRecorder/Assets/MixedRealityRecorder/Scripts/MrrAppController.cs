@@ -11,9 +11,12 @@ namespace MRR.Controller
 
     public class MrrAppController : MonoBehaviour
     {
-        public MrrVirtualCameraController virtualCamera;
+        public MrrVirtualCameraColorController virtualCameraColor;
+        public MrrVirtualCameraDepthController virtualCameraDepth;
         public MrrUiView uiView;
         public Camera uiCamera;
+
+        public GameObject promter;
 
         public Material matForegroundMask;
 
@@ -27,9 +30,6 @@ namespace MRR.Controller
         private WebCamTexture rawPhysicalCameraTexture;
 
         public MrrVideoRecorder videoRecorder;
-
-        public Mesh targetMesh;
-        public Material targetMaterial;
 
         public CameraPreset CreateWebcamPreset()
         {            
@@ -80,7 +80,8 @@ namespace MRR.Controller
             CacheWebcamDevices();
             CacheTargetObjects();
 
-            virtualCamera.Init(cameraPresets[0].cameraSettings, targetObjects[0]);
+            virtualCameraColor.Init(cameraPresets[0].cameraSettings);
+            virtualCameraDepth.Init(cameraPresets[0].cameraSettings, targetObjects[0]);
 
             UpdateInternalTextures();
             uiView.Init();
@@ -91,7 +92,7 @@ namespace MRR.Controller
         private void UpdateInternalTextures()
         {
             // screen size
-            Vector2Int screenSize = new Vector2Int(virtualCamera.GetCameraSettings().resolutionWidth, virtualCamera.GetCameraSettings().resolutionHeight);
+            Vector2Int screenSize = new Vector2Int(virtualCameraColor.GetCameraSettings().resolutionWidth, virtualCameraColor.GetCameraSettings().resolutionHeight);
 
             foregroundMaskTexture = new RenderTexture(screenSize.x, screenSize.y, 0, RenderTextureFormat.ARGBHalf);
 
@@ -107,30 +108,32 @@ namespace MRR.Controller
             rawPhysicalCameraTexture.Play();
 
             // set foreground shader depth texture
-            matForegroundMask.SetTexture("_DepthTex", virtualCamera.GetDepthTexture());
+            matForegroundMask.SetTexture("_DepthTex", virtualCameraDepth.GetDepthTexture());
 
             // assign the textures to the ui raw image component
-            uiView.SetScreenVirtualCamera(virtualCamera.GetColorTexture());
+            uiView.SetScreenVirtualCamera(virtualCameraColor.GetColorTexture());
             uiView.SetScreenForegroundMask(foregroundMaskTexture);
             uiView.SetScreenPhysicalCamera(rawPhysicalCameraTexture);
-            uiView.SetOptionalScreen(virtualCamera.GetDepthTexture());
+            promter.GetComponent<MeshRenderer>().material.mainTexture = rawPhysicalCameraTexture;
+            uiView.SetOptionalScreen(virtualCameraDepth.GetDepthTexture());
         }
 
         // main loop
 
         private void StartCycle()
         {
-            InvokeRepeating("RunCycle", 0.0f, ((float)1 / virtualCamera.GetCameraSettings().framerate));
+            InvokeRepeating("RunCycle", 0.0f, ((float)1 / virtualCameraColor.GetCameraSettings().framerate));
         }
 
         private void RunCycle()
         {
             var stopWatch = Stopwatch.StartNew();
 
-            virtualCamera.Render();
+            virtualCameraColor.Render();
+            virtualCameraDepth.Render();
             UpdateForegroundMask();
 
-            videoRecorder.RecordFrame(virtualCamera.GetColorTexture(), foregroundMaskTexture);
+            //videoRecorder.RecordFrame(virtualCamera.GetColorTexture(), foregroundMaskTexture);
 
             long frameTime = stopWatch.ElapsedMilliseconds;
 
@@ -141,8 +144,8 @@ namespace MRR.Controller
         {
             // we only use this method to receive our processed foreground mask texture
             // all shader properties are already set in Initialize() method
-            matForegroundMask.SetFloat("_HmdDepth", virtualCamera.GetTargetDepth());
-            Graphics.Blit(virtualCamera.GetDepthTexture(), foregroundMaskTexture, matForegroundMask);
+            //matForegroundMask.SetFloat("_HmdDepth", virtualCamera.GetTargetDepth());
+            Graphics.Blit(virtualCameraDepth.GetDepthTexture(), foregroundMaskTexture, matForegroundMask);
         }
 
         // user input
@@ -156,7 +159,7 @@ namespace MRR.Controller
         public void ToggleRecord()
         {
             if (!videoRecorder.IsRecording())
-                videoRecorder.StartRecording(settings.outputPath, Utility.Util.GetOutputFormat(settings.outputFormat), new Vector2Int(virtualCamera.GetCameraSettings().resolutionWidth, virtualCamera.GetCameraSettings().resolutionHeight));
+                videoRecorder.StartRecording(settings.outputPath, Utility.Util.GetOutputFormat(settings.outputFormat), new Vector2Int(virtualCameraColor.GetCameraSettings().resolutionWidth, virtualCameraColor.GetCameraSettings().resolutionHeight));
             else
                 videoRecorder.StopRecording();
         }
@@ -170,9 +173,10 @@ namespace MRR.Controller
 
             CancelInvoke();
 
-            SetTargetObject(oldTargetObjectName, settings.targetObject);
-            virtualCamera.SetCameraSettings(settings.cameraSettings);
-            virtualCamera.SetTargetObject(GetTargetObjectByName(settings.targetObject));
+            //SetTargetObject(oldTargetObjectName, settings.targetObject);
+            virtualCameraColor.SetCameraSettings(settings.cameraSettings);
+            virtualCameraDepth.SetCameraSettings(settings.cameraSettings);
+            virtualCameraDepth.SetTargetObject(GetTargetObjectByName(settings.targetObject));
             UpdateInternalTextures();
             StartCycle();
 
@@ -197,17 +201,18 @@ namespace MRR.Controller
                 foreach (GameObject target in targets)
                     targetObjects.Add(target);
             }
-            else
-            {
-                GameObject debugTarget = new GameObject();
-                debugTarget.name = "debugTarget";
-                debugTarget.transform.position = virtualCamera.gameObject.transform.position + virtualCamera.gameObject.transform.forward * 100;
-                targetObjects.Add(debugTarget);
-            }
+            //else
+            //{
+            //    GameObject debugTarget = new GameObject();
+            //    debugTarget.name = "debugTarget";
+            //    debugTarget.transform.position = virtualCameraColor.gameObject.transform.position + virtualCameraColor.gameObject.transform.forward * 100;
+            //    targetObjects.Add(debugTarget);
+            //}
         }
 
         // setter methods
 
+        /*
         private void SetTargetObject(string oldTarget, string newTarget)
         {
 
@@ -232,6 +237,7 @@ namespace MRR.Controller
                 newTargetObject.AddComponent<SphereCollider>();
 
         }
+        */
 
         // getter methods
 
@@ -272,9 +278,14 @@ namespace MRR.Controller
             return cameraPresets[0].cameraSettings;
         }
 
-        public MrrVirtualCameraController GetVirtualCameraController()
+        public MrrVirtualCameraColorController GetVirtualCameraColorController()
         {
-            return virtualCamera;
+            return virtualCameraColor;
+        }
+
+        public MrrVirtualCameraDepthController GetVirtualCameraDepthController()
+        {
+            return virtualCameraDepth;
         }
     }
 }

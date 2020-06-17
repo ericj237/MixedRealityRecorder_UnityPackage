@@ -27,7 +27,6 @@
 
             sampler2D _DepthTex;
 			float4 _DepthTex_ST;
-			float _HmdDepth;
 
             v2f vert (appdata v)
             {
@@ -41,9 +40,11 @@
             {
 
 				// get depth from depth texture
-				float depth = tex2D(_DepthTex, i.uv).r;
+				// float depth = tex2D(_DepthTex, i.uv).r;
+				// float2 uv = i.sceenuv.xy / i.screenuv.w;
+				float depth = 1 - Linear01Depth(SAMPLE_DEPTH_TEXTURE(_DepthTex, i.uv));
 
-				if (depth > _HmdDepth + 0.0001f)
+				if (depth > 0.0f)
 					return fixed4(1.0f, 1.0f, 1.0f, 1.0f);
 				else
 					return fixed4(0.0f, 0.0f, 0.0f, 1.0f);
