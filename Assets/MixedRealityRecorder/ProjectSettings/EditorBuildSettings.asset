@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/MixedRealityRecorder/Scenes/scene_mrrDev.unity
-    guid: abd0ecacbeda6364fa41f03ed1c85d6c
+    path: Assets/MixedRealityRecorder/Scenes/scene_mrrTest.unity
+    guid: 756a325f263d5a54ba08a817c2b4f9a9
   m_configObjects: {}

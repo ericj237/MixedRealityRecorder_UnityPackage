@@ -16,6 +16,7 @@ namespace MRR.Controller
         public MrrUiView uiView;
         public Camera uiCamera;
 
+        public GameObject screenVideoCall;
         public GameObject promter;
 
         public Material matForegroundMask;
@@ -28,6 +29,7 @@ namespace MRR.Controller
 
         private RenderTexture foregroundMaskTexture;
         private WebCamTexture rawPhysicalCameraTexture;
+        private WebCamTexture videoCallTexture;
 
         public MrrVideoRecorder videoRecorder;
 
@@ -53,7 +55,7 @@ namespace MRR.Controller
             CameraSetting currCamSetting = new CameraSetting();
             currCamSetting.resolutionWidth = 1920;
             currCamSetting.resolutionHeight = 1080;
-            currCamSetting.framerate = 30;
+            currCamSetting.framerate = 60;
             currCamSetting.focalLenth = 16;
             currCamSetting.sensorWidth = 18;
             currCamSetting.sensorHeight = 14;
@@ -68,8 +70,8 @@ namespace MRR.Controller
         private void CacheCameraPresets()
         {
             cameraPresets = new CameraPreset[2];
-            cameraPresets[0] = CreateWebcamPreset();
-            cameraPresets[1] = CreateBmpcc4kPreset();
+            cameraPresets[0] = CreateBmpcc4kPreset();
+            cameraPresets[1] = CreateWebcamPreset();
         }
 
         // init methods - entry point for MixedRealtiyRecorder
@@ -84,9 +86,18 @@ namespace MRR.Controller
             virtualCameraDepth.Init(cameraPresets[0].cameraSettings, targetObjects[0]);
 
             UpdateInternalTextures();
+            InitVideoCall();
             uiView.Init();
 
             StartCycle();
+        }
+
+        private void InitVideoCall()
+        {
+            videoCallTexture = new WebCamTexture(webCamDevices[2].name);
+            videoCallTexture.Play();
+
+            screenVideoCall.GetComponent<MeshRenderer>().material.mainTexture = videoCallTexture;
         }
 
         private void UpdateInternalTextures()
@@ -114,7 +125,9 @@ namespace MRR.Controller
             uiView.SetScreenVirtualCamera(virtualCameraColor.GetColorTexture());
             uiView.SetScreenForegroundMask(foregroundMaskTexture);
             uiView.SetScreenPhysicalCamera(rawPhysicalCameraTexture);
+
             promter.GetComponent<MeshRenderer>().material.mainTexture = rawPhysicalCameraTexture;
+
             uiView.SetOptionalScreen(virtualCameraDepth.GetDepthTexture());
         }
 
