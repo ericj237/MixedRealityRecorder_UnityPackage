@@ -56,7 +56,7 @@ namespace MRR.Controller
             currCamSetting.resolutionWidth = 1920;
             currCamSetting.resolutionHeight = 1080;
             currCamSetting.framerate = 60;
-            currCamSetting.focalLenth = 16;
+            currCamSetting.focalLenth = 18;
             currCamSetting.sensorWidth = 18;
             currCamSetting.sensorHeight = 14;
 
