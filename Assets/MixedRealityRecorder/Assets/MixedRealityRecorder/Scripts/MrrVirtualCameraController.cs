@@ -21,7 +21,7 @@ namespace MRR.Controller
 
         private RenderTexture rawColorTextureBackground;
         private RenderTexture colorTextureBackground;
-        private RenderTexture colorTextureForeground;
+        private RenderTexture rawColorTextureForeground;
         private RenderTexture rawDepthTexture;
         private RenderTexture depthTexture;
 
@@ -36,7 +36,8 @@ namespace MRR.Controller
 
             virtualCameraColor.targetTexture = rawColorTextureBackground;
             matRemoveAlphaChannel.SetTexture("_ColorTex", rawColorTextureBackground);
-            virtualCameraDepth.SetTargetBuffers(colorTextureForeground.colorBuffer, rawDepthTexture.depthBuffer);
+
+            virtualCameraDepth.SetTargetBuffers(rawColorTextureForeground.colorBuffer, rawDepthTexture.depthBuffer);
             matDepthTexture.SetTexture("_RawDepthTex", rawDepthTexture);
         }
 
@@ -45,8 +46,10 @@ namespace MRR.Controller
         public void Render()
         {
             UpdateFarClipPlane();
+
             virtualCameraColor.Render();
             Graphics.Blit(rawColorTextureBackground, colorTextureBackground, matRemoveAlphaChannel);
+
             virtualCameraDepth.Render();
             Graphics.Blit(rawDepthTexture, depthTexture, matDepthTexture);
         }
@@ -67,7 +70,7 @@ namespace MRR.Controller
             // create render textures
             rawColorTextureBackground = new RenderTexture(cameraResolution.x, cameraResolution.y, 0, RenderTextureFormat.Default);
             colorTextureBackground = new RenderTexture(cameraResolution.x, cameraResolution.y, 0, RenderTextureFormat.Default);
-            colorTextureForeground = new RenderTexture(cameraResolution.x, cameraResolution.y, 0, RenderTextureFormat.Default);
+            rawColorTextureForeground = new RenderTexture(cameraResolution.x, cameraResolution.y, 0, RenderTextureFormat.Default);
             rawDepthTexture = new RenderTexture(cameraResolution.x, cameraResolution.y, 16, RenderTextureFormat.Depth);
             depthTexture = new RenderTexture(cameraResolution.x, cameraResolution.y, 0, RenderTextureFormat.ARGBHalf);
         }
@@ -87,11 +90,6 @@ namespace MRR.Controller
         public RenderTexture GetDepthTexture()
         {
             return depthTexture;
-        }
-
-        public RenderTexture GetRawDepthTexture()
-        {
-            return rawDepthTexture;
         }
 
         // setter methods
@@ -114,6 +112,8 @@ namespace MRR.Controller
 
             virtualCameraDepth.farClipPlane = distance;
         }
+
+        /*
 
         private void SetResolutionWidth(int resolutionWidth)
         {
@@ -144,6 +144,8 @@ namespace MRR.Controller
         {
             cameraSettings.sensorHeight = sensorWidth;
         }
+
+        */
 
         public void SetSensorOffsetPosition(float value, Vector3Component component)
         {

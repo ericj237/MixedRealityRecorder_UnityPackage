@@ -29,47 +29,6 @@ namespace MRR.Controller
 
         public MrrVideoRecorder videoRecorder;
 
-        public CameraPreset CreateWebcamPreset()
-        {            
-            CameraSetting currCamSetting = new CameraSetting();
-            currCamSetting.resolutionWidth = 1280;
-            currCamSetting.resolutionHeight = 720;
-            currCamSetting.framerate = 30;
-            currCamSetting.focalLenth = 4;
-            currCamSetting.sensorWidth = 3;
-            currCamSetting.sensorHeight = 2;
-
-            CameraPreset currCamPreset = new CameraPreset();
-            currCamPreset.presetName = "Webcam";
-            currCamPreset.cameraSettings = currCamSetting;
-
-            return currCamPreset;
-        }
-
-        private CameraPreset CreateBmpcc4kPreset()
-        {
-            CameraSetting currCamSetting = new CameraSetting();
-            currCamSetting.resolutionWidth = 1920;
-            currCamSetting.resolutionHeight = 1080;
-            currCamSetting.framerate = 60;
-            currCamSetting.focalLenth = 18;
-            currCamSetting.sensorWidth = 17.31f;
-            currCamSetting.sensorHeight = 12.89f;
-
-            CameraPreset currCamPreset = new CameraPreset();
-            currCamPreset.presetName = "Pocket Cinema Camera 4k";
-            currCamPreset.cameraSettings = currCamSetting;
-
-            return currCamPreset;
-        }
-
-        private void CacheCameraPresets()
-        {
-            cameraPresets = new CameraPreset[2];
-            cameraPresets[0] = CreateBmpcc4kPreset();
-            cameraPresets[1] = CreateWebcamPreset();
-        }
-
         // init methods - entry point for MixedRealtiyRecorder
 
         private void Start()
@@ -137,8 +96,6 @@ namespace MRR.Controller
 
         public void UpdateForegroundMask()
         {
-            // we only use this method to receive our processed foreground mask texture
-            // all shader properties are already set in Initialize() method
             Graphics.Blit(virtualCameraController.GetDepthTexture(), foregroundMaskTexture, matForegroundMask);
         }
 
@@ -178,6 +135,13 @@ namespace MRR.Controller
         }
 
         // caching methods
+
+        private void CacheCameraPresets()
+        {
+            cameraPresets = new CameraPreset[2];
+            cameraPresets[0] = CreateBmpcc4kPreset();
+            cameraPresets[1] = CreateWebcamPreset();
+        }
 
         private void CacheWebcamDevices()
         {
@@ -246,6 +210,42 @@ namespace MRR.Controller
         public MrrVirtualCameraController GetVirtualCameraController()
         {
             return virtualCameraController;
+        }
+
+        // camera presets
+
+        public CameraPreset CreateWebcamPreset()
+        {
+            CameraSetting currCamSetting = new CameraSetting();
+            currCamSetting.resolutionWidth = 1280;
+            currCamSetting.resolutionHeight = 720;
+            currCamSetting.framerate = 30;
+            currCamSetting.focalLenth = 4;
+            currCamSetting.sensorWidth = 3;
+            currCamSetting.sensorHeight = 2;
+
+            CameraPreset currCamPreset = new CameraPreset();
+            currCamPreset.presetName = "Webcam";
+            currCamPreset.cameraSettings = currCamSetting;
+
+            return currCamPreset;
+        }
+
+        private CameraPreset CreateBmpcc4kPreset()
+        {
+            CameraSetting currCamSetting = new CameraSetting();
+            currCamSetting.resolutionWidth = 1920;
+            currCamSetting.resolutionHeight = 1080;
+            currCamSetting.framerate = 60;
+            currCamSetting.focalLenth = 18;
+            currCamSetting.sensorWidth = 17.31f;
+            currCamSetting.sensorHeight = 12.89f;
+
+            CameraPreset currCamPreset = new CameraPreset();
+            currCamPreset.presetName = "Pocket Cinema Camera 4k";
+            currCamPreset.cameraSettings = currCamSetting;
+
+            return currCamPreset;
         }
     }
 }
