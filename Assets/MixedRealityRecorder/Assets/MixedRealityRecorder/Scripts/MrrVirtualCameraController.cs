@@ -135,12 +135,12 @@ namespace MRR.Controller
             cameraSettings.focalLenth = focalLength;
         }
 
-        private void SetSensorHeight(int sensorHeight)
+        private void SetSensorHeight(float sensorHeight)
         {
             cameraSettings.sensorHeight = sensorHeight;
         }
 
-        private void SetSensorWidth(int sensorWidth)
+        private void SetSensorWidth(float sensorWidth)
         {
             cameraSettings.sensorHeight = sensorWidth;
         }

@@ -287,7 +287,7 @@ namespace MRR.View
 
         private void OnSensorSizeWidthChanged(InputField iSensorWidth)
         {
-            int sensorWidth = Utility.Util.ReturnValidIntFromString(iSensorWidth.text);
+            float sensorWidth = Utility.Util.ReturnValidFloatFromString(iSensorWidth.text);
 
             if (sensorWidth == 0)
                 SetSensorWidth(appController.GetVirtualCameraController().GetCameraSettings().sensorWidth);
@@ -301,7 +301,7 @@ namespace MRR.View
 
         private void OnSensorSizeHeightChanged(InputField iSensorHeight)
         {
-            int sensorHeight = Utility.Util.ReturnValidIntFromString(iSensorHeight.text);
+            float sensorHeight = Utility.Util.ReturnValidFloatFromString(iSensorHeight.text);
 
             if (sensorHeight == 0)
                 SetSensorHeight(appController.GetVirtualCameraController().GetCameraSettings().sensorHeight);
@@ -513,12 +513,12 @@ namespace MRR.View
             iCameraFocalLenth.SetTextWithoutNotify(focalLenth.ToString());
         }
 
-        private void SetSensorHeight(int sensorHeight)
+        private void SetSensorHeight(float sensorHeight)
         {
             iSensorSize[1].SetTextWithoutNotify(sensorHeight.ToString());
         }
 
-        private void SetSensorWidth(int sensorWidth)
+        private void SetSensorWidth(float sensorWidth)
         {
             iSensorSize[0].SetTextWithoutNotify(sensorWidth.ToString());
         }
@@ -774,14 +774,14 @@ namespace MRR.View
             return int.Parse(iCameraFocalLenth.text);
         }
 
-        private int GetSelectedSensorSizeWidth()
+        private float GetSelectedSensorSizeWidth()
         {
-            return int.Parse(iSensorSize[0].text);
+            return float.Parse(iSensorSize[0].text);
         }
 
-        private int GetSelectedSensorSizeHeight()
+        private float GetSelectedSensorSizeHeight()
         {
-            return int.Parse(iSensorSize[1].text);
+            return float.Parse(iSensorSize[1].text);
         }
 
         private string GetSelectedOptionalScreen()

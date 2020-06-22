@@ -53,8 +53,8 @@ namespace MRR.Controller
             currCamSetting.resolutionHeight = 1080;
             currCamSetting.framerate = 60;
             currCamSetting.focalLenth = 18;
-            currCamSetting.sensorWidth = 18;
-            currCamSetting.sensorHeight = 14;
+            currCamSetting.sensorWidth = 17.31f;
+            currCamSetting.sensorHeight = 12.89f;
 
             CameraPreset currCamPreset = new CameraPreset();
             currCamPreset.presetName = "Pocket Cinema Camera 4k";

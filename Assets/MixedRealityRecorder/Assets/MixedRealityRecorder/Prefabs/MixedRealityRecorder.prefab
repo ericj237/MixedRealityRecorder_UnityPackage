@@ -1414,7 +1414,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2598808727759131574}
   m_TextComponent: {fileID: 2202986803363407036}
   m_Placeholder: {fileID: 0}
-  m_ContentType: 9
+  m_ContentType: 3
   m_InputType: 0
   m_AsteriskChar: 42
   m_KeyboardType: 2
@@ -2904,7 +2904,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3083676403214232525}
   m_TextComponent: {fileID: 5165602646031446429}
   m_Placeholder: {fileID: 0}
-  m_ContentType: 9
+  m_ContentType: 3
   m_InputType: 0
   m_AsteriskChar: 42
   m_KeyboardType: 2
@@ -3603,7 +3603,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1178572945515660002}
   m_TextComponent: {fileID: 1062515121380174875}
   m_Placeholder: {fileID: 0}
-  m_ContentType: 9
+  m_ContentType: 3
   m_InputType: 0
   m_AsteriskChar: 42
   m_KeyboardType: 2
@@ -5563,7 +5563,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 255226863608502406}
   m_TextComponent: {fileID: 4109808908075822988}
   m_Placeholder: {fileID: 0}
-  m_ContentType: 9
+  m_ContentType: 3
   m_InputType: 0
   m_AsteriskChar: 42
   m_KeyboardType: 2
@@ -6502,10 +6502,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d06b393201e5eb4ba2eab14236bd15f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cameraGroup: {fileID: 0}
   appController: {fileID: 904347279075937804}
   virtualCameraColor: {fileID: 6148841860107912221}
   virtualCameraDepth: {fileID: 4038152469814439042}
   matDepthTexture: {fileID: 2100000, guid: 65d78336d94d99f4687f242fdf5f3092, type: 2}
+  matRemoveAlphaChannel: {fileID: 0}
 --- !u!1 &2879573343190316556
 GameObject:
   m_ObjectHideFlags: 0
@@ -6750,7 +6752,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4017576348940356050}
   m_TextComponent: {fileID: 2964672994990466859}
   m_Placeholder: {fileID: 0}
-  m_ContentType: 9
+  m_ContentType: 3
   m_InputType: 0
   m_AsteriskChar: 42
   m_KeyboardType: 2
@@ -7204,7 +7206,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 959555788976136445}
   m_TextComponent: {fileID: 6932593998293154477}
   m_Placeholder: {fileID: 0}
-  m_ContentType: 9
+  m_ContentType: 3
   m_InputType: 0
   m_AsteriskChar: 42
   m_KeyboardType: 2
@@ -17963,13 +17965,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7155399277852303420}
   m_TextComponent: {fileID: 9054763842469973701}
   m_Placeholder: {fileID: 0}
-  m_ContentType: 2
+  m_ContentType: 3
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 4
+  m_KeyboardType: 2
   m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 1
+  m_CharacterValidation: 2
   m_CharacterLimit: 8
   m_OnEndEdit:
     m_PersistentCalls:
@@ -18481,13 +18483,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6475436549708663059}
   m_TextComponent: {fileID: 3799310060818289475}
   m_Placeholder: {fileID: 0}
-  m_ContentType: 2
+  m_ContentType: 3
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 4
+  m_KeyboardType: 2
   m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 1
+  m_CharacterValidation: 2
   m_CharacterLimit: 8
   m_OnEndEdit:
     m_PersistentCalls:
