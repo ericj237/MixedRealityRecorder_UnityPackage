@@ -489,6 +489,12 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 14
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1490718555 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3890836233923575601, guid: 3d832f69edbe6b7498c6be0963342e51,
+    type: 3}
+  m_PrefabInstance: {fileID: 6148841861028112750}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1938504042
 GameObject:
   m_ObjectHideFlags: 0
@@ -3143,5 +3149,10 @@ PrefabInstance:
       propertyPath: matRemoveAlphaChannel
       value: 
       objectReference: {fileID: 2100000, guid: 0c8fdf25724b1e34799907f9b0524e76, type: 2}
+    - target: {fileID: 8285643408426802524, guid: 3d832f69edbe6b7498c6be0963342e51,
+        type: 3}
+      propertyPath: cameraGroup
+      value: 
+      objectReference: {fileID: 1490718555}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3d832f69edbe6b7498c6be0963342e51, type: 3}

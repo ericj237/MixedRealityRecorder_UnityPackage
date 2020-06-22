@@ -6,7 +6,7 @@ namespace MRR.Controller
 
     public class MrrVirtualCameraController : MonoBehaviour
     {
-
+        public GameObject cameraGroup;
         public MrrAppController appController;
 
         public Camera virtualCameraColor;
@@ -150,13 +150,13 @@ namespace MRR.Controller
             switch (component)
             {
                 case Vector3Component.x:
-                    this.transform.localPosition = new Vector3(value, this.transform.localPosition.y, this.transform.localPosition.z);
+                    cameraGroup.transform.localPosition = new Vector3(value, cameraGroup.transform.localPosition.y, cameraGroup.transform.localPosition.z);
                     break;
                 case Vector3Component.y:
-                    this.transform.localPosition = new Vector3(this.transform.localPosition.x, value, this.transform.localPosition.z);
+                    cameraGroup.transform.localPosition = new Vector3(cameraGroup.transform.localPosition.x, value, cameraGroup.transform.localPosition.z);
                     break;
                 case Vector3Component.z:
-                    this.transform.localPosition = new Vector3(this.transform.localPosition.y, this.transform.localPosition.y, value);
+                    cameraGroup.transform.localPosition = new Vector3(cameraGroup.transform.localPosition.x, cameraGroup.transform.localPosition.y, value);
                     break;
                 default:
                     break;
@@ -165,7 +165,7 @@ namespace MRR.Controller
 
         public Vector3 GetSensorOffsetPosition()
         {
-            return this.transform.localPosition;
+            return cameraGroup.transform.localPosition;
         }
 
         public void SetSensorOffsetRotation(float value, Vector3Component component)
@@ -173,13 +173,13 @@ namespace MRR.Controller
             switch (component)
             {
                 case Vector3Component.x:
-                    this.transform.localEulerAngles = new Vector3(value, this.transform.localEulerAngles.y, this.transform.localEulerAngles.z);
+                    cameraGroup.transform.localEulerAngles = new Vector3(value, cameraGroup.transform.localEulerAngles.y, cameraGroup.transform.localEulerAngles.z);
                     break;
                 case Vector3Component.y:
-                    this.transform.localEulerAngles = new Vector3(this.transform.localEulerAngles.x, value, this.transform.localEulerAngles.z);
+                    cameraGroup.transform.localEulerAngles = new Vector3(cameraGroup.transform.localEulerAngles.x, value, cameraGroup.transform.localEulerAngles.z);
                     break;
                 case Vector3Component.z:
-                    this.transform.localEulerAngles = new Vector3(this.transform.localEulerAngles.y, this.transform.localEulerAngles.y, value);
+                    cameraGroup.transform.localEulerAngles = new Vector3(cameraGroup.transform.localEulerAngles.x, cameraGroup.transform.localEulerAngles.y, value);
                     break;
                 default:
                     break;
@@ -188,7 +188,7 @@ namespace MRR.Controller
 
         public Vector3 GetSensorOffsetRotation()
         {
-            return this.transform.localEulerAngles;
+            return cameraGroup.transform.localEulerAngles;
         }
     }
 }
