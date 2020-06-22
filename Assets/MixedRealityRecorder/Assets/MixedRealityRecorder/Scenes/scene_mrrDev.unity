@@ -3138,5 +3138,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8285643408426802524, guid: 3d832f69edbe6b7498c6be0963342e51,
+        type: 3}
+      propertyPath: matRemoveAlphaChannel
+      value: 
+      objectReference: {fileID: 2100000, guid: 0c8fdf25724b1e34799907f9b0524e76, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3d832f69edbe6b7498c6be0963342e51, type: 3}

@@ -2,7 +2,7 @@
 
 namespace MRR.Utility
 {
-    public static class Util
+    public class Util
     {
 
         public static float ReturnValidFloatFromString(string input)

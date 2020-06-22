@@ -1,4 +1,4 @@
-﻿Shader "MixedRealityRecorder/depthTexture"
+﻿Shader "MixedRealityRecorder/removeAlphaChannel"
 {
 
 	SubShader
@@ -26,24 +26,22 @@
 				float4 vertex : SV_POSITION;
 			};
 
-			sampler2D _RawDepthTex;
-			float4 _RawDepthTex_ST;
+			sampler2D _ColorTex;
+			float4 _ColorTex_ST;
 
 			v2f vert(appdata v)
 			{
 				v2f o;
 				o.vertex = UnityObjectToClipPos(v.vertex);
-				o.uv = TRANSFORM_TEX(v.uv, _RawDepthTex);
+				o.uv = TRANSFORM_TEX(v.uv, _ColorTex);
 				return o;
 			}
 
 			fixed4 frag(v2f i) : SV_Target
 			{
+				fixed4 col = tex2D(_ColorTex, i.uv);
 
-				// get depth from depth texture
-				float depth = 1 - Linear01Depth(SAMPLE_DEPTH_TEXTURE(_RawDepthTex, i.uv));
-
-				return fixed4(depth, depth, depth, 1.0f);
+				return fixed4(col.r, col.g, col.b, 1.0f);
 			}
 
 			ENDCG

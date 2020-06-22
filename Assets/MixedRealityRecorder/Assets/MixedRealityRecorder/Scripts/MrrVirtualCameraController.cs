@@ -8,34 +8,35 @@ namespace MRR.Controller
     {
 
         public MrrAppController appController;
-        public Material matDepthTexture;
 
-        private Camera virtualCamera;
+        public Camera virtualCameraColor;
+        public Camera virtualCameraDepth;
+
+        public Material matDepthTexture;
+        public Material matRemoveAlphaChannel;
+
         private CameraSetting cameraSettings = new CameraSetting();
 
         private Transform target;
-        private float targetDepth;
 
-        private RenderTexture colorTexture;
+        private RenderTexture rawColorTextureBackground;
+        private RenderTexture colorTextureBackground;
+        private RenderTexture colorTextureForeground;
         private RenderTexture rawDepthTexture;
         private RenderTexture depthTexture;
-        private Texture2D depthTexture2D;
 
         // init method
 
         public void Init(CameraSetting cameraSetting, GameObject targetObject)
         {
-            SetTargetObject(targetObject);
-
-            virtualCamera = GetComponent<Camera>();
-            virtualCamera.depthTextureMode = DepthTextureMode.Depth;
-
             SetCameraSettings(cameraSetting);
-
-            depthTexture2D = new Texture2D(1, 1, TextureFormat.RGBAHalf, false);
+            SetTargetObject(targetObject);
+            
             UpdateInternalTextures();
 
-            virtualCamera.SetTargetBuffers(colorTexture.colorBuffer, rawDepthTexture.depthBuffer);
+            virtualCameraColor.targetTexture = rawColorTextureBackground;
+            matRemoveAlphaChannel.SetTexture("_ColorTex", rawColorTextureBackground);
+            virtualCameraDepth.SetTargetBuffers(colorTextureForeground.colorBuffer, rawDepthTexture.depthBuffer);
             matDepthTexture.SetTexture("_RawDepthTex", rawDepthTexture);
         }
 
@@ -43,58 +44,19 @@ namespace MRR.Controller
 
         public void Render()
         {
-            virtualCamera.Render();
-            UpdateTargetDepth();
+            UpdateFarClipPlane();
+            virtualCameraColor.Render();
+            Graphics.Blit(rawColorTextureBackground, colorTextureBackground, matRemoveAlphaChannel);
+            virtualCameraDepth.Render();
+            Graphics.Blit(rawDepthTexture, depthTexture, matDepthTexture);
         }
 
         // update methods
 
-        private void UpdateTargetDepth()
+        private void UpdateCameraSettings(Camera camera)
         {
-            Graphics.Blit(rawDepthTexture, depthTexture, matDepthTexture);
-
-            Vector2 targetScreenPosition = virtualCamera.WorldToScreenPoint(target.position);
-            //Debug.Log(targetScreenPosition);
-
-            // screen size
-            Vector2Int cameraResolution = new Vector2Int(cameraSettings.resolutionWidth, cameraSettings.resolutionHeight);
-
-            if (targetScreenPosition.x >= 0 && targetScreenPosition.x <= cameraResolution.x && targetScreenPosition.y >= 0 && targetScreenPosition.y <= cameraResolution.y)
-            {
-                //Debug.Log("HDM Depth = " + hmdDepth);
-
-                Vector3 origin = transform.position + transform.forward * virtualCamera.nearClipPlane;
-                Vector3 direction = Vector3.Normalize(target.position - origin);
-                float distance = Vector3.Distance(target.position, origin);
-
-                RaycastHit hit;
-                if (Physics.Raycast(origin, direction, out hit, virtualCamera.farClipPlane))
-                {
-                    if (hit.collider.gameObject.name == target.name)
-                    {
-                        RenderTexture.active = depthTexture;
-
-                        depthTexture2D.ReadPixels(new Rect((int)targetScreenPosition.x, (int)targetScreenPosition.y, 1, 1), 0, 0);
-                        depthTexture2D.Apply();
-
-                        RenderTexture.active = null;
-
-                        //Debug.DrawRay(origin, direction * hit.distance, Color.green);
-                        targetDepth = depthTexture2D.GetPixel(1, 1).r;
-                        //return;
-                    }
-                    //else
-                    //{
-                    //    Debug.DrawRay(origin, direction * hit.distance, Color.red);
-                    //}
-                }
-            }
-        }     
-
-        private void UpdateCameraSettings()
-        {
-            virtualCamera.focalLength = cameraSettings.focalLenth;
-            virtualCamera.sensorSize = new Vector2(cameraSettings.sensorWidth, cameraSettings.sensorHeight);
+            camera.focalLength = cameraSettings.focalLenth;
+            camera.sensorSize = new Vector2(cameraSettings.sensorWidth, cameraSettings.sensorHeight);
         }
 
         private void UpdateInternalTextures()
@@ -103,7 +65,9 @@ namespace MRR.Controller
             Vector2Int cameraResolution = new Vector2Int(cameraSettings.resolutionWidth, cameraSettings.resolutionHeight);
 
             // create render textures
-            colorTexture = new RenderTexture(cameraResolution.x, cameraResolution.y, 0, RenderTextureFormat.Default);
+            rawColorTextureBackground = new RenderTexture(cameraResolution.x, cameraResolution.y, 0, RenderTextureFormat.Default);
+            colorTextureBackground = new RenderTexture(cameraResolution.x, cameraResolution.y, 0, RenderTextureFormat.Default);
+            colorTextureForeground = new RenderTexture(cameraResolution.x, cameraResolution.y, 0, RenderTextureFormat.Default);
             rawDepthTexture = new RenderTexture(cameraResolution.x, cameraResolution.y, 16, RenderTextureFormat.Depth);
             depthTexture = new RenderTexture(cameraResolution.x, cameraResolution.y, 0, RenderTextureFormat.ARGBHalf);
         }
@@ -115,9 +79,9 @@ namespace MRR.Controller
             return cameraSettings;
         }
 
-        public RenderTexture GetColorTexture()
+        public RenderTexture GetColorBackgroundTexture()
         {
-            return colorTexture;
+            return colorTextureBackground;
         }
 
         public RenderTexture GetDepthTexture()
@@ -125,14 +89,9 @@ namespace MRR.Controller
             return depthTexture;
         }
 
-        public float GetTargetDepth()
+        public RenderTexture GetRawDepthTexture()
         {
-            return targetDepth;
-        }
-
-        public Camera GetVirtualCamera()
-        {
-            return virtualCamera;
+            return rawDepthTexture;
         }
 
         // setter methods
@@ -140,12 +99,20 @@ namespace MRR.Controller
         public void SetCameraSettings(CameraSetting cameraSettings)
         {
             this.cameraSettings = cameraSettings;
-            UpdateCameraSettings();
+            UpdateCameraSettings(virtualCameraColor);
+            UpdateCameraSettings(virtualCameraDepth);
         }
 
         public void SetTargetObject(GameObject targetObject)
         {
             target = targetObject.transform;
+        }
+
+        public void UpdateFarClipPlane()
+        {
+            float distance = Vector3.Distance(virtualCameraDepth.gameObject.transform.position, target.transform.position);
+
+            virtualCameraDepth.farClipPlane = distance;
         }
 
         private void SetResolutionWidth(int resolutionWidth)
@@ -183,13 +150,13 @@ namespace MRR.Controller
             switch (component)
             {
                 case Vector3Component.x:
-                    virtualCamera.transform.localPosition = new Vector3(value, virtualCamera.transform.localPosition.y, virtualCamera.transform.localPosition.z);
+                    this.transform.localPosition = new Vector3(value, this.transform.localPosition.y, this.transform.localPosition.z);
                     break;
                 case Vector3Component.y:
-                    virtualCamera.transform.localPosition = new Vector3(virtualCamera.transform.localPosition.x, value, virtualCamera.transform.localPosition.z);
+                    this.transform.localPosition = new Vector3(this.transform.localPosition.x, value, this.transform.localPosition.z);
                     break;
                 case Vector3Component.z:
-                    virtualCamera.transform.localPosition = new Vector3(virtualCamera.transform.localPosition.y, virtualCamera.transform.localPosition.y, value);
+                    this.transform.localPosition = new Vector3(this.transform.localPosition.y, this.transform.localPosition.y, value);
                     break;
                 default:
                     break;
@@ -198,7 +165,7 @@ namespace MRR.Controller
 
         public Vector3 GetSensorOffsetPosition()
         {
-            return virtualCamera.transform.localPosition;
+            return this.transform.localPosition;
         }
 
         public void SetSensorOffsetRotation(float value, Vector3Component component)
@@ -206,13 +173,13 @@ namespace MRR.Controller
             switch (component)
             {
                 case Vector3Component.x:
-                    virtualCamera.transform.localEulerAngles = new Vector3(value, virtualCamera.transform.localEulerAngles.y, virtualCamera.transform.localEulerAngles.z);
+                    this.transform.localEulerAngles = new Vector3(value, this.transform.localEulerAngles.y, this.transform.localEulerAngles.z);
                     break;
                 case Vector3Component.y:
-                    virtualCamera.transform.localEulerAngles = new Vector3(virtualCamera.transform.localEulerAngles.x, value, virtualCamera.transform.localEulerAngles.z);
+                    this.transform.localEulerAngles = new Vector3(this.transform.localEulerAngles.x, value, this.transform.localEulerAngles.z);
                     break;
                 case Vector3Component.z:
-                    virtualCamera.transform.localEulerAngles = new Vector3(virtualCamera.transform.localEulerAngles.y, virtualCamera.transform.localEulerAngles.y, value);
+                    this.transform.localEulerAngles = new Vector3(this.transform.localEulerAngles.y, this.transform.localEulerAngles.y, value);
                     break;
                 default:
                     break;
@@ -221,7 +188,7 @@ namespace MRR.Controller
 
         public Vector3 GetSensorOffsetRotation()
         {
-            return virtualCamera.transform.localEulerAngles;
+            return this.transform.localEulerAngles;
         }
     }
 }
