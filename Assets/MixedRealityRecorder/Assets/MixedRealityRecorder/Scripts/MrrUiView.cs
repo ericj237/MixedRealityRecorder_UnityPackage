@@ -27,8 +27,6 @@ namespace MRR.View
         public InputField iCameraFocalLenth;
         [Header("Sensor Settings")]
         public InputField[] iSensorSize = new InputField[2];
-        [Header("Optional Screen")]
-        public Dropdown dOptionalScreenSource;
         [Header("Output Settings")]
         public InputField iOutputPath;
         public Dropdown dOutputCodec;
@@ -39,6 +37,11 @@ namespace MRR.View
         [Header("Sensor Offset")]
         public InputField[] iSensorOffsetPosition = new InputField[3];
         public InputField[] iSensorOffsetRotation = new InputField[3];
+
+        [Header("Scene Offset")]
+        public Dropdown dSceneObjectSource;
+        public InputField[] iSceneOffsetPosition = new InputField[3];
+        public InputField[] iSceneOffsetRotation = new InputField[3];
 
         [Header("Controls")]
         public Button bRecord;
@@ -75,11 +78,15 @@ namespace MRR.View
 
             SetCameraValues(appController.GetCameraSettingByPresetName(dCameraPresetDevice.captionText.text));
 
-            SetOutputPath(Application.persistentDataPath);
             SetOutputFormatPresets();
+            SetOutputPath(Application.persistentDataPath);
 
             UpdateSensorOffsetPosition();
             UpdateSensorOffsetRotation();
+
+            SetSceneObjects();
+            UpdateSceneOffsetPosition();
+            UpdateSceneOffsetRotation();
 
             ApplySettings();
 
@@ -189,6 +196,38 @@ namespace MRR.View
             iSensorOffsetRotation[2].onEndEdit.AddListener(delegate
             {
                 OnSensorOffsetRotationZChanged(Utility.Util.ReturnValidFloatFromString(iSensorOffsetRotation[2].text));
+            });
+
+            // events offset position
+            iSceneOffsetPosition[0].onEndEdit.AddListener(delegate
+            {
+                OnSceneOffsetPositionXChanged(Utility.Util.ReturnValidFloatFromString(iSceneOffsetPosition[0].text));
+            });
+
+            iSceneOffsetPosition[1].onEndEdit.AddListener(delegate
+            {
+                OnSceneOffsetPositionYChanged(Utility.Util.ReturnValidFloatFromString(iSceneOffsetPosition[1].text));
+            });
+
+            iSceneOffsetPosition[2].onEndEdit.AddListener(delegate
+            {
+                OnSceneOffsetPositionZChanged(Utility.Util.ReturnValidFloatFromString(iSceneOffsetPosition[2].text));
+            });
+
+            // events offset rotation
+            iSceneOffsetRotation[0].onEndEdit.AddListener(delegate
+            {
+                OnSceneOffsetRotationXChanged(Utility.Util.ReturnValidFloatFromString(iSceneOffsetRotation[0].text));
+            });
+
+            iSceneOffsetRotation[1].onEndEdit.AddListener(delegate
+            {
+                OnSceneOffsetRotationYChanged(Utility.Util.ReturnValidFloatFromString(iSceneOffsetRotation[1].text));
+            });
+
+            iSceneOffsetRotation[2].onEndEdit.AddListener(delegate
+            {
+                OnSceneOffsetRotationZChanged(Utility.Util.ReturnValidFloatFromString(iSceneOffsetRotation[2].text));
             });
         }
 
@@ -333,13 +372,11 @@ namespace MRR.View
         private void OnSensorOffsetPositionXChanged(float x)
         {
             appController.GetCameraController().SetSensorOffsetPosition(x, Vector3Component.x);
-            appController.GetCameraController().SetSensorOffsetPosition(x, Vector3Component.x);
             UpdateSensorOffsetPosition();
         }
 
         private void OnSensorOffsetPositionYChanged(float y)
         {
-            appController.GetCameraController().SetSensorOffsetPosition(y, Vector3Component.y);
             appController.GetCameraController().SetSensorOffsetPosition(y, Vector3Component.y);
             UpdateSensorOffsetPosition();
         }
@@ -347,13 +384,11 @@ namespace MRR.View
         private void OnSensorOffsetPositionZChanged(float z)
         {
             appController.GetCameraController().SetSensorOffsetPosition(z, Vector3Component.z);
-            appController.GetCameraController().SetSensorOffsetPosition(z, Vector3Component.z);
             UpdateSensorOffsetPosition();
         }                    
 
         private void OnSensorOffsetRotationXChanged(float x)
         {
-            appController.GetCameraController().SetSensorOffsetRotation(x, Vector3Component.x);
             appController.GetCameraController().SetSensorOffsetRotation(x, Vector3Component.x);
             UpdateSensorOffsetRotation();
         }
@@ -361,15 +396,51 @@ namespace MRR.View
         private void OnSensorOffsetRotationYChanged(float y)
         {
             appController.GetCameraController().SetSensorOffsetRotation(y, Vector3Component.y);
-            appController.GetCameraController().SetSensorOffsetRotation(y, Vector3Component.y);
             UpdateSensorOffsetRotation();
         }
 
         private void OnSensorOffsetRotationZChanged(float z)
         {
             appController.GetCameraController().SetSensorOffsetRotation(z, Vector3Component.z);
-            appController.GetCameraController().SetSensorOffsetRotation(z, Vector3Component.z);
             UpdateSensorOffsetRotation();
+        }
+
+        // event callback scene offset - REALTIME
+
+        private void OnSceneOffsetPositionXChanged(float x)
+        {
+            appController.SetSceneOffsetPosition(GetSelectedSceneObjectIndex(), x, Vector3Component.x);
+            UpdateSceneOffsetPosition();
+        }
+
+        private void OnSceneOffsetPositionYChanged(float y)
+        {
+            appController.SetSceneOffsetPosition(GetSelectedSceneObjectIndex(), y, Vector3Component.y);
+            UpdateSceneOffsetPosition();
+        }
+
+        private void OnSceneOffsetPositionZChanged(float z)
+        {
+            appController.SetSceneOffsetPosition(GetSelectedSceneObjectIndex(), z, Vector3Component.z);
+            UpdateSceneOffsetPosition();
+        }
+
+        private void OnSceneOffsetRotationXChanged(float x)
+        {
+            appController.SetSceneOffsetRotation(GetSelectedSceneObjectIndex(), x, Vector3Component.x);
+            UpdateSceneOffsetRotation();
+        }
+
+        private void OnSceneOffsetRotationYChanged(float y)
+        {
+            appController.SetSceneOffsetRotation(GetSelectedSceneObjectIndex(), y, Vector3Component.y);
+            UpdateSceneOffsetRotation();
+        }
+
+        private void OnSceneOffsetRotationZChanged(float z)
+        {
+            appController.SetSceneOffsetRotation(GetSelectedSceneObjectIndex(), z, Vector3Component.z);
+            UpdateSceneOffsetRotation();
         }
 
         // event callback buttons
@@ -473,6 +544,22 @@ namespace MRR.View
             iSensorOffsetRotation[2].SetTextWithoutNotify(sensorOffsetRoation.z.ToString());
         }
 
+        private void UpdateSceneOffsetPosition()
+        {
+            Vector3 sceneOffsetPosition = appController.GetSceneOffsetPosition(dSceneObjectSource.value);
+            iSceneOffsetPosition[0].SetTextWithoutNotify(sceneOffsetPosition.x.ToString());
+            iSceneOffsetPosition[1].SetTextWithoutNotify(sceneOffsetPosition.y.ToString());
+            iSceneOffsetPosition[2].SetTextWithoutNotify(sceneOffsetPosition.z.ToString());
+        }
+
+        private void UpdateSceneOffsetRotation()
+        {
+            Vector3 sceneOffsetRoation = appController.GetSceneOffsetRotation(dSceneObjectSource.value);
+            iSceneOffsetRotation[0].SetTextWithoutNotify(sceneOffsetRoation.x.ToString());
+            iSceneOffsetRotation[1].SetTextWithoutNotify(sceneOffsetRoation.y.ToString());
+            iSceneOffsetRotation[2].SetTextWithoutNotify(sceneOffsetRoation.z.ToString());
+        }
+
         // setter methods
 
         private void SetCameraResolutionWidth(int resolutionWidth)
@@ -532,6 +619,20 @@ namespace MRR.View
 
             dTargetObject.AddOptions(optionData);
         }
+
+        private void SetSceneObjects()
+        {
+            dSceneObjectSource.ClearOptions();
+
+            List<GameObject> sceneObjects = appController.GetSceneObjects();
+
+            List<Dropdown.OptionData> optionData = new List<Dropdown.OptionData>();
+
+            foreach (GameObject scene in sceneObjects)
+                optionData.Add(new Dropdown.OptionData(scene.name));
+
+            dSceneObjectSource.AddOptions(optionData);
+        }        
 
         private void SetCameraPresets()
         {
@@ -759,11 +860,6 @@ namespace MRR.View
             return float.Parse(iSensorSize[1].text);
         }
 
-        private string GetSelectedOptionalScreen()
-        {
-            return dOptionalScreenSource.captionText.text;
-        }
-
         private string GetSelectedOutputPath()
         {
             return iOutputPath.text;
@@ -772,6 +868,11 @@ namespace MRR.View
         private string GetSelectedOuputCodec()
         {
             return dOutputCodec.captionText.text;
+        }
+
+        private int GetSelectedSceneObjectIndex()
+        {
+            return dSceneObjectSource.value;
         }
 
         // button util methods

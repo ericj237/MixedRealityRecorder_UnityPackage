@@ -1687,7 +1687,6 @@ MonoBehaviour:
   iSensorSize:
   - {fileID: 5807717584511058925}
   - {fileID: 3100789596390806368}
-  dOptionalScreenSource: {fileID: 0}
   iOutputPath: {fileID: 1459135252461304812}
   dOutputCodec: {fileID: 7136311113808721775}
   bApplyA: {fileID: 1727248240081256891}
@@ -1700,6 +1699,15 @@ MonoBehaviour:
   - {fileID: 294266159903189507}
   - {fileID: 9188590539794627214}
   - {fileID: 2318827926750472418}
+  dSceneObjectSource: {fileID: 8496226440969687727}
+  iSceneOffsetPosition:
+  - {fileID: 7990500970525467910}
+  - {fileID: 5988328493559340530}
+  - {fileID: 3836551618214786313}
+  iSceneOffsetRotation:
+  - {fileID: 3746924734886658422}
+  - {fileID: 302887479345199064}
+  - {fileID: 1717549429062505833}
   bRecord: {fileID: 6447250418181772153}
   imgRecord: {fileID: 7901247815134897381}
   imgStop: {fileID: 8322538176022146693}

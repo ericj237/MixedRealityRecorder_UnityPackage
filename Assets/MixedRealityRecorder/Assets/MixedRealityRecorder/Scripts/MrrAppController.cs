@@ -24,6 +24,7 @@ namespace MRR.Controller
         private CameraPreset[] cameraPresets;
         private WebCamDevice[] webCamDevices;
         private List<GameObject> targetObjects;
+        private List<GameObject> sceneObjects;
 
         private Settings settings = new Settings();
 
@@ -37,6 +38,7 @@ namespace MRR.Controller
             CacheCameraPresets();
             CacheWebcamDevices();
             CacheTargetObjects();
+            CacheSceneObjects();
 
             cameraController.Init(cameraPresets[0].cameraSettings, targetObjects[0]);
 
@@ -156,13 +158,19 @@ namespace MRR.Controller
                 foreach (GameObject target in targets)
                     targetObjects.Add(target);
             }
-            //else
-            //{
-            //    GameObject debugTarget = new GameObject();
-            //    debugTarget.name = "debugTarget";
-            //    debugTarget.transform.position = virtualCameraColor.gameObject.transform.position + virtualCameraColor.gameObject.transform.forward * 100;
-            //    targetObjects.Add(debugTarget);
-            //}
+        }
+
+        private void CacheSceneObjects()
+        {
+            sceneObjects = new List<GameObject>();
+
+            if (GameObject.FindGameObjectsWithTag("Scene").Length > 0)
+            {
+                GameObject[] scenes = GameObject.FindGameObjectsWithTag("Scene");
+
+                foreach (GameObject scene in scenes)
+                    sceneObjects.Add(scene);
+            }
         }
 
         // getter methods
@@ -203,7 +211,12 @@ namespace MRR.Controller
                     return target;
             return null;
         }
-               
+
+        public List<GameObject> GetSceneObjects()
+        {
+            return sceneObjects;
+        }
+
         public MrrVirtualCameraController GetCameraController()
         {
             return cameraController;
@@ -243,6 +256,52 @@ namespace MRR.Controller
             currCamPreset.cameraSettings = currCamSetting;
 
             return currCamPreset;
+        }
+
+        public void SetSceneOffsetPosition(int indexSceneObject, float value, Vector3Component component)
+        {
+            switch (component)
+            {
+                case Vector3Component.x:
+                    sceneObjects[indexSceneObject].transform.localPosition = new Vector3(value, sceneObjects[indexSceneObject].transform.localPosition.y, sceneObjects[indexSceneObject].transform.localPosition.z);
+                    break;
+                case Vector3Component.y:
+                    sceneObjects[indexSceneObject].transform.localPosition = new Vector3(sceneObjects[indexSceneObject].transform.localPosition.x, value, sceneObjects[indexSceneObject].transform.localPosition.z);
+                    break;
+                case Vector3Component.z:
+                    sceneObjects[indexSceneObject].transform.localPosition = new Vector3(sceneObjects[indexSceneObject].transform.localPosition.x, sceneObjects[indexSceneObject].transform.localPosition.y, value);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public Vector3 GetSceneOffsetPosition(int indexSceneObject)
+        {
+            return sceneObjects[indexSceneObject].transform.localPosition;
+        }
+
+        public void SetSceneOffsetRotation(int indexSceneObject, float value, Vector3Component component)
+        {
+            switch (component)
+            {
+                case Vector3Component.x:
+                    sceneObjects[indexSceneObject].transform.localEulerAngles = new Vector3(value, sceneObjects[indexSceneObject].transform.localEulerAngles.y, sceneObjects[indexSceneObject].transform.localEulerAngles.z);
+                    break;
+                case Vector3Component.y:
+                    sceneObjects[indexSceneObject].transform.localEulerAngles = new Vector3(sceneObjects[indexSceneObject].transform.localEulerAngles.x, value, sceneObjects[indexSceneObject].transform.localEulerAngles.z);
+                    break;
+                case Vector3Component.z:
+                    sceneObjects[indexSceneObject].transform.localEulerAngles = new Vector3(sceneObjects[indexSceneObject].transform.localEulerAngles.x, sceneObjects[indexSceneObject].transform.localEulerAngles.y, value);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public Vector3 GetSceneOffsetRotation(int indexSceneObject)
+        {
+            return sceneObjects[indexSceneObject].transform.localEulerAngles;
         }
     }
 }
