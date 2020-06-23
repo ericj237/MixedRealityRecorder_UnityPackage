@@ -75,8 +75,6 @@ namespace MRR.View
 
             SetCameraValues(appController.GetCameraSettingByPresetName(dCameraPresetDevice.captionText.text));
 
-            SetOptionalScreenInputSources();
-
             SetOutputPath(Application.persistentDataPath);
             SetOutputFormatPresets();
 
@@ -134,11 +132,6 @@ namespace MRR.View
             iSensorSize[1].onEndEdit.AddListener(delegate
             {
                 OnSensorSizeHeightChanged(iSensorSize[1]);
-            });
-
-            dOptionalScreenSource.onValueChanged.AddListener(delegate
-            {
-                OnOptionalScreenChanged(dOptionalScreenSource.captionText.text);
             });
 
             iOutputPath.onEndEdit.AddListener(delegate
@@ -313,15 +306,6 @@ namespace MRR.View
             }
         }
 
-        private void OnOptionalScreenChanged(string sourceName)
-        {
-            if (sourceName != appController.GetSettings().optionalScreenSource)
-            {
-                //Debug.Log("Changed optional screen source!");
-                EnableButtonsA(true);
-            }
-        }
-
         private void OnOutputPathChanged(string path)
         {
             if (path != appController.GetSettings().outputPath && System.IO.Directory.Exists(path))
@@ -433,9 +417,7 @@ namespace MRR.View
             SetTargetObjects();
             SetCameraPresets();
 
-            SetCameraValues(appController.GetCameraSettingByPresetName(dCameraPresetDevice.captionText.text));
-
-            SetOptionalScreenInputSources();
+            SetCameraValues(appController.GetSettings().cameraSettings);
 
             SetOutputPath(Application.persistentDataPath);
             SetOutputFormatPresets();
@@ -464,7 +446,7 @@ namespace MRR.View
 
         private bool HasSettingsChanged()
         {
-            return bResetA.enabled;
+            return bResetA.IsInteractable();
         }
 
         private void Update()
@@ -563,6 +545,18 @@ namespace MRR.View
                 optionData.Add(new Dropdown.OptionData(device.presetName));
 
             dCameraPresetDevice.AddOptions(optionData);
+
+            int indexValue = 0;
+
+            foreach (Dropdown.OptionData option in dCameraPresetDevice.options)
+            {
+                if (option.text == appController.GetSettings().cameraPreset)
+                {
+                    dCameraPresetDevice.value = indexValue;
+                    return;
+                }
+                indexValue++;
+            }
         }
 
         private void SetCustomCameraPreset()
@@ -579,25 +573,6 @@ namespace MRR.View
                 optionData.Add(new Dropdown.OptionData(device.presetName));
 
             dCameraPresetDevice.AddOptions(optionData);
-        }
-
-        private void SetOptionalScreenInputSources()
-        {
-            dOptionalScreenSource.ClearOptions();
-
-            WebCamDevice[] webCamDevices = appController.GetWebCamDevices();
-
-            List<Dropdown.OptionData> optionData = new List<Dropdown.OptionData>();
-
-            optionData.Add(new Dropdown.OptionData("Depth Virtual Camera"));
-
-            foreach (WebCamDevice source in webCamDevices)
-            {
-                if (source.name != dPhysicalCameraSource.captionText.text)
-                    optionData.Add(new Dropdown.OptionData(source.name));
-            }
-
-            dOptionalScreenSource.AddOptions(optionData);
         }
 
         private void SetOutputFormatPresets()
@@ -803,18 +778,12 @@ namespace MRR.View
 
         private void EnableButtonApplyA(bool toggle)
         {
-            if (toggle == true)
-                bApplyA.interactable = true;
-            else
-                bApplyA.interactable = false;
+            bApplyA.interactable = toggle;
         }
 
         private void EnableButtonResetA(bool toggle)
         {
-            if (toggle == true)
-                bResetA.interactable = true;
-            else
-                bResetA.interactable = false;
+            bResetA.interactable = toggle;
         }
 
         private void EnableButtonsA(bool toggle)
