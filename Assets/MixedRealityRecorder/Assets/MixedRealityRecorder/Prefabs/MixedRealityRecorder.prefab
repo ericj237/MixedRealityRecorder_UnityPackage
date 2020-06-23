@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 912229424}
   - component: {fileID: 912229423}
   m_Layer: 5
-  m_Name: screenOptionalScreen
+  m_Name: screenForegroundMask
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -457,7 +457,7 @@ GameObject:
   - component: {fileID: 1180021731}
   - component: {fileID: 1180021730}
   m_Layer: 5
-  m_Name: screenForegroundMask
+  m_Name: screenForegroundLayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -596,7 +596,7 @@ GameObject:
   - component: {fileID: 1963696358}
   - component: {fileID: 1963696357}
   m_Layer: 5
-  m_Name: screenVirtualCamera
+  m_Name: screenBackgroundLayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3977,7 +3977,7 @@ GameObject:
   - component: {fileID: 1019124593985113369}
   - component: {fileID: 5583895504455686978}
   m_Layer: 5
-  m_Name: txt_foregroundMask
+  m_Name: txt_foregroundLayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4043,7 +4043,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Foreground Mask
+  m_Text: Foreground Layer
 --- !u!1 &1567461124974971769
 GameObject:
   m_ObjectHideFlags: 0
@@ -4494,7 +4494,7 @@ GameObject:
   - component: {fileID: 2612239623628017779}
   - component: {fileID: 3162105469994188786}
   m_Layer: 5
-  m_Name: txt_optionalScreen
+  m_Name: txt_foregroundMask
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4560,7 +4560,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Optional Screen
+  m_Text: Foreground Mask
 --- !u!1 &1756377504476945793
 GameObject:
   m_ObjectHideFlags: 0
@@ -5134,7 +5134,7 @@ GameObject:
   - component: {fileID: 1839705279354083673}
   - component: {fileID: 960017760593089758}
   m_Layer: 5
-  m_Name: txt_virtualCamera
+  m_Name: txt_backgroundLayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5200,7 +5200,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Virtual Camera
+  m_Text: Background Layer
 --- !u!1 &2133377643641708111
 GameObject:
   m_ObjectHideFlags: 0
@@ -7237,11 +7237,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d06b393201e5eb4ba2eab14236bd15f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraGroup: {fileID: 3890836233923575601}
   appController: {fileID: 904347279075937804}
+  cameraGroup: {fileID: 3890836233923575601}
   virtualCameraColor: {fileID: 6148841860107912221}
   virtualCameraDepth: {fileID: 4038152469814439042}
-  matDepthTexture: {fileID: 2100000, guid: 65d78336d94d99f4687f242fdf5f3092, type: 2}
   matRemoveAlphaChannel: {fileID: 2100000, guid: 0c8fdf25724b1e34799907f9b0524e76,
     type: 2}
 --- !u!1 &2879573343190316556
@@ -10428,7 +10427,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3890836233923575601}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.14, z: -0.03}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6892826249187110248}
@@ -11216,7 +11215,7 @@ GameObject:
   - component: {fileID: 6892826249187110248}
   - component: {fileID: 4038152469814439042}
   m_Layer: 0
-  m_Name: cam_depth
+  m_Name: cam_foreground
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14907,7 +14906,7 @@ GameObject:
   - component: {fileID: 6148841860107912218}
   - component: {fileID: 6148841860107912221}
   m_Layer: 0
-  m_Name: cam_color
+  m_Name: cam_background
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

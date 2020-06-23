@@ -6,13 +6,12 @@ namespace MRR.Controller
 
     public class MrrVirtualCameraController : MonoBehaviour
     {
-        public GameObject cameraGroup;
         public MrrAppController appController;
+        public GameObject cameraGroup;
 
-        public Camera virtualCameraColor;
-        public Camera virtualCameraDepth;
+        public Camera backgroundCamera;
+        public Camera foregroundCamera;
 
-        public Material matDepthTexture;
         public Material matRemoveAlphaChannel;
 
         private CameraSetting cameraSettings = new CameraSetting();
@@ -21,9 +20,9 @@ namespace MRR.Controller
 
         private RenderTexture rawColorTextureBackground;
         private RenderTexture colorTextureBackground;
+
         private RenderTexture rawColorTextureForeground;
-        private RenderTexture rawDepthTexture;
-        private RenderTexture depthTexture;
+        private RenderTexture colorTextureForeground;
 
         // init method
 
@@ -34,11 +33,8 @@ namespace MRR.Controller
             
             UpdateInternalTextures();
 
-            virtualCameraColor.targetTexture = rawColorTextureBackground;
-            matRemoveAlphaChannel.SetTexture("_ColorTex", rawColorTextureBackground);
-
-            virtualCameraDepth.SetTargetBuffers(rawColorTextureForeground.colorBuffer, rawDepthTexture.depthBuffer);
-            matDepthTexture.SetTexture("_RawDepthTex", rawDepthTexture);
+            backgroundCamera.targetTexture = rawColorTextureBackground;       
+            foregroundCamera.targetTexture = rawColorTextureForeground;
         }
 
         // render method
@@ -46,12 +42,16 @@ namespace MRR.Controller
         public void Render()
         {
             UpdateFarClipPlane();
+            UpdateNearClipPlane();
 
-            virtualCameraColor.Render();
+            backgroundCamera.Render();
+            foregroundCamera.Render();
+
+            matRemoveAlphaChannel.SetTexture("_ColorTex", rawColorTextureBackground);
             Graphics.Blit(rawColorTextureBackground, colorTextureBackground, matRemoveAlphaChannel);
 
-            virtualCameraDepth.Render();
-            Graphics.Blit(rawDepthTexture, depthTexture, matDepthTexture);
+            matRemoveAlphaChannel.SetTexture("_ColorTex", rawColorTextureForeground);
+            Graphics.Blit(rawColorTextureForeground, colorTextureForeground, matRemoveAlphaChannel);
         }
 
         // update methods
@@ -71,25 +71,29 @@ namespace MRR.Controller
             rawColorTextureBackground = new RenderTexture(cameraResolution.x, cameraResolution.y, 0, RenderTextureFormat.Default);
             colorTextureBackground = new RenderTexture(cameraResolution.x, cameraResolution.y, 0, RenderTextureFormat.Default);
             rawColorTextureForeground = new RenderTexture(cameraResolution.x, cameraResolution.y, 0, RenderTextureFormat.Default);
-            rawDepthTexture = new RenderTexture(cameraResolution.x, cameraResolution.y, 16, RenderTextureFormat.Depth);
-            depthTexture = new RenderTexture(cameraResolution.x, cameraResolution.y, 0, RenderTextureFormat.ARGBHalf);
+            colorTextureForeground = new RenderTexture(cameraResolution.x, cameraResolution.y, 0, RenderTextureFormat.Default);
         }
 
         // getter methods
 
-        public CameraSetting GetCameraSettings()
+        public CameraSetting GetSettings()
         {
             return cameraSettings;
         }
 
-        public RenderTexture GetColorBackgroundTexture()
+        public RenderTexture GetColorTextureBackground()
         {
             return colorTextureBackground;
         }
 
-        public RenderTexture GetDepthTexture()
+        public RenderTexture GetRawColorTextureForeground()
         {
-            return depthTexture;
+            return rawColorTextureForeground;
+        }
+
+        public RenderTexture GetColorTextureForeground()
+        {
+            return colorTextureForeground;
         }
 
         // setter methods
@@ -97,8 +101,8 @@ namespace MRR.Controller
         public void SetCameraSettings(CameraSetting cameraSettings)
         {
             this.cameraSettings = cameraSettings;
-            UpdateCameraSettings(virtualCameraColor);
-            UpdateCameraSettings(virtualCameraDepth);
+            UpdateCameraSettings(backgroundCamera);
+            UpdateCameraSettings(foregroundCamera);
         }
 
         public void SetTargetObject(GameObject targetObject)
@@ -108,9 +112,16 @@ namespace MRR.Controller
 
         public void UpdateFarClipPlane()
         {
-            float distance = Vector3.Distance(virtualCameraDepth.gameObject.transform.position, target.transform.position);
+            float distance = Vector3.Distance(foregroundCamera.gameObject.transform.position, target.transform.position);
 
-            virtualCameraDepth.farClipPlane = distance;
+            foregroundCamera.farClipPlane = distance;
+        }
+
+        public void UpdateNearClipPlane()
+        {
+            float distance = Vector3.Distance(backgroundCamera.gameObject.transform.position, target.transform.position);
+
+            backgroundCamera.nearClipPlane = distance - 0.1f;
         }
 
         /*

@@ -233,7 +233,7 @@ namespace MRR.View
             int width = Utility.Util.ReturnValidIntFromString(iResolutionWidth.text);
 
             if (width == 0)
-                SetCameraResolutionWidth(appController.GetVirtualCameraController().GetCameraSettings().resolutionWidth);
+                SetCameraResolutionWidth(appController.GetCameraController().GetSettings().resolutionWidth);
             else
             {
                 //Debug.Log("Changed camera resolution width!");
@@ -247,7 +247,7 @@ namespace MRR.View
             int height = Utility.Util.ReturnValidIntFromString(iResolutionHeight.text);
 
             if (height == 0)
-                SetCameraResolutionHeight(appController.GetVirtualCameraController().GetCameraSettings().resolutionHeight);
+                SetCameraResolutionHeight(appController.GetCameraController().GetSettings().resolutionHeight);
             else
             {
                 //Debug.Log("Changed camera resolution height!");
@@ -262,7 +262,7 @@ namespace MRR.View
             int framerate = Utility.Util.ReturnValidIntFromString(iFramerate.text);
 
             if (framerate == 0)
-                SetCameraFramerate(appController.GetVirtualCameraController().GetCameraSettings().framerate);
+                SetCameraFramerate(appController.GetCameraController().GetSettings().framerate);
             else
             {
                 //Debug.Log("Changed camera framerate!");
@@ -276,7 +276,7 @@ namespace MRR.View
             int focalLength = Utility.Util.ReturnValidIntFromString(iFocalLength.text);
 
             if (focalLength == 0)
-                SetCameraFocalLength(appController.GetVirtualCameraController().GetCameraSettings().focalLenth);
+                SetCameraFocalLength(appController.GetCameraController().GetSettings().focalLenth);
             else
             {
                 //Debug.Log("Changed camera focal length!");
@@ -290,7 +290,7 @@ namespace MRR.View
             float sensorWidth = Utility.Util.ReturnValidFloatFromString(iSensorWidth.text);
 
             if (sensorWidth == 0)
-                SetSensorWidth(appController.GetVirtualCameraController().GetCameraSettings().sensorWidth);
+                SetSensorWidth(appController.GetCameraController().GetSettings().sensorWidth);
             else
             {
                 //Debug.Log("Changed sensor size width!");
@@ -304,7 +304,7 @@ namespace MRR.View
             float sensorHeight = Utility.Util.ReturnValidFloatFromString(iSensorHeight.text);
 
             if (sensorHeight == 0)
-                SetSensorHeight(appController.GetVirtualCameraController().GetCameraSettings().sensorHeight);
+                SetSensorHeight(appController.GetCameraController().GetSettings().sensorHeight);
             else
             {
                 //Debug.Log("Changed sensor size heigth!");
@@ -348,43 +348,43 @@ namespace MRR.View
 
         private void OnSensorOffsetPositionXChanged(float x)
         {
-            appController.GetVirtualCameraController().SetSensorOffsetPosition(x, Vector3Component.x);
-            appController.GetVirtualCameraController().SetSensorOffsetPosition(x, Vector3Component.x);
+            appController.GetCameraController().SetSensorOffsetPosition(x, Vector3Component.x);
+            appController.GetCameraController().SetSensorOffsetPosition(x, Vector3Component.x);
             UpdateSensorOffsetPosition();
         }
 
         private void OnSensorOffsetPositionYChanged(float y)
         {
-            appController.GetVirtualCameraController().SetSensorOffsetPosition(y, Vector3Component.y);
-            appController.GetVirtualCameraController().SetSensorOffsetPosition(y, Vector3Component.y);
+            appController.GetCameraController().SetSensorOffsetPosition(y, Vector3Component.y);
+            appController.GetCameraController().SetSensorOffsetPosition(y, Vector3Component.y);
             UpdateSensorOffsetPosition();
         }
 
         private void OnSensorOffsetPositionZChanged(float z)
         {
-            appController.GetVirtualCameraController().SetSensorOffsetPosition(z, Vector3Component.z);
-            appController.GetVirtualCameraController().SetSensorOffsetPosition(z, Vector3Component.z);
+            appController.GetCameraController().SetSensorOffsetPosition(z, Vector3Component.z);
+            appController.GetCameraController().SetSensorOffsetPosition(z, Vector3Component.z);
             UpdateSensorOffsetPosition();
         }                    
 
         private void OnSensorOffsetRotationXChanged(float x)
         {
-            appController.GetVirtualCameraController().SetSensorOffsetRotation(x, Vector3Component.x);
-            appController.GetVirtualCameraController().SetSensorOffsetRotation(x, Vector3Component.x);
+            appController.GetCameraController().SetSensorOffsetRotation(x, Vector3Component.x);
+            appController.GetCameraController().SetSensorOffsetRotation(x, Vector3Component.x);
             UpdateSensorOffsetRotation();
         }
 
         private void OnSensorOffsetRotationYChanged(float y)
         {
-            appController.GetVirtualCameraController().SetSensorOffsetRotation(y, Vector3Component.y);
-            appController.GetVirtualCameraController().SetSensorOffsetRotation(y, Vector3Component.y);
+            appController.GetCameraController().SetSensorOffsetRotation(y, Vector3Component.y);
+            appController.GetCameraController().SetSensorOffsetRotation(y, Vector3Component.y);
             UpdateSensorOffsetRotation();
         }
 
         private void OnSensorOffsetRotationZChanged(float z)
         {
-            appController.GetVirtualCameraController().SetSensorOffsetRotation(z, Vector3Component.z);
-            appController.GetVirtualCameraController().SetSensorOffsetRotation(z, Vector3Component.z);
+            appController.GetCameraController().SetSensorOffsetRotation(z, Vector3Component.z);
+            appController.GetCameraController().SetSensorOffsetRotation(z, Vector3Component.z);
             UpdateSensorOffsetRotation();
         }
 
@@ -477,7 +477,7 @@ namespace MRR.View
 
         private void UpdateSensorOffsetPosition()
         {
-            Vector3 sensorOffsetPosition = appController.GetVirtualCameraController().GetSensorOffsetPosition();
+            Vector3 sensorOffsetPosition = appController.GetCameraController().GetSensorOffsetPosition();
             iSensorOffsetPosition[0].SetTextWithoutNotify(sensorOffsetPosition.x.ToString());
             iSensorOffsetPosition[1].SetTextWithoutNotify(sensorOffsetPosition.y.ToString());
             iSensorOffsetPosition[2].SetTextWithoutNotify(sensorOffsetPosition.z.ToString());
@@ -485,7 +485,7 @@ namespace MRR.View
 
         private void UpdateSensorOffsetRotation()
         {
-            Vector3 sensorOffsetRoation = appController.GetVirtualCameraController().GetSensorOffsetRotation();
+            Vector3 sensorOffsetRoation = appController.GetCameraController().GetSensorOffsetRotation();
             iSensorOffsetRotation[0].SetTextWithoutNotify(sensorOffsetRoation.x.ToString());
             iSensorOffsetRotation[1].SetTextWithoutNotify(sensorOffsetRoation.y.ToString());
             iSensorOffsetRotation[2].SetTextWithoutNotify(sensorOffsetRoation.z.ToString());
@@ -695,13 +695,13 @@ namespace MRR.View
 
         // setter screens methods
 
-        public void SetScreenVirtualCamera(RenderTexture colorTexture)
+        public void SetScreenBackgroundLayer(RenderTexture colorTexture)
         {
             screenVirtualCamera.texture = colorTexture;
             screenVirtualCameraScreencapture.texture = colorTexture;
         }
 
-        public void SetScreenForegroundMask(RenderTexture foregroundMaskTexture)
+        public void SetScreenForegroundLayer(RenderTexture foregroundMaskTexture)
         {
             screenForegroundMask.texture = foregroundMaskTexture;
             screenForegroundMaskScreencapture.texture = foregroundMaskTexture;
@@ -719,7 +719,7 @@ namespace MRR.View
             screenPhysicalCameraScreencapture.texture = rawPhysicalCameraTexture;
         }
 
-        public void SetOptionalScreen(RenderTexture renderTexture)
+        public void SetScreenForegroundMask(RenderTexture renderTexture)
         {
             screenOptional.texture = renderTexture;
             screenOptionalScreencapture.texture = renderTexture;

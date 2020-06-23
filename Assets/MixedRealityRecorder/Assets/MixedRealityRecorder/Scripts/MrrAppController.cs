@@ -12,22 +12,23 @@ namespace MRR.Controller
     public class MrrAppController : MonoBehaviour
     {
 
+        public MrrVirtualCameraController cameraController;
+
         public MrrUiView uiView;
         public Camera uiCamera;
 
-        public MrrVirtualCameraController virtualCameraController;
+        public MrrVideoRecorder videoRecorder;
+
         public Material matForegroundMask;
 
         private CameraPreset[] cameraPresets;
-        private List<GameObject> targetObjects;
         private WebCamDevice[] webCamDevices;
+        private List<GameObject> targetObjects;
 
         private Settings settings = new Settings();
 
         private RenderTexture foregroundMaskTexture;
-        private WebCamTexture rawPhysicalCameraTexture;
-
-        public MrrVideoRecorder videoRecorder;
+        private WebCamTexture rawPhysicalCameraTexture;        
 
         // init methods - entry point for MixedRealtiyRecorder
 
@@ -37,7 +38,7 @@ namespace MRR.Controller
             CacheWebcamDevices();
             CacheTargetObjects();
 
-            virtualCameraController.Init(cameraPresets[0].cameraSettings, targetObjects[0]);
+            cameraController.Init(cameraPresets[0].cameraSettings, targetObjects[0]);
 
             UpdateInternalTextures();
             uiView.Init();
@@ -48,46 +49,42 @@ namespace MRR.Controller
         private void UpdateInternalTextures()
         {
             // screen size
-            Vector2Int screenSize = new Vector2Int(virtualCameraController.GetCameraSettings().resolutionWidth, virtualCameraController.GetCameraSettings().resolutionHeight);
+            Vector2Int screenSize = new Vector2Int(cameraController.GetSettings().resolutionWidth, cameraController.GetSettings().resolutionHeight);
 
             foregroundMaskTexture = new RenderTexture(screenSize.x, screenSize.y, 0, RenderTextureFormat.ARGBHalf);
 
             if(rawPhysicalCameraTexture != null && rawPhysicalCameraTexture.isPlaying)
-            {
                 rawPhysicalCameraTexture.Stop();
-            }
             else
-            {
                 rawPhysicalCameraTexture = new WebCamTexture(settings.physicalCameraSource);
-            }
 
             rawPhysicalCameraTexture.Play();
 
             // set foreground shader depth texture
-            matForegroundMask.SetTexture("_DepthTex", virtualCameraController.GetDepthTexture());
+            matForegroundMask.SetTexture("_ColorTex", cameraController.GetRawColorTextureForeground());
 
             // assign the textures to the ui raw image component
-            uiView.SetScreenVirtualCamera(virtualCameraController.GetColorBackgroundTexture());
-            uiView.SetScreenForegroundMask(foregroundMaskTexture);
+            uiView.SetScreenBackgroundLayer(cameraController.GetColorTextureBackground());
+            uiView.SetScreenForegroundLayer(cameraController.GetColorTextureForeground());
             uiView.SetScreenPhysicalCamera(rawPhysicalCameraTexture);
-            uiView.SetOptionalScreen(virtualCameraController.GetDepthTexture());
+            uiView.SetScreenForegroundMask(foregroundMaskTexture);
         }
 
         // main loop
 
         private void StartCycle()
         {
-            InvokeRepeating("RunCycle", 0.0f, ((float)1 / virtualCameraController.GetCameraSettings().framerate));
+            InvokeRepeating("RunCycle", 0.0f, ((float)1 / cameraController.GetSettings().framerate));
         }
 
         private void RunCycle()
         {
             var stopWatch = Stopwatch.StartNew();
 
-            virtualCameraController.Render();
+            cameraController.Render();
             UpdateForegroundMask();
 
-            videoRecorder.RecordFrame(virtualCameraController.GetColorBackgroundTexture(), foregroundMaskTexture);
+            videoRecorder.RecordFrame(cameraController.GetColorTextureBackground(), foregroundMaskTexture);
 
             long frameTime = stopWatch.ElapsedMilliseconds;
 
@@ -96,7 +93,7 @@ namespace MRR.Controller
 
         public void UpdateForegroundMask()
         {
-            Graphics.Blit(virtualCameraController.GetDepthTexture(), foregroundMaskTexture, matForegroundMask);
+            Graphics.Blit(cameraController.GetRawColorTextureForeground(), foregroundMaskTexture, matForegroundMask);
         }
 
         // user input
@@ -110,7 +107,7 @@ namespace MRR.Controller
         public void ToggleRecord()
         {
             if (!videoRecorder.IsRecording())
-                videoRecorder.StartRecording(settings.outputPath, Utility.Util.GetOutputFormat(settings.outputFormat), new Vector2Int(virtualCameraController.GetCameraSettings().resolutionWidth, virtualCameraController.GetCameraSettings().resolutionHeight));
+                videoRecorder.StartRecording(settings.outputPath, Utility.Util.GetOutputFormat(settings.outputFormat), new Vector2Int(cameraController.GetSettings().resolutionWidth, cameraController.GetSettings().resolutionHeight));
             else
                 videoRecorder.StopRecording();
         }
@@ -125,9 +122,9 @@ namespace MRR.Controller
             CancelInvoke();
 
             //SetTargetObject(oldTargetObjectName, settings.targetObject);
-            virtualCameraController.SetCameraSettings(settings.cameraSettings);
-            virtualCameraController.SetCameraSettings(settings.cameraSettings);
-            virtualCameraController.SetTargetObject(GetTargetObjectByName(settings.targetObject));
+            cameraController.SetCameraSettings(settings.cameraSettings);
+            cameraController.SetCameraSettings(settings.cameraSettings);
+            cameraController.SetTargetObject(GetTargetObjectByName(settings.targetObject));
             UpdateInternalTextures();
             StartCycle();
 
@@ -170,6 +167,25 @@ namespace MRR.Controller
 
         // getter methods
 
+        public Settings GetSettings()
+        {
+            return settings;
+        }
+
+        public CameraPreset[] GetCameraPresets()
+        {
+            return cameraPresets;
+        }
+
+        public CameraSetting GetCameraSettingByPresetName(string name)
+        {
+            foreach (CameraPreset cameraPreset in cameraPresets)
+                if (cameraPreset.presetName == name)
+                    return cameraPreset.cameraSettings;
+
+            return cameraPresets[0].cameraSettings;
+        }
+
         public WebCamDevice[] GetWebCamDevices()
         {
             return webCamDevices;
@@ -187,29 +203,10 @@ namespace MRR.Controller
                     return target;
             return null;
         }
-
-        public CameraPreset[] GetCameraPresets()
+               
+        public MrrVirtualCameraController GetCameraController()
         {
-            return cameraPresets;
-        }
-
-        public Settings GetSettings()
-        {
-            return settings;
-        }
-
-        public CameraSetting GetCameraSettingByPresetName(string name)
-        {
-            foreach (CameraPreset cameraPreset in cameraPresets)
-                if (cameraPreset.presetName == name)
-                    return cameraPreset.cameraSettings;
-
-            return cameraPresets[0].cameraSettings;
-        }
-
-        public MrrVirtualCameraController GetVirtualCameraController()
-        {
-            return virtualCameraController;
+            return cameraController;
         }
 
         // camera presets

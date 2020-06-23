@@ -25,27 +25,24 @@
                 float4 vertex : SV_POSITION;
             };
 
-            sampler2D _DepthTex;
-			float4 _DepthTex_ST;
+            sampler2D _ColorTex;
+			float4 _ColorTex_ST;
 
             v2f vert (appdata v)
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                o.uv = TRANSFORM_TEX(v.uv, _DepthTex);
+                o.uv = TRANSFORM_TEX(v.uv, _ColorTex);
                 return o;
             }
 
             fixed4 frag (v2f i) : SV_Target
             {
 
-				// get depth from depth texture
-				// float depth = tex2D(_DepthTex, i.uv).r;
-				// float2 uv = i.sceenuv.xy / i.screenuv.w;
-				float depth = 1 - Linear01Depth(SAMPLE_DEPTH_TEXTURE(_DepthTex, i.uv));
+				float alpha = tex2D(_ColorTex, i.uv).a;
 
-				if (depth > 0.0f)
-					return fixed4(1.0f, 1.0f, 1.0f, 1.0f);
+				if(alpha > 0.0f)
+					return fixed4(alpha, alpha, alpha, 1.0f);
 				else
 					return fixed4(0.0f, 0.0f, 0.0f, 1.0f);
             }
