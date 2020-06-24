@@ -85,8 +85,6 @@ namespace MRR.View
             UpdateSensorOffsetRotation();
 
             SetSceneObjects();
-            UpdateSceneOffsetPosition();
-            UpdateSceneOffsetRotation();
 
             ApplySettings();
 
@@ -149,6 +147,11 @@ namespace MRR.View
             dOutputCodec.onValueChanged.AddListener(delegate
             {
                 OnOutputFormatChanged(dOutputCodec.captionText.text);
+            });
+
+            dSceneObjectSource.onValueChanged.AddListener(delegate
+            {
+                OnSceneObjectChanged();
             });
 
             bApplyA.onClick.AddListener(delegate
@@ -365,7 +368,13 @@ namespace MRR.View
                 //Debug.Log("Changed output codec!");
                 EnableButtonsA(true);
             }
-        } 
+        }
+
+        private void OnSceneObjectChanged()
+        {
+            UpdateSceneOffsetPosition();
+            UpdateSceneOffsetRotation();
+        }
 
         // event callback sensor offset - REALTIME
 
@@ -618,6 +627,7 @@ namespace MRR.View
                 optionData.Add(new Dropdown.OptionData(target.name));
 
             dTargetObject.AddOptions(optionData);
+
         }
 
         private void SetSceneObjects()
@@ -626,12 +636,32 @@ namespace MRR.View
 
             List<GameObject> sceneObjects = appController.GetSceneObjects();
 
-            List<Dropdown.OptionData> optionData = new List<Dropdown.OptionData>();
+            if (sceneObjects.Count > 0)
+            {
+                List<Dropdown.OptionData> optionData = new List<Dropdown.OptionData>();
 
-            foreach (GameObject scene in sceneObjects)
-                optionData.Add(new Dropdown.OptionData(scene.name));
+                foreach (GameObject scene in sceneObjects)
+                    optionData.Add(new Dropdown.OptionData(scene.name));
 
-            dSceneObjectSource.AddOptions(optionData);
+                dSceneObjectSource.AddOptions(optionData);
+
+                UpdateSceneOffsetPosition();
+                UpdateSceneOffsetRotation();
+            }
+            else
+            {
+                List<Dropdown.OptionData> optionData = new List<Dropdown.OptionData>();
+                optionData.Add(new Dropdown.OptionData("None"));
+                dSceneObjectSource.AddOptions(optionData);
+
+                dSceneObjectSource.interactable = false;
+
+                for (int index = 0; index < 3; index++)
+                {
+                    iSceneOffsetPosition[index].interactable = false;
+                    iSceneOffsetRotation[index].interactable = false;
+                }
+            }
         }        
 
         private void SetCameraPresets()
