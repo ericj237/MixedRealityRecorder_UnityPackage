@@ -5,14 +5,12 @@ Mixed Reality Recorder (MRR) is a Package for the Unity Engine that lets you rec
 ## Features
 
 - tracked camera with Vive tracker
-- opaque dynamic obstruction mask
+- dynamic obstruction mask
 - user interface with camera settings and video layers
 - camera presets
 - capture video layers in unity
 - TGA and BMP image sequence output
-- manual screen capture layout for open broadcaster or other recording software
-
-BILD!
+- manual screen capture layout for screencapture software
 
 ## Quick Start
 
