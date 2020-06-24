@@ -11,7 +11,7 @@ namespace MRR.Model
         public int framerate;
 
         // in mm
-        public int sensorWidth, sensorHeight;
+        public float sensorWidth, sensorHeight;
 
         // in mm
         public int focalLenth;

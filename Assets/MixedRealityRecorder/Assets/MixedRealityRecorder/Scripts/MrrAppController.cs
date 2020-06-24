@@ -11,28 +11,221 @@ namespace MRR.Controller
 
     public class MrrAppController : MonoBehaviour
     {
-        public MrrVirtualCameraController virtualCamera;
+
+        public MrrVirtualCameraController cameraController;
+
         public MrrUiView uiView;
         public Camera uiCamera;
+
+        public MrrVideoRecorder videoRecorder;
 
         public Material matForegroundMask;
 
         private CameraPreset[] cameraPresets;
-        private List<GameObject> targetObjects;
         private WebCamDevice[] webCamDevices;
+        private List<GameObject> targetObjects;
+        private List<GameObject> sceneObjects;
 
         private Settings settings = new Settings();
 
         private RenderTexture foregroundMaskTexture;
-        private WebCamTexture rawPhysicalCameraTexture;
+        private WebCamTexture rawPhysicalCameraTexture;        
 
-        public MrrVideoRecorder videoRecorder;
+        // init methods - entry point for MixedRealtiyRecorder
 
-        public Mesh targetMesh;
-        public Material targetMaterial;
+        private void Start()
+        {
+            CacheCameraPresets();
+            CacheWebcamDevices();
+            CacheTargetObjects();
+            CacheSceneObjects();
+
+            cameraController.Init(cameraPresets[0].cameraSettings, targetObjects[0]);
+
+            UpdateInternalTextures();
+            uiView.Init();
+
+            StartCycle();
+        }
+
+        private void UpdateInternalTextures()
+        {
+            // screen size
+            Vector2Int screenSize = new Vector2Int(cameraController.GetSettings().resolutionWidth, cameraController.GetSettings().resolutionHeight);
+
+            foregroundMaskTexture = new RenderTexture(screenSize.x, screenSize.y, 0, RenderTextureFormat.ARGBHalf);
+
+            if(rawPhysicalCameraTexture != null && rawPhysicalCameraTexture.isPlaying)
+                rawPhysicalCameraTexture.Stop();
+            else
+                rawPhysicalCameraTexture = new WebCamTexture(settings.physicalCameraSource);
+
+            rawPhysicalCameraTexture.Play();
+
+            // set foreground shader depth texture
+            matForegroundMask.SetTexture("_ColorTex", cameraController.GetRawColorTextureForeground());
+
+            // assign the textures to the ui raw image component
+            uiView.SetScreenBackgroundLayer(cameraController.GetColorTextureBackground());
+            uiView.SetScreenForegroundLayer(cameraController.GetColorTextureForeground());
+            uiView.SetScreenPhysicalCamera(rawPhysicalCameraTexture);
+            uiView.SetScreenForegroundMask(foregroundMaskTexture);
+        }
+
+        // main loop
+
+        private void StartCycle()
+        {
+            InvokeRepeating("RunCycle", 0.0f, ((float)1 / cameraController.GetSettings().framerate));
+        }
+
+        private void RunCycle()
+        {
+            var stopWatch = Stopwatch.StartNew();
+
+            cameraController.Render();
+            UpdateForegroundMask();
+
+            videoRecorder.RecordFrame(cameraController.GetColorTextureBackground(), foregroundMaskTexture);
+
+            long frameTime = stopWatch.ElapsedMilliseconds;
+
+            uiView.SetFooterFrameTime(frameTime);
+        }
+
+        public void UpdateForegroundMask()
+        {
+            Graphics.Blit(cameraController.GetRawColorTextureForeground(), foregroundMaskTexture, matForegroundMask);
+        }
+
+        // user input
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.F11))
+                uiCamera.enabled = !uiCamera.enabled;
+        }
+
+        public void ToggleRecord()
+        {
+            if (!videoRecorder.IsRecording())
+                videoRecorder.StartRecording(settings.outputPath, Utility.Util.GetOutputFormat(settings.outputFormat), new Vector2Int(cameraController.GetSettings().resolutionWidth, cameraController.GetSettings().resolutionHeight));
+            else
+                videoRecorder.StopRecording();
+        }
+
+        // update methods
+
+        public void ApplySettings(Settings settings)
+        {
+            //string oldTargetObjectName = this.settings.targetObject;
+            this.settings = settings;
+
+            CancelInvoke();
+
+            //SetTargetObject(oldTargetObjectName, settings.targetObject);
+            cameraController.SetCameraSettings(settings.cameraSettings);
+            cameraController.SetCameraSettings(settings.cameraSettings);
+            cameraController.SetTargetObject(GetTargetObjectByName(settings.targetObject));
+            UpdateInternalTextures();
+            StartCycle();
+
+            //UnityEngine.Debug.Log("Applyed Settings!");
+        }
+
+        // caching methods
+
+        private void CacheCameraPresets()
+        {
+            cameraPresets = new CameraPreset[2];
+            cameraPresets[0] = CreateBmpcc4kPreset();
+            cameraPresets[1] = CreateWebcamPreset();
+        }
+
+        private void CacheWebcamDevices()
+        {
+            webCamDevices = WebCamTexture.devices;
+        }
+
+        private void CacheTargetObjects()
+        {
+            targetObjects = new List<GameObject>();
+
+            if (GameObject.FindGameObjectsWithTag("Target").Length > 0)
+            {
+                GameObject[] targets = GameObject.FindGameObjectsWithTag("Target");
+
+                foreach (GameObject target in targets)
+                    targetObjects.Add(target);
+            }
+        }
+
+        private void CacheSceneObjects()
+        {
+            sceneObjects = new List<GameObject>();
+
+            if (GameObject.FindGameObjectsWithTag("Scene").Length > 0)
+            {
+                GameObject[] scenes = GameObject.FindGameObjectsWithTag("Scene");
+
+                foreach (GameObject scene in scenes)
+                    sceneObjects.Add(scene);
+            }
+        }
+
+        // getter methods
+
+        public Settings GetSettings()
+        {
+            return settings;
+        }
+
+        public CameraPreset[] GetCameraPresets()
+        {
+            return cameraPresets;
+        }
+
+        public CameraSetting GetCameraSettingByPresetName(string name)
+        {
+            foreach (CameraPreset cameraPreset in cameraPresets)
+                if (cameraPreset.presetName == name)
+                    return cameraPreset.cameraSettings;
+
+            return cameraPresets[0].cameraSettings;
+        }
+
+        public WebCamDevice[] GetWebCamDevices()
+        {
+            return webCamDevices;
+        }
+
+        public List<GameObject> GetTargetObjects()
+        {
+            return targetObjects;
+        }
+
+        private GameObject GetTargetObjectByName(string name)
+        {
+            foreach (GameObject target in targetObjects)
+                if (target.name == name)
+                    return target;
+            return null;
+        }
+
+        public List<GameObject> GetSceneObjects()
+        {
+            return sceneObjects;
+        }
+
+        public MrrVirtualCameraController GetCameraController()
+        {
+            return cameraController;
+        }
+
+        // camera presets
 
         public CameraPreset CreateWebcamPreset()
-        {            
+        {
             CameraSetting currCamSetting = new CameraSetting();
             currCamSetting.resolutionWidth = 1280;
             currCamSetting.resolutionHeight = 720;
@@ -53,10 +246,10 @@ namespace MRR.Controller
             CameraSetting currCamSetting = new CameraSetting();
             currCamSetting.resolutionWidth = 1920;
             currCamSetting.resolutionHeight = 1080;
-            currCamSetting.framerate = 30;
-            currCamSetting.focalLenth = 16;
-            currCamSetting.sensorWidth = 18;
-            currCamSetting.sensorHeight = 14;
+            currCamSetting.framerate = 60;
+            currCamSetting.focalLenth = 18;
+            currCamSetting.sensorWidth = 17.31f;
+            currCamSetting.sensorHeight = 12.89f;
 
             CameraPreset currCamPreset = new CameraPreset();
             currCamPreset.presetName = "Pocket Cinema Camera 4k";
@@ -65,216 +258,50 @@ namespace MRR.Controller
             return currCamPreset;
         }
 
-        private void CacheCameraPresets()
+        public void SetSceneOffsetPosition(int indexSceneObject, float value, Vector3Component component)
         {
-            cameraPresets = new CameraPreset[2];
-            cameraPresets[0] = CreateWebcamPreset();
-            cameraPresets[1] = CreateBmpcc4kPreset();
-        }
-
-        // init methods - entry point for MixedRealtiyRecorder
-
-        private void Start()
-        {
-            CacheCameraPresets();
-            CacheWebcamDevices();
-            CacheTargetObjects();
-
-            virtualCamera.Init(cameraPresets[0].cameraSettings, targetObjects[0]);
-
-            UpdateInternalTextures();
-            uiView.Init();
-
-            StartCycle();
-        }
-
-        private void UpdateInternalTextures()
-        {
-            // screen size
-            Vector2Int screenSize = new Vector2Int(virtualCamera.GetCameraSettings().resolutionWidth, virtualCamera.GetCameraSettings().resolutionHeight);
-
-            foregroundMaskTexture = new RenderTexture(screenSize.x, screenSize.y, 0, RenderTextureFormat.ARGBHalf);
-
-            if(rawPhysicalCameraTexture != null && rawPhysicalCameraTexture.isPlaying)
+            switch (component)
             {
-                rawPhysicalCameraTexture.Stop();
-            }
-            else
-            {
-                rawPhysicalCameraTexture = new WebCamTexture(settings.physicalCameraSource);
-            }
-
-            rawPhysicalCameraTexture.Play();
-
-            // set foreground shader depth texture
-            matForegroundMask.SetTexture("_DepthTex", virtualCamera.GetDepthTexture());
-
-            // assign the textures to the ui raw image component
-            uiView.SetScreenVirtualCamera(virtualCamera.GetColorTexture());
-            uiView.SetScreenForegroundMask(foregroundMaskTexture);
-            uiView.SetScreenPhysicalCamera(rawPhysicalCameraTexture);
-            uiView.SetOptionalScreen(virtualCamera.GetDepthTexture());
-        }
-
-        // main loop
-
-        private void StartCycle()
-        {
-            InvokeRepeating("RunCycle", 0.0f, ((float)1 / virtualCamera.GetCameraSettings().framerate));
-        }
-
-        private void RunCycle()
-        {
-            var stopWatch = Stopwatch.StartNew();
-
-            virtualCamera.Render();
-            UpdateForegroundMask();
-
-            videoRecorder.RecordFrame(virtualCamera.GetColorTexture(), foregroundMaskTexture);
-
-            long frameTime = stopWatch.ElapsedMilliseconds;
-
-            uiView.SetFooterFrameTime(frameTime);
-        }
-
-        public void UpdateForegroundMask()
-        {
-            // we only use this method to receive our processed foreground mask texture
-            // all shader properties are already set in Initialize() method
-            matForegroundMask.SetFloat("_HmdDepth", virtualCamera.GetTargetDepth());
-            Graphics.Blit(virtualCamera.GetDepthTexture(), foregroundMaskTexture, matForegroundMask);
-        }
-
-        // user input
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.F11))
-                uiCamera.enabled = !uiCamera.enabled;
-        }
-
-        public void ToggleRecord()
-        {
-            if (!videoRecorder.IsRecording())
-                videoRecorder.StartRecording(settings.outputPath, Utility.Util.GetOutputFormat(settings.outputFormat), new Vector2Int(virtualCamera.GetCameraSettings().resolutionWidth, virtualCamera.GetCameraSettings().resolutionHeight));
-            else
-                videoRecorder.StopRecording();
-        }
-
-        // update methods
-
-        public void ApplySettings(Settings settings)
-        {
-            string oldTargetObjectName = this.settings.targetObject;
-            this.settings = settings;
-
-            CancelInvoke();
-
-            SetTargetObject(oldTargetObjectName, settings.targetObject);
-            virtualCamera.SetCameraSettings(settings.cameraSettings);
-            virtualCamera.SetTargetObject(GetTargetObjectByName(settings.targetObject));
-            UpdateInternalTextures();
-            StartCycle();
-
-            //UnityEngine.Debug.Log("Applyed Settings!");
-        }
-
-        // caching methods
-
-        private void CacheWebcamDevices()
-        {
-            webCamDevices = WebCamTexture.devices;
-        }
-
-        private void CacheTargetObjects()
-        {
-            targetObjects = new List<GameObject>();
-
-            if (GameObject.FindGameObjectsWithTag("Target").Length > 0)
-            {
-                GameObject[] targets = GameObject.FindGameObjectsWithTag("Target");
-
-                foreach (GameObject target in targets)
-                    targetObjects.Add(target);
-            }
-            else
-            {
-                GameObject debugTarget = new GameObject();
-                debugTarget.name = "debugTarget";
-                debugTarget.transform.position = virtualCamera.gameObject.transform.position + virtualCamera.gameObject.transform.forward * 100;
-                targetObjects.Add(debugTarget);
+                case Vector3Component.x:
+                    sceneObjects[indexSceneObject].transform.localPosition = new Vector3(value, sceneObjects[indexSceneObject].transform.localPosition.y, sceneObjects[indexSceneObject].transform.localPosition.z);
+                    break;
+                case Vector3Component.y:
+                    sceneObjects[indexSceneObject].transform.localPosition = new Vector3(sceneObjects[indexSceneObject].transform.localPosition.x, value, sceneObjects[indexSceneObject].transform.localPosition.z);
+                    break;
+                case Vector3Component.z:
+                    sceneObjects[indexSceneObject].transform.localPosition = new Vector3(sceneObjects[indexSceneObject].transform.localPosition.x, sceneObjects[indexSceneObject].transform.localPosition.y, value);
+                    break;
+                default:
+                    break;
             }
         }
 
-        // setter methods
-
-        private void SetTargetObject(string oldTarget, string newTarget)
+        public Vector3 GetSceneOffsetPosition(int indexSceneObject)
         {
+            return sceneObjects[indexSceneObject].transform.localPosition;
+        }
 
-            GameObject oldTargetObject = GameObject.Find(oldTarget);
-
-            if (oldTargetObject != null)
+        public void SetSceneOffsetRotation(int indexSceneObject, float value, Vector3Component component)
+        {
+            switch (component)
             {
-                Destroy(oldTargetObject.GetComponent<SphereCollider>());
-                Destroy(oldTargetObject.GetComponent<MeshRenderer>());
-                Destroy(oldTargetObject.GetComponent<MeshFilter>());
+                case Vector3Component.x:
+                    sceneObjects[indexSceneObject].transform.localEulerAngles = new Vector3(value, sceneObjects[indexSceneObject].transform.localEulerAngles.y, sceneObjects[indexSceneObject].transform.localEulerAngles.z);
+                    break;
+                case Vector3Component.y:
+                    sceneObjects[indexSceneObject].transform.localEulerAngles = new Vector3(sceneObjects[indexSceneObject].transform.localEulerAngles.x, value, sceneObjects[indexSceneObject].transform.localEulerAngles.z);
+                    break;
+                case Vector3Component.z:
+                    sceneObjects[indexSceneObject].transform.localEulerAngles = new Vector3(sceneObjects[indexSceneObject].transform.localEulerAngles.x, sceneObjects[indexSceneObject].transform.localEulerAngles.y, value);
+                    break;
+                default:
+                    break;
             }
-
-            GameObject newTargetObject = GameObject.Find(newTarget);
-
-            if (newTargetObject.GetComponent<MeshFilter>() == null)
-                newTargetObject.AddComponent<MeshFilter>().mesh = targetMesh;
-
-            if (newTargetObject.GetComponent<MeshRenderer>() == null)
-                newTargetObject.AddComponent<MeshRenderer>().material = targetMaterial;
-
-            if (newTargetObject.GetComponent<SphereCollider>() == null)
-                newTargetObject.AddComponent<SphereCollider>();
-
         }
 
-        // getter methods
-
-        public WebCamDevice[] GetWebCamDevices()
+        public Vector3 GetSceneOffsetRotation(int indexSceneObject)
         {
-            return webCamDevices;
-        }
-
-        public List<GameObject> GetTargetObjects()
-        {
-            return targetObjects;
-        }
-
-        private GameObject GetTargetObjectByName(string name)
-        {
-            foreach (GameObject target in targetObjects)
-                if (target.name == name)
-                    return target;
-            return null;
-        }
-
-        public CameraPreset[] GetCameraPresets()
-        {
-            return cameraPresets;
-        }
-
-        public Settings GetSettings()
-        {
-            return settings;
-        }
-
-        public CameraSetting GetCameraSettingByPresetName(string name)
-        {
-            foreach (CameraPreset cameraPreset in cameraPresets)
-                if (cameraPreset.presetName == name)
-                    return cameraPreset.cameraSettings;
-
-            return cameraPresets[0].cameraSettings;
-        }
-
-        public MrrVirtualCameraController GetVirtualCameraController()
-        {
-            return virtualCamera;
+            return sceneObjects[indexSceneObject].transform.localEulerAngles;
         }
     }
 }
