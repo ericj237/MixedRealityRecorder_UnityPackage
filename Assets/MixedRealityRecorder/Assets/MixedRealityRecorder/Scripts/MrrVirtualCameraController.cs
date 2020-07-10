@@ -35,6 +35,9 @@ namespace MRR.Controller
 
             backgroundCamera.targetTexture = rawColorTextureBackground;       
             foregroundCamera.targetTexture = rawColorTextureForeground;
+
+            cameraGroup.transform.localPosition = new Vector3(0.0f, -0.04f, -0.14f);
+            cameraGroup.transform.localEulerAngles = new Vector3(-90.0f, 0.0f, 180.0f);
         }
 
         // render method
