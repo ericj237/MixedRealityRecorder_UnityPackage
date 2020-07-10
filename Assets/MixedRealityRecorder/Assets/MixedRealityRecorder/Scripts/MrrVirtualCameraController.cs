@@ -122,7 +122,7 @@ namespace MRR.Controller
 
         public void UpdateNearClipPlane()
         {
-            float distance = Vector3.Distance(backgroundCamera.gameObject.transform.position, target.transform.position);
+            float distance = 0.0f; // Vector3.Distance(backgroundCamera.gameObject.transform.position, target.transform.position);
 
             backgroundCamera.nearClipPlane = distance - 0.1f;
         }
