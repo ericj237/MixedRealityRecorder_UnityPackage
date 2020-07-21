@@ -24,5 +24,13 @@ namespace Valve.VR
                 return SteamVR_Actions.mixedRealityRecorder_OperatorPoint;
             }
         }
+        
+        public virtual SteamVR_Action_Boolean OperatorToggleRecording
+        {
+            get
+            {
+                return SteamVR_Actions.mixedRealityRecorder_OperatorToggleRecording;
+            }
+        }
     }
 }
