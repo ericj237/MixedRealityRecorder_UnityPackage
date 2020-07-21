@@ -80,13 +80,19 @@ namespace MRR.Controller
                         break;
                     }
                 case Mode.light:
-                    break;
+                    {
+                        isTriggerDown = false;
+                        currSelectedLight = null;
+                        break;
+                    }
                 case Mode.webcam:
                     break;
                 default:
                     break;
             }
         }
+
+        private GameObject currSelectedLight;
 
         public void TriggerDown(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
         {
@@ -100,12 +106,32 @@ namespace MRR.Controller
                         break;
                     }
                 case Mode.light:
-                    break;
+                    {
+                        isTriggerDown = true;
+                        currSelectedLight = CreateLight();
+                        break;
+                    }
                 case Mode.webcam:
                     break;
                 default:
                     break;
             }
+        }
+
+        private GameObject CreateLight()
+        {
+            GameObject lightObject = new GameObject();
+            lightObject.name = "light";
+
+            Light lightComponent = lightObject.AddComponent<Light>();
+            lightComponent.type = LightType.Point;
+            lightComponent.color = Color.white;
+            lightComponent.range = 6.0f;
+            lightComponent.intensity = 1.25f;
+
+            lightObject.transform.position = transform.position;
+
+            return lightObject;
         }
 
         public void OperatorStartRecordingButtonDown(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
@@ -116,21 +142,41 @@ namespace MRR.Controller
 
         private void Update()
         {
-            if(isTriggerDown)
+
+            if (isTriggerDown)
             {
-                RaycastHit hit;
 
-                if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity))
+                switch (mode)
                 {
-                    if(!HighlightPrefab.GetComponent<MeshRenderer>().enabled)
-                        HighlightPrefab.GetComponent<MeshRenderer>().enabled = true;
+                    case Mode.pointer:
+                        {
+                            RaycastHit hit;
 
-                    HighlightPrefab.transform.position = hit.point + hit.normal * 0.1f;
-                }
-                else
-                {
-                    HighlightPrefab.GetComponent<MeshRenderer>().enabled = false;
-                }
+                            if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity))
+                            {
+                                if (!HighlightPrefab.GetComponent<MeshRenderer>().enabled)
+                                    HighlightPrefab.GetComponent<MeshRenderer>().enabled = true;
+
+                                HighlightPrefab.transform.position = hit.point + hit.normal * 0.1f;
+                            }
+                            else
+                            {
+                                HighlightPrefab.GetComponent<MeshRenderer>().enabled = false;
+                            }
+
+                            break;
+                        }
+                    case Mode.light:
+                        {
+                            if(currSelectedLight != null)
+                                currSelectedLight.transform.position = transform.position;
+                            break;
+                        }
+                    case Mode.webcam:
+                        break;
+                    default:
+                        break;
+                }            
             }
         }
     }
