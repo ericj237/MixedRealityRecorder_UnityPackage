@@ -22,7 +22,7 @@ namespace MRR.Controller
         public GameObject HighlightPrefab;
         public Canvas canvasScreencapture;
         public Text debugText;
-        //public GameObject webcamScreen;
+        public GameObject webcamScreen;
 
         private bool isTriggerDown = false;
 
@@ -75,21 +75,23 @@ namespace MRR.Controller
             {
                 case Mode.pointer:
                     {
-                        isTriggerDown = false;
                         HighlightPrefab.GetComponent<MeshRenderer>().enabled = false;
                         break;
                     }
                 case Mode.light:
                     {
-                        isTriggerDown = false;
                         currSelectedLight = null;
                         break;
                     }
                 case Mode.webcam:
-                    break;
+                    {
+                        break;
+                    }
                 default:
                     break;
             }
+
+            isTriggerDown = false;
         }
 
         private GameObject currSelectedLight;
@@ -102,20 +104,23 @@ namespace MRR.Controller
             {
                 case Mode.pointer:
                     {
-                        isTriggerDown = true;
                         break;
                     }
                 case Mode.light:
                     {
-                        isTriggerDown = true;
                         currSelectedLight = CreateLight();
                         break;
                     }
                 case Mode.webcam:
-                    break;
+                    {
+                        break;
+                    }
                 default:
                     break;
             }
+
+            isTriggerDown = true;
+
         }
 
         private GameObject CreateLight()
@@ -173,7 +178,19 @@ namespace MRR.Controller
                             break;
                         }
                     case Mode.webcam:
-                        break;
+                        {
+                            RaycastHit hit;
+
+                            if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity))
+                            {
+                                float scalar = Mathf.Lerp(0.5f, 4.0f, Vector3.Distance(transform.position, webcamScreen.transform.position) / 10.0f);
+
+                                webcamScreen.transform.position = hit.point + Vector3.up * scalar;
+                                webcamScreen.transform.localScale = Vector3.one * scalar;
+                            }
+
+                            break;
+                        }
                     default:
                         break;
                 }            
