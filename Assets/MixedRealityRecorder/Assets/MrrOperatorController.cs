@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Valve.VR;
 
 namespace MRR.Controller
@@ -20,6 +21,7 @@ namespace MRR.Controller
         //reference to the sphere
         public GameObject HighlightPrefab;
         public Canvas canvasScreencapture;
+        public Text debugText;
         //public GameObject webcamScreen;
 
         private bool isTriggerDown = false;
@@ -35,6 +37,8 @@ namespace MRR.Controller
 
         void Start()
         {
+            debugText.text = "Pointer Mode";
+
             a_pointerMode.AddOnStateDownListener(SelectPointerMode, handType);
             a_lightMode.AddOnStateDownListener(SelectLightMode, handType);
             a_webcamMode.AddOnStateDownListener(SelectWebcamMode, handType);
@@ -48,16 +52,19 @@ namespace MRR.Controller
         public void SelectPointerMode(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
         {
             mode = Mode.pointer;
+            debugText.text = "Pointer Mode";
         }
 
         public void SelectLightMode(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
         {
             mode = Mode.light;
+            debugText.text = "Light Mode";
         }
 
         public void SelectWebcamMode(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
         {
             mode = Mode.webcam;
+            debugText.text = "Webcam Mode";
         }
 
         public void TriggerUp(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
