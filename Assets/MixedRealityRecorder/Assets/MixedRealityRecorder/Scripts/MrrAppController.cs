@@ -137,9 +137,10 @@ namespace MRR.Controller
 
         private void CacheCameraPresets()
         {
-            cameraPresets = new CameraPreset[2];
+            cameraPresets = new CameraPreset[3];
             cameraPresets[0] = CreateBmpcc4kPreset();
             cameraPresets[1] = CreateWebcamPreset();
+            cameraPresets[2] = CreateCanon7dPreset();
         }
 
         private void CacheWebcamDevices()
@@ -253,6 +254,23 @@ namespace MRR.Controller
 
             CameraPreset currCamPreset = new CameraPreset();
             currCamPreset.presetName = "Pocket Cinema Camera 4k";
+            currCamPreset.cameraSettings = currCamSetting;
+
+            return currCamPreset;
+        }
+
+        private CameraPreset CreateCanon7dPreset()
+        {
+            CameraSetting currCamSetting = new CameraSetting();
+            currCamSetting.resolutionWidth = 1920;
+            currCamSetting.resolutionHeight = 1080;
+            currCamSetting.framerate = 60;
+            currCamSetting.focalLenth = 16;
+            currCamSetting.sensorWidth = 22.3f;
+            currCamSetting.sensorHeight = 14.9f;
+
+            CameraPreset currCamPreset = new CameraPreset();
+            currCamPreset.presetName = "Canon 7D";
             currCamPreset.cameraSettings = currCamSetting;
 
             return currCamPreset;
