@@ -72,6 +72,30 @@
     {
       "name": "/actions/mixedRealityRecorder/in/OperatorTrigger",
       "type": "boolean"
+    },
+    {
+      "name": "/actions/mixedRealityRecorder/in/UserTrigger",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/mixedRealityRecorder/in/UserSwitchPrompterPosition",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/mixedRealityRecorder/in/UserNextPrompterPage",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/mixedRealityRecorder/in/UserPointerMode",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/mixedRealityRecorder/in/UserMarkerMode",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/mixedRealityRecorder/in/UserPrompterMode",
+      "type": "boolean"
     }
   ],
   "action_sets": [
@@ -152,7 +176,13 @@
       "/actions/mixedRealityRecorder/in/OperatorPointerMode": "Select pointer mode.",
       "/actions/mixedRealityRecorder/in/OperatorLightMode": "Select light edit mode.",
       "/actions/mixedRealityRecorder/in/OperatorWebcamMode": "Select webcam placement mode.",
-      "/actions/mixedRealityRecorder/in/OperatorTrigger": "Operator Trigger action."
+      "/actions/mixedRealityRecorder/in/OperatorTrigger": "Operator Trigger action.",
+      "/actions/mixedRealityRecorder/in/UserTrigger": "UserTrigger",
+      "/actions/mixedRealityRecorder/in/UserSwitchPrompterPosition": "UserSwitchPrompterPosition",
+      "/actions/mixedRealityRecorder/in/UserNextPrompterPage": "UserNextPrompterPage",
+      "/actions/mixedRealityRecorder/in/UserPointerMode": "UserPointerMode",
+      "/actions/mixedRealityRecorder/in/UserMarkerMode": "UserMarkerMode",
+      "/actions/mixedRealityRecorder/in/UserPrompterMode": "UserPrompterMode"
     }
   ]
 }

@@ -56,5 +56,53 @@ namespace Valve.VR
                 return SteamVR_Actions.mixedRealityRecorder_OperatorTrigger;
             }
         }
+        
+        public virtual SteamVR_Action_Boolean UserTrigger
+        {
+            get
+            {
+                return SteamVR_Actions.mixedRealityRecorder_UserTrigger;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean UserSwitchPrompterPosition
+        {
+            get
+            {
+                return SteamVR_Actions.mixedRealityRecorder_UserSwitchPrompterPosition;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean UserNextPrompterPage
+        {
+            get
+            {
+                return SteamVR_Actions.mixedRealityRecorder_UserNextPrompterPage;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean UserPointerMode
+        {
+            get
+            {
+                return SteamVR_Actions.mixedRealityRecorder_UserPointerMode;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean UserMarkerMode
+        {
+            get
+            {
+                return SteamVR_Actions.mixedRealityRecorder_UserMarkerMode;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean UserPrompterMode
+        {
+            get
+            {
+                return SteamVR_Actions.mixedRealityRecorder_UserPrompterMode;
+            }
+        }
     }
 }
