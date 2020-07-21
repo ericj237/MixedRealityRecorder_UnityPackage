@@ -10,37 +10,95 @@ namespace MRR.Controller
     public class MrrOperatorController : MonoBehaviour
     {
         // a reference to the action
-        public SteamVR_Action_Boolean a_point;
+        public SteamVR_Action_Boolean a_trigger;
         public SteamVR_Action_Boolean a_toggleRecording;
+        public SteamVR_Action_Boolean a_pointerMode;
+        public SteamVR_Action_Boolean a_lightMode;
+        public SteamVR_Action_Boolean a_webcamMode;
         // a reference to the hand
         private SteamVR_Input_Sources handType = SteamVR_Input_Sources.LeftHand;
         //reference to the sphere
         public GameObject HighlightPrefab;
-
         public Canvas canvasScreencapture;
+        //public GameObject webcamScreen;
 
         private bool isTriggerDown = false;
 
+        private Mode mode = Mode.pointer;
+
+        private enum Mode
+        {
+            pointer,
+            light,
+            webcam
+        };
+
         void Start()
         {
-            a_point.AddOnStateDownListener(OperatorPointTriggerDown, handType);
-            a_point.AddOnStateUpListener(OperatorPointTriggerUp, handType);
+            a_pointerMode.AddOnStateDownListener(SelectPointerMode, handType);
+            a_lightMode.AddOnStateDownListener(SelectLightMode, handType);
+            a_webcamMode.AddOnStateDownListener(SelectWebcamMode, handType);
+
+            a_trigger.AddOnStateDownListener(TriggerDown, handType);
+            a_trigger.AddOnStateUpListener(TriggerUp, handType);
 
             a_toggleRecording.AddOnStateDownListener(OperatorStartRecordingButtonDown, handType);
         }
 
-        public void OperatorPointTriggerUp(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+        public void SelectPointerMode(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+        {
+            mode = Mode.pointer;
+        }
+
+        public void SelectLightMode(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+        {
+            mode = Mode.light;
+        }
+
+        public void SelectWebcamMode(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+        {
+            mode = Mode.webcam;
+        }
+
+        public void TriggerUp(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
         {
             Debug.Log("Operator Trigger is up!");
 
-            isTriggerDown = false;
-            HighlightPrefab.GetComponent<MeshRenderer>().enabled = false;
+            switch(mode)
+            {
+                case Mode.pointer:
+                    {
+                        isTriggerDown = false;
+                        HighlightPrefab.GetComponent<MeshRenderer>().enabled = false;
+                        break;
+                    }
+                case Mode.light:
+                    break;
+                case Mode.webcam:
+                    break;
+                default:
+                    break;
+            }
         }
 
-        public void OperatorPointTriggerDown(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+        public void TriggerDown(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
         {
             Debug.Log("Operator Trigger is down!");
-            isTriggerDown = true;
+
+            switch (mode)
+            {
+                case Mode.pointer:
+                    {
+                        isTriggerDown = true;
+                        break;
+                    }
+                case Mode.light:
+                    break;
+                case Mode.webcam:
+                    break;
+                default:
+                    break;
+            }
         }
 
         public void OperatorStartRecordingButtonDown(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)

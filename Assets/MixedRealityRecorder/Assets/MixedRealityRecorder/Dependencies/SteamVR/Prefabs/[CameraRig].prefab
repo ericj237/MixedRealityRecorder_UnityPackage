@@ -89,11 +89,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2d4260b12b49714da837b9d76706afb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  a_point:
-    actionPath: /actions/mixedRealityRecorder/in/OperatorPoint
+  a_trigger:
+    actionPath: /actions/mixedRealityRecorder/in/OperatorTrigger
     needsReinit: 0
   a_toggleRecording:
     actionPath: /actions/mixedRealityRecorder/in/OperatorToggleRecording
+    needsReinit: 0
+  a_pointerMode:
+    actionPath: /actions/mixedRealityRecorder/in/OperatorPointerMode
+    needsReinit: 0
+  a_lightMode:
+    actionPath: /actions/mixedRealityRecorder/in/OperatorLightMode
+    needsReinit: 0
+  a_webcamMode:
+    actionPath: /actions/mixedRealityRecorder/in/OperatorWebcamMode
     needsReinit: 0
   HighlightPrefab: {fileID: 8046696669229558092}
   canvasScreencapture: {fileID: 1903987315621449144}

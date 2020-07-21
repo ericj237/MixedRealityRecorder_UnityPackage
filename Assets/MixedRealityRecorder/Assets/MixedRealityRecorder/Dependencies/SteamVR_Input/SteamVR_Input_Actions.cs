@@ -41,9 +41,15 @@ namespace Valve.VR
         
         private static SteamVR_Action_Vibration p_default_Haptic;
         
-        private static SteamVR_Action_Boolean p_mixedRealityRecorder_OperatorPoint;
-        
         private static SteamVR_Action_Boolean p_mixedRealityRecorder_OperatorToggleRecording;
+        
+        private static SteamVR_Action_Boolean p_mixedRealityRecorder_OperatorPointerMode;
+        
+        private static SteamVR_Action_Boolean p_mixedRealityRecorder_OperatorLightMode;
+        
+        private static SteamVR_Action_Boolean p_mixedRealityRecorder_OperatorWebcamMode;
+        
+        private static SteamVR_Action_Boolean p_mixedRealityRecorder_OperatorTrigger;
         
         public static SteamVR_Action_Boolean default_InteractUI
         {
@@ -141,19 +147,43 @@ namespace Valve.VR
             }
         }
         
-        public static SteamVR_Action_Boolean mixedRealityRecorder_OperatorPoint
-        {
-            get
-            {
-                return SteamVR_Actions.p_mixedRealityRecorder_OperatorPoint.GetCopy<SteamVR_Action_Boolean>();
-            }
-        }
-        
         public static SteamVR_Action_Boolean mixedRealityRecorder_OperatorToggleRecording
         {
             get
             {
                 return SteamVR_Actions.p_mixedRealityRecorder_OperatorToggleRecording.GetCopy<SteamVR_Action_Boolean>();
+            }
+        }
+        
+        public static SteamVR_Action_Boolean mixedRealityRecorder_OperatorPointerMode
+        {
+            get
+            {
+                return SteamVR_Actions.p_mixedRealityRecorder_OperatorPointerMode.GetCopy<SteamVR_Action_Boolean>();
+            }
+        }
+        
+        public static SteamVR_Action_Boolean mixedRealityRecorder_OperatorLightMode
+        {
+            get
+            {
+                return SteamVR_Actions.p_mixedRealityRecorder_OperatorLightMode.GetCopy<SteamVR_Action_Boolean>();
+            }
+        }
+        
+        public static SteamVR_Action_Boolean mixedRealityRecorder_OperatorWebcamMode
+        {
+            get
+            {
+                return SteamVR_Actions.p_mixedRealityRecorder_OperatorWebcamMode.GetCopy<SteamVR_Action_Boolean>();
+            }
+        }
+        
+        public static SteamVR_Action_Boolean mixedRealityRecorder_OperatorTrigger
+        {
+            get
+            {
+                return SteamVR_Actions.p_mixedRealityRecorder_OperatorTrigger.GetCopy<SteamVR_Action_Boolean>();
             }
         }
         
@@ -172,8 +202,11 @@ namespace Valve.VR
                     SteamVR_Actions.default_SnapTurnLeft,
                     SteamVR_Actions.default_SnapTurnRight,
                     SteamVR_Actions.default_Haptic,
-                    SteamVR_Actions.mixedRealityRecorder_OperatorPoint,
-                    SteamVR_Actions.mixedRealityRecorder_OperatorToggleRecording};
+                    SteamVR_Actions.mixedRealityRecorder_OperatorToggleRecording,
+                    SteamVR_Actions.mixedRealityRecorder_OperatorPointerMode,
+                    SteamVR_Actions.mixedRealityRecorder_OperatorLightMode,
+                    SteamVR_Actions.mixedRealityRecorder_OperatorWebcamMode,
+                    SteamVR_Actions.mixedRealityRecorder_OperatorTrigger};
             Valve.VR.SteamVR_Input.actionsIn = new Valve.VR.ISteamVR_Action_In[] {
                     SteamVR_Actions.default_InteractUI,
                     SteamVR_Actions.default_Teleport,
@@ -186,8 +219,11 @@ namespace Valve.VR
                     SteamVR_Actions.default_HeadsetOnHead,
                     SteamVR_Actions.default_SnapTurnLeft,
                     SteamVR_Actions.default_SnapTurnRight,
-                    SteamVR_Actions.mixedRealityRecorder_OperatorPoint,
-                    SteamVR_Actions.mixedRealityRecorder_OperatorToggleRecording};
+                    SteamVR_Actions.mixedRealityRecorder_OperatorToggleRecording,
+                    SteamVR_Actions.mixedRealityRecorder_OperatorPointerMode,
+                    SteamVR_Actions.mixedRealityRecorder_OperatorLightMode,
+                    SteamVR_Actions.mixedRealityRecorder_OperatorWebcamMode,
+                    SteamVR_Actions.mixedRealityRecorder_OperatorTrigger};
             Valve.VR.SteamVR_Input.actionsOut = new Valve.VR.ISteamVR_Action_Out[] {
                     SteamVR_Actions.default_Haptic};
             Valve.VR.SteamVR_Input.actionsVibration = new Valve.VR.SteamVR_Action_Vibration[] {
@@ -202,8 +238,11 @@ namespace Valve.VR
                     SteamVR_Actions.default_HeadsetOnHead,
                     SteamVR_Actions.default_SnapTurnLeft,
                     SteamVR_Actions.default_SnapTurnRight,
-                    SteamVR_Actions.mixedRealityRecorder_OperatorPoint,
-                    SteamVR_Actions.mixedRealityRecorder_OperatorToggleRecording};
+                    SteamVR_Actions.mixedRealityRecorder_OperatorToggleRecording,
+                    SteamVR_Actions.mixedRealityRecorder_OperatorPointerMode,
+                    SteamVR_Actions.mixedRealityRecorder_OperatorLightMode,
+                    SteamVR_Actions.mixedRealityRecorder_OperatorWebcamMode,
+                    SteamVR_Actions.mixedRealityRecorder_OperatorTrigger};
             Valve.VR.SteamVR_Input.actionsSingle = new Valve.VR.SteamVR_Action_Single[] {
                     SteamVR_Actions.default_Squeeze};
             Valve.VR.SteamVR_Input.actionsVector2 = new Valve.VR.SteamVR_Action_Vector2[0];
@@ -220,8 +259,11 @@ namespace Valve.VR
                     SteamVR_Actions.default_HeadsetOnHead,
                     SteamVR_Actions.default_SnapTurnLeft,
                     SteamVR_Actions.default_SnapTurnRight,
-                    SteamVR_Actions.mixedRealityRecorder_OperatorPoint,
-                    SteamVR_Actions.mixedRealityRecorder_OperatorToggleRecording};
+                    SteamVR_Actions.mixedRealityRecorder_OperatorToggleRecording,
+                    SteamVR_Actions.mixedRealityRecorder_OperatorPointerMode,
+                    SteamVR_Actions.mixedRealityRecorder_OperatorLightMode,
+                    SteamVR_Actions.mixedRealityRecorder_OperatorWebcamMode,
+                    SteamVR_Actions.mixedRealityRecorder_OperatorTrigger};
         }
         
         private static void PreInitActions()
@@ -238,8 +280,11 @@ namespace Valve.VR
             SteamVR_Actions.p_default_SnapTurnLeft = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/SnapTurnLeft")));
             SteamVR_Actions.p_default_SnapTurnRight = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/SnapTurnRight")));
             SteamVR_Actions.p_default_Haptic = ((SteamVR_Action_Vibration)(SteamVR_Action.Create<SteamVR_Action_Vibration>("/actions/default/out/Haptic")));
-            SteamVR_Actions.p_mixedRealityRecorder_OperatorPoint = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/mixedRealityRecorder/in/OperatorPoint")));
             SteamVR_Actions.p_mixedRealityRecorder_OperatorToggleRecording = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/mixedRealityRecorder/in/OperatorToggleRecording")));
+            SteamVR_Actions.p_mixedRealityRecorder_OperatorPointerMode = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/mixedRealityRecorder/in/OperatorPointerMode")));
+            SteamVR_Actions.p_mixedRealityRecorder_OperatorLightMode = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/mixedRealityRecorder/in/OperatorLightMode")));
+            SteamVR_Actions.p_mixedRealityRecorder_OperatorWebcamMode = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/mixedRealityRecorder/in/OperatorWebcamMode")));
+            SteamVR_Actions.p_mixedRealityRecorder_OperatorTrigger = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/mixedRealityRecorder/in/OperatorTrigger")));
         }
     }
 }

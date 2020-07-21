@@ -54,11 +54,23 @@
       "type": "vibration"
     },
     {
-      "name": "/actions/mixedRealityRecorder/in/OperatorPoint",
+      "name": "/actions/mixedRealityRecorder/in/OperatorToggleRecording",
       "type": "boolean"
     },
     {
-      "name": "/actions/mixedRealityRecorder/in/OperatorToggleRecording",
+      "name": "/actions/mixedRealityRecorder/in/OperatorPointerMode",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/mixedRealityRecorder/in/OperatorLightMode",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/mixedRealityRecorder/in/OperatorWebcamMode",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/mixedRealityRecorder/in/OperatorTrigger",
       "type": "boolean"
     }
   ],
@@ -136,8 +148,11 @@
       "/actions/default/out/Haptic": "Haptic",
       "/actions/default/in/SnapTurnLeft": "Snap Turn (Left)",
       "/actions/default/in/SnapTurnRight": "Snap Turn (Right)",
-      "/actions/mixedRealityRecorder/in/OperatorPoint": "Display operator pointer marker.",
-      "/actions/mixedRealityRecorder/in/OperatorToggleRecording": "Toggle the video recording."
+      "/actions/mixedRealityRecorder/in/OperatorToggleRecording": "Toggle the video recording.",
+      "/actions/mixedRealityRecorder/in/OperatorPointerMode": "Select pointer mode.",
+      "/actions/mixedRealityRecorder/in/OperatorLightMode": "Select light edit mode.",
+      "/actions/mixedRealityRecorder/in/OperatorWebcamMode": "Select webcam placement mode.",
+      "/actions/mixedRealityRecorder/in/OperatorTrigger": "Operator Trigger action."
     }
   ]
 }

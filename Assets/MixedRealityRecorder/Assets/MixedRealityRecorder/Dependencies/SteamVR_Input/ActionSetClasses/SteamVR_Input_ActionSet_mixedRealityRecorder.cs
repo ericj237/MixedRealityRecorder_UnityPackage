@@ -17,19 +17,43 @@ namespace Valve.VR
     public class SteamVR_Input_ActionSet_mixedRealityRecorder : Valve.VR.SteamVR_ActionSet
     {
         
-        public virtual SteamVR_Action_Boolean OperatorPoint
-        {
-            get
-            {
-                return SteamVR_Actions.mixedRealityRecorder_OperatorPoint;
-            }
-        }
-        
         public virtual SteamVR_Action_Boolean OperatorToggleRecording
         {
             get
             {
                 return SteamVR_Actions.mixedRealityRecorder_OperatorToggleRecording;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean OperatorPointerMode
+        {
+            get
+            {
+                return SteamVR_Actions.mixedRealityRecorder_OperatorPointerMode;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean OperatorLightMode
+        {
+            get
+            {
+                return SteamVR_Actions.mixedRealityRecorder_OperatorLightMode;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean OperatorWebcamMode
+        {
+            get
+            {
+                return SteamVR_Actions.mixedRealityRecorder_OperatorWebcamMode;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean OperatorTrigger
+        {
+            get
+            {
+                return SteamVR_Actions.mixedRealityRecorder_OperatorTrigger;
             }
         }
     }
