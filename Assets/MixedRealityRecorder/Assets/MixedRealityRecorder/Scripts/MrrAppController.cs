@@ -13,7 +13,7 @@ namespace MRR.Controller
     {
 
         public MrrVirtualCameraController cameraController;
-
+        public MrrWebcamController webcamController;
         public MrrUiView uiView;
         public Camera uiCamera;
 
@@ -58,7 +58,17 @@ namespace MRR.Controller
             if(rawPhysicalCameraTexture != null && rawPhysicalCameraTexture.isPlaying)
                 rawPhysicalCameraTexture.Stop();
             else
+            {
                 rawPhysicalCameraTexture = new WebCamTexture(settings.physicalCameraSource);
+                foreach (WebCamDevice webCamDevice in GetWebCamDevices())
+                {
+                    if (webCamDevice.name != settings.physicalCameraSource)
+                    {
+                        webcamController.StartWebcam(webCamDevice.name);
+                        break;
+                    }
+                }
+            }
 
             rawPhysicalCameraTexture.Play();
 
