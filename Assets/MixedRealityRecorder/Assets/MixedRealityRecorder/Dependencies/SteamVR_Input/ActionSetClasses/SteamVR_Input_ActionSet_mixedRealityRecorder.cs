@@ -104,5 +104,13 @@ namespace Valve.VR
                 return SteamVR_Actions.mixedRealityRecorder_UserPrompterMode;
             }
         }
+        
+        public virtual SteamVR_Action_Boolean OperatorRotateScene
+        {
+            get
+            {
+                return SteamVR_Actions.mixedRealityRecorder_OperatorRotateScene;
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MRR.View;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,8 +11,13 @@ namespace MRR.Controller
 
     public class MrrOperatorController : MonoBehaviour
     {
+
+        public MrrUiView uiView;
+        public MrrAppController appController;
+
         // a reference to the action
         public SteamVR_Action_Boolean a_trigger;
+        public SteamVR_Action_Boolean a_rotateScene;
         public SteamVR_Action_Boolean a_toggleRecording;
         public SteamVR_Action_Boolean a_pointerMode;
         public SteamVR_Action_Boolean a_lightMode;
@@ -36,7 +42,7 @@ namespace MRR.Controller
         };
 
         void Start()
-        {
+        {          
             debugText.text = "Pointer Mode";
 
             a_pointerMode.AddOnStateDownListener(SelectPointerMode, handType);
@@ -47,6 +53,13 @@ namespace MRR.Controller
             a_trigger.AddOnStateUpListener(TriggerUp, handType);
 
             a_toggleRecording.AddOnStateDownListener(OperatorStartRecordingButtonDown, handType);
+            a_rotateScene.AddOnStateDownListener(OperatorRotateSceneButtonDown, handType);
+        }
+
+        public void OperatorRotateSceneButtonDown(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+        {
+            appController.RotateScene();
+            uiView.UpdateSceneOffsetRotation();
         }
 
         public void SelectPointerMode(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)

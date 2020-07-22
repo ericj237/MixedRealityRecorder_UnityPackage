@@ -561,7 +561,7 @@ namespace MRR.View
             iSceneOffsetPosition[2].SetTextWithoutNotify(sceneOffsetPosition.z.ToString());
         }
 
-        private void UpdateSceneOffsetRotation()
+        public void UpdateSceneOffsetRotation()
         {
             Vector3 sceneOffsetRoation = appController.GetSceneOffsetRotation(dSceneObjectSource.value);
             iSceneOffsetRotation[0].SetTextWithoutNotify(sceneOffsetRoation.x.ToString());

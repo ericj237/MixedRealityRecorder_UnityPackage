@@ -48,6 +48,11 @@ namespace MRR.Controller
             StartCycle();
         }
 
+        public void RotateScene()
+        {
+            sceneObjects[0].transform.localEulerAngles = new Vector3(sceneObjects[0].transform.localEulerAngles.x, sceneObjects[0].transform.localEulerAngles.y + 180.0f, sceneObjects[0].transform.localEulerAngles.z);           
+        }
+
         private void UpdateInternalTextures()
         {
             // screen size

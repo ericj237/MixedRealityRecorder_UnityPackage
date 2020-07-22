@@ -96,6 +96,10 @@
     {
       "name": "/actions/mixedRealityRecorder/in/UserPrompterMode",
       "type": "boolean"
+    },
+    {
+      "name": "/actions/mixedRealityRecorder/in/OperatorRotateScene",
+      "type": "boolean"
     }
   ],
   "action_sets": [
@@ -182,7 +186,8 @@
       "/actions/mixedRealityRecorder/in/UserNextPrompterPage": "UserNextPrompterPage",
       "/actions/mixedRealityRecorder/in/UserPointerMode": "UserPointerMode",
       "/actions/mixedRealityRecorder/in/UserMarkerMode": "UserMarkerMode",
-      "/actions/mixedRealityRecorder/in/UserPrompterMode": "UserPrompterMode"
+      "/actions/mixedRealityRecorder/in/UserPrompterMode": "UserPrompterMode",
+      "/actions/mixedRealityRecorder/in/OperatorRotateScene": "OperatorRotateScene"
     }
   ]
 }

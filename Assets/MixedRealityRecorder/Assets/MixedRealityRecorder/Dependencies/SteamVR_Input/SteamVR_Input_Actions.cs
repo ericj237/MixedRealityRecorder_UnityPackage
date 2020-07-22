@@ -63,6 +63,8 @@ namespace Valve.VR
         
         private static SteamVR_Action_Boolean p_mixedRealityRecorder_UserPrompterMode;
         
+        private static SteamVR_Action_Boolean p_mixedRealityRecorder_OperatorRotateScene;
+        
         public static SteamVR_Action_Boolean default_InteractUI
         {
             get
@@ -247,6 +249,14 @@ namespace Valve.VR
             }
         }
         
+        public static SteamVR_Action_Boolean mixedRealityRecorder_OperatorRotateScene
+        {
+            get
+            {
+                return SteamVR_Actions.p_mixedRealityRecorder_OperatorRotateScene.GetCopy<SteamVR_Action_Boolean>();
+            }
+        }
+        
         private static void InitializeActionArrays()
         {
             Valve.VR.SteamVR_Input.actions = new Valve.VR.SteamVR_Action[] {
@@ -272,7 +282,8 @@ namespace Valve.VR
                     SteamVR_Actions.mixedRealityRecorder_UserNextPrompterPage,
                     SteamVR_Actions.mixedRealityRecorder_UserPointerMode,
                     SteamVR_Actions.mixedRealityRecorder_UserMarkerMode,
-                    SteamVR_Actions.mixedRealityRecorder_UserPrompterMode};
+                    SteamVR_Actions.mixedRealityRecorder_UserPrompterMode,
+                    SteamVR_Actions.mixedRealityRecorder_OperatorRotateScene};
             Valve.VR.SteamVR_Input.actionsIn = new Valve.VR.ISteamVR_Action_In[] {
                     SteamVR_Actions.default_InteractUI,
                     SteamVR_Actions.default_Teleport,
@@ -295,7 +306,8 @@ namespace Valve.VR
                     SteamVR_Actions.mixedRealityRecorder_UserNextPrompterPage,
                     SteamVR_Actions.mixedRealityRecorder_UserPointerMode,
                     SteamVR_Actions.mixedRealityRecorder_UserMarkerMode,
-                    SteamVR_Actions.mixedRealityRecorder_UserPrompterMode};
+                    SteamVR_Actions.mixedRealityRecorder_UserPrompterMode,
+                    SteamVR_Actions.mixedRealityRecorder_OperatorRotateScene};
             Valve.VR.SteamVR_Input.actionsOut = new Valve.VR.ISteamVR_Action_Out[] {
                     SteamVR_Actions.default_Haptic};
             Valve.VR.SteamVR_Input.actionsVibration = new Valve.VR.SteamVR_Action_Vibration[] {
@@ -320,7 +332,8 @@ namespace Valve.VR
                     SteamVR_Actions.mixedRealityRecorder_UserNextPrompterPage,
                     SteamVR_Actions.mixedRealityRecorder_UserPointerMode,
                     SteamVR_Actions.mixedRealityRecorder_UserMarkerMode,
-                    SteamVR_Actions.mixedRealityRecorder_UserPrompterMode};
+                    SteamVR_Actions.mixedRealityRecorder_UserPrompterMode,
+                    SteamVR_Actions.mixedRealityRecorder_OperatorRotateScene};
             Valve.VR.SteamVR_Input.actionsSingle = new Valve.VR.SteamVR_Action_Single[] {
                     SteamVR_Actions.default_Squeeze};
             Valve.VR.SteamVR_Input.actionsVector2 = new Valve.VR.SteamVR_Action_Vector2[0];
@@ -347,7 +360,8 @@ namespace Valve.VR
                     SteamVR_Actions.mixedRealityRecorder_UserNextPrompterPage,
                     SteamVR_Actions.mixedRealityRecorder_UserPointerMode,
                     SteamVR_Actions.mixedRealityRecorder_UserMarkerMode,
-                    SteamVR_Actions.mixedRealityRecorder_UserPrompterMode};
+                    SteamVR_Actions.mixedRealityRecorder_UserPrompterMode,
+                    SteamVR_Actions.mixedRealityRecorder_OperatorRotateScene};
         }
         
         private static void PreInitActions()
@@ -375,6 +389,7 @@ namespace Valve.VR
             SteamVR_Actions.p_mixedRealityRecorder_UserPointerMode = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/mixedRealityRecorder/in/UserPointerMode")));
             SteamVR_Actions.p_mixedRealityRecorder_UserMarkerMode = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/mixedRealityRecorder/in/UserMarkerMode")));
             SteamVR_Actions.p_mixedRealityRecorder_UserPrompterMode = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/mixedRealityRecorder/in/UserPrompterMode")));
+            SteamVR_Actions.p_mixedRealityRecorder_OperatorRotateScene = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/mixedRealityRecorder/in/OperatorRotateScene")));
         }
     }
 }
