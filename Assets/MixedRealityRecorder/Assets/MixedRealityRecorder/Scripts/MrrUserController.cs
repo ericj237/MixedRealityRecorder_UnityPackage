@@ -10,6 +10,8 @@ namespace MRR.Controller
 
     public class MrrUserController : MonoBehaviour
     {
+        public MrrPromterController prompter;
+
         // a reference to the action
         public SteamVR_Action_Boolean a_trigger;
         public SteamVR_Action_Boolean a_switchPrompterPositon;
@@ -48,6 +50,12 @@ namespace MRR.Controller
             a_trigger.AddOnStateUpListener(TriggerUp, handType);
 
             a_switchPrompterPositon.AddOnStateDownListener(UserSwitchPrompterPositionButtonDown, handType);
+            a_nextPrompterPage.AddOnStateDownListener(UserNextPrompterPage, handType);
+        }
+
+        public void UserNextPrompterPage(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+        {
+            prompter.DisplayNextPage();
         }
 
         public void SelectPointerMode(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)

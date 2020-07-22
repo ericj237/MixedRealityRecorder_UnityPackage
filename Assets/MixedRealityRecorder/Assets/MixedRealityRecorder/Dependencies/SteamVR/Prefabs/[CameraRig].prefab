@@ -376,6 +376,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22ed8ea8bda06124da5b281ff85e02aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  prompter: {fileID: 0}
   a_trigger:
     actionPath: /actions/mixedRealityRecorder/in/UserTrigger
     needsReinit: 0
