@@ -44,7 +44,14 @@ namespace MRR.Controller
         void Update()
         {
             if (Input.GetKeyDown(KeyCode.R))
-                LoadText();
+                Reload();
+        }
+
+        private void Reload()
+        {
+            LoadText();
+            pageIndex = 0;
+            DispayPage(pageIndex);
         }
 
         private void LoadText()
