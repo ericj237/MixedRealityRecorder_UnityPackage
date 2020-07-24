@@ -19,7 +19,7 @@ namespace MRR.Controller
         void Start()
         {
             text = this.gameObject.GetComponent<Text>();
-            path = Application.dataPath;
+            path = Application.persistentDataPath;
             LoadText();
             DispayPage(pageIndex);
         }

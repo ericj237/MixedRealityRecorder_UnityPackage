@@ -64,15 +64,8 @@ namespace MRR.Controller
                 rawPhysicalCameraTexture.Stop();
             else
             {
-                rawPhysicalCameraTexture = new WebCamTexture(settings.physicalCameraSource);
-                foreach (WebCamDevice webCamDevice in GetWebCamDevices())
-                {
-                    if (webCamDevice.name != settings.physicalCameraSource)
-                    {
-                        webcamController.StartWebcam(webCamDevice.name);
-                        break;
-                    }
-                }
+                //UnityEngine.Debug.Log("Test");
+                rawPhysicalCameraTexture = new WebCamTexture("Blackmagic Design");
             }
 
             rawPhysicalCameraTexture.Play();

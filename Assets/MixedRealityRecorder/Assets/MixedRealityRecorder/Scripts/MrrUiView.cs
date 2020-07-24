@@ -612,6 +612,9 @@ namespace MRR.View
             foreach (WebCamDevice source in webCamDevices)
                 optionData.Add(new Dropdown.OptionData(source.name));
 
+            //optionData.RemoveAt(2);
+            optionData.Reverse();
+
             dPhysicalCameraSource.AddOptions(optionData);
         }
 
