@@ -58,18 +58,6 @@
       "type": "boolean"
     },
     {
-      "name": "/actions/mixedRealityRecorder/in/OperatorPointerMode",
-      "type": "boolean"
-    },
-    {
-      "name": "/actions/mixedRealityRecorder/in/OperatorLightMode",
-      "type": "boolean"
-    },
-    {
-      "name": "/actions/mixedRealityRecorder/in/OperatorWebcamMode",
-      "type": "boolean"
-    },
-    {
       "name": "/actions/mixedRealityRecorder/in/OperatorTrigger",
       "type": "boolean"
     },
@@ -78,27 +66,51 @@
       "type": "boolean"
     },
     {
-      "name": "/actions/mixedRealityRecorder/in/UserSwitchPrompterPosition",
-      "type": "boolean"
-    },
-    {
       "name": "/actions/mixedRealityRecorder/in/UserNextPrompterPage",
       "type": "boolean"
     },
     {
-      "name": "/actions/mixedRealityRecorder/in/UserPointerMode",
-      "type": "boolean"
-    },
-    {
-      "name": "/actions/mixedRealityRecorder/in/UserMarkerMode",
-      "type": "boolean"
-    },
-    {
-      "name": "/actions/mixedRealityRecorder/in/UserPrompterMode",
-      "type": "boolean"
-    },
-    {
       "name": "/actions/mixedRealityRecorder/in/OperatorRotateScene",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/mixedRealityRecorder/in/OperatorCycleMode",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/mixedRealityRecorder/in/UserCycleMode",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/mixedRealityRecorder/in/OperatorDPadUp",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/mixedRealityRecorder/in/OperatorDPadDown",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/mixedRealityRecorder/in/OperatorDPadRight",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/mixedRealityRecorder/in/OperatorDPadLeft",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/mixedRealityRecorder/in/UserDPadUp",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/mixedRealityRecorder/in/UserDPadDown",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/mixedRealityRecorder/in/UserDPadRight",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/mixedRealityRecorder/in/UserDPadLeft",
       "type": "boolean"
     }
   ],
@@ -176,18 +188,21 @@
       "/actions/default/out/Haptic": "Haptic",
       "/actions/default/in/SnapTurnLeft": "Snap Turn (Left)",
       "/actions/default/in/SnapTurnRight": "Snap Turn (Right)",
-      "/actions/mixedRealityRecorder/in/OperatorToggleRecording": "Toggle the video recording.",
-      "/actions/mixedRealityRecorder/in/OperatorPointerMode": "Select pointer mode.",
-      "/actions/mixedRealityRecorder/in/OperatorLightMode": "Select light edit mode.",
-      "/actions/mixedRealityRecorder/in/OperatorWebcamMode": "Select webcam placement mode.",
+      "/actions/mixedRealityRecorder/in/OperatorToggleRecording": "OperatorToggleRecording",
       "/actions/mixedRealityRecorder/in/OperatorTrigger": "Operator Trigger action.",
       "/actions/mixedRealityRecorder/in/UserTrigger": "UserTrigger",
-      "/actions/mixedRealityRecorder/in/UserSwitchPrompterPosition": "UserSwitchPrompterPosition",
       "/actions/mixedRealityRecorder/in/UserNextPrompterPage": "UserNextPrompterPage",
-      "/actions/mixedRealityRecorder/in/UserPointerMode": "UserPointerMode",
-      "/actions/mixedRealityRecorder/in/UserMarkerMode": "UserMarkerMode",
-      "/actions/mixedRealityRecorder/in/UserPrompterMode": "UserPrompterMode",
-      "/actions/mixedRealityRecorder/in/OperatorRotateScene": "OperatorRotateScene"
+      "/actions/mixedRealityRecorder/in/OperatorRotateScene": "OperatorRotateScene",
+      "/actions/mixedRealityRecorder/in/UserCycleMode": "UserCycleMode",
+      "/actions/mixedRealityRecorder/in/OperatorCycleMode": "OperatorCycleMode",
+      "/actions/mixedRealityRecorder/in/OperatorDPadUp": "OperatorDPadUp",
+      "/actions/mixedRealityRecorder/in/OperatorDPadDown": "OperatorDPadDown",
+      "/actions/mixedRealityRecorder/in/OperatorDPadRight": "OperatorDPadRight",
+      "/actions/mixedRealityRecorder/in/OperatorDPadLeft": "OperatorDPadLeft",
+      "/actions/mixedRealityRecorder/in/UserDPadUp": "UserDPadUp",
+      "/actions/mixedRealityRecorder/in/UserDPadDown": "UserDPadDown",
+      "/actions/mixedRealityRecorder/in/UserDPadRight": "UserDPadRight",
+      "/actions/mixedRealityRecorder/in/UserDPadLeft": "UserDPadLeft"
     }
   ]
 }

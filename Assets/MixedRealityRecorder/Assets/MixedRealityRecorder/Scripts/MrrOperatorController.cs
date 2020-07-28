@@ -12,6 +12,8 @@ namespace MRR.Controller
     public class MrrOperatorController : MonoBehaviour
     {
 
+        private int layerMaskPointer = 1 << 9;
+
         public MrrUiView uiView;
         public MrrAppController appController;
 
@@ -19,9 +21,11 @@ namespace MRR.Controller
         public SteamVR_Action_Boolean a_trigger;
         public SteamVR_Action_Boolean a_rotateScene;
         public SteamVR_Action_Boolean a_toggleRecording;
-        public SteamVR_Action_Boolean a_pointerMode;
-        public SteamVR_Action_Boolean a_lightMode;
-        public SteamVR_Action_Boolean a_webcamMode;
+        public SteamVR_Action_Boolean a_cycleMode;
+        public SteamVR_Action_Boolean a_dPadUp;
+        public SteamVR_Action_Boolean a_dPadDown;
+        public SteamVR_Action_Boolean a_dPadLeft;
+        public SteamVR_Action_Boolean a_dPadRight;
         // a reference to the hand
         private SteamVR_Input_Sources handType = SteamVR_Input_Sources.LeftHand;
         //reference to the sphere
@@ -33,6 +37,7 @@ namespace MRR.Controller
         private bool isTriggerDown = false;
 
         private Mode mode = Mode.pointer;
+        private LightModeState lightModeState = LightModeState.none;
 
         private enum Mode
         {
@@ -41,19 +46,121 @@ namespace MRR.Controller
             webcam
         };
 
+        private enum LightModeState
+        {
+            none,
+            placement,
+            edit
+        };
+
         void Start()
         {          
             debugText.text = "Pointer Mode";
 
-            a_pointerMode.AddOnStateDownListener(SelectPointerMode, handType);
-            a_lightMode.AddOnStateDownListener(SelectLightMode, handType);
-            a_webcamMode.AddOnStateDownListener(SelectWebcamMode, handType);
+            a_cycleMode.AddOnStateDownListener(CycleMode, handType);
 
             a_trigger.AddOnStateDownListener(TriggerDown, handType);
             a_trigger.AddOnStateUpListener(TriggerUp, handType);
 
             a_toggleRecording.AddOnStateDownListener(OperatorStartRecordingButtonDown, handType);
             a_rotateScene.AddOnStateDownListener(OperatorRotateSceneButtonDown, handType);
+
+            a_dPadUp.AddOnStateDownListener(OperatorDPadUpButtonDown, handType);
+            a_dPadDown.AddOnStateDownListener(OperatorDPadDownButtonDown, handType);
+            a_dPadLeft.AddOnStateDownListener(OperatorDPadLeftButtonDown, handType);
+            a_dPadRight.AddOnStateDownListener(OperatorDPadRightButtonDown, handType);
+        }
+
+        private void OperatorDPadUpButtonDown(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+        {
+            switch (mode)
+            {
+                case Mode.pointer:
+                    {
+                        break;
+                    }
+                case Mode.light:
+                    {
+                        if (lightModeState == LightModeState.edit)
+                            currSelectedLight.GetComponent<Light>().range += 0.1f;
+                        break;
+                    }
+                case Mode.webcam:
+                    {
+                        break;
+                    }
+                default:
+                    break;
+            }
+        }
+
+        private void OperatorDPadDownButtonDown(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+        {
+            switch (mode)
+            {
+                case Mode.pointer:
+                    {
+                        break;
+                    }
+                case Mode.light:
+                    {
+                        if (lightModeState == LightModeState.edit)
+                            currSelectedLight.GetComponent<Light>().range -= 0.1f;
+                        break;
+                    }
+                case Mode.webcam:
+                    {
+                        break;
+                    }
+                default:
+                    break;
+            }
+        }
+
+        private void OperatorDPadLeftButtonDown(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+        {
+            switch (mode)
+            {
+                case Mode.pointer:
+                    {
+                        break;
+                    }
+                case Mode.light:
+                    {
+                        if (lightModeState == LightModeState.edit)
+                            currSelectedLight.GetComponent<Light>().intensity -= 0.1f;
+                        break;
+                    }
+                case Mode.webcam:
+                    {
+                        break;
+                    }
+                default:
+                    break;
+            }
+        }
+
+        private void OperatorDPadRightButtonDown(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+        {
+            switch (mode)
+            {
+                case Mode.pointer:
+                    {
+                        break;
+                    }
+                case Mode.light:
+                    {
+                        if (lightModeState == LightModeState.edit)
+                            currSelectedLight.GetComponent<Light>().intensity += 0.1f;
+                        break;
+                    }
+                case Mode.webcam:
+                    {
+                        break;
+                    }
+                default:
+                    break;
+            }
         }
 
         public void OperatorRotateSceneButtonDown(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
@@ -62,22 +169,27 @@ namespace MRR.Controller
             uiView.UpdateSceneOffsetRotation();
         }
 
-        public void SelectPointerMode(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+        public void CycleMode(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
         {
-            mode = Mode.pointer;
-            debugText.text = "Pointer Mode";
-        }
+            if (mode == Mode.webcam)
+                mode = Mode.pointer;
+            else
+                mode++;
 
-        public void SelectLightMode(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
-        {
-            mode = Mode.light;
-            debugText.text = "Light Mode";
-        }
-
-        public void SelectWebcamMode(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
-        {
-            mode = Mode.webcam;
-            debugText.text = "Webcam Mode";
+            switch(mode)
+            {
+                case Mode.pointer:
+                    debugText.text = "Pointer Mode";
+                    break;
+                case Mode.light:
+                    debugText.text = "Light Mode";
+                    break;
+                case Mode.webcam:
+                    debugText.text = "Webcam Mode";
+                    break;
+                default:
+                    break;
+            }
         }
 
         public void TriggerUp(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
@@ -93,7 +205,8 @@ namespace MRR.Controller
                     }
                 case Mode.light:
                     {
-                        currSelectedLight = null;
+                        if (lightModeState == LightModeState.placement)
+                            lightModeState = LightModeState.edit;
                         break;
                     }
                 case Mode.webcam:
@@ -121,7 +234,17 @@ namespace MRR.Controller
                     }
                 case Mode.light:
                     {
-                        currSelectedLight = CreateLight();
+                        if(lightModeState == LightModeState.none)
+                        {
+                            currSelectedLight = CreateLight();
+                            lightModeState = LightModeState.placement;
+                        }
+                        else if (lightModeState == LightModeState.edit)
+                        {
+                            lightModeState = LightModeState.none;
+                            currSelectedLight = null;
+                        }
+
                         break;
                     }
                 case Mode.webcam:
@@ -144,8 +267,8 @@ namespace MRR.Controller
             Light lightComponent = lightObject.AddComponent<Light>();
             lightComponent.type = LightType.Point;
             lightComponent.color = Color.white;
-            lightComponent.range = 6.0f;
-            lightComponent.intensity = 1.25f;
+            lightComponent.range = 2.0f;
+            lightComponent.intensity = 1.0f;
 
             lightObject.transform.position = transform.position;
 
@@ -160,17 +283,15 @@ namespace MRR.Controller
 
         private void Update()
         {
-
-            if (isTriggerDown)
+            switch (mode)
             {
-
-                switch (mode)
-                {
-                    case Mode.pointer:
+                case Mode.pointer:
+                    {
+                        if (isTriggerDown)
                         {
                             RaycastHit hit;
 
-                            if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity))
+                            if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity, layerMaskPointer))
                             {
                                 if (!HighlightPrefab.GetComponent<MeshRenderer>().enabled)
                                     HighlightPrefab.GetComponent<MeshRenderer>().enabled = true;
@@ -181,16 +302,18 @@ namespace MRR.Controller
                             {
                                 HighlightPrefab.GetComponent<MeshRenderer>().enabled = false;
                             }
-
-                            break;
                         }
-                    case Mode.light:
-                        {
-                            if(currSelectedLight != null)
-                                currSelectedLight.transform.position = transform.position;
-                            break;
-                        }
-                    case Mode.webcam:
+                        break;
+                    }
+                case Mode.light:
+                    {
+                        if (currSelectedLight != null && lightModeState == LightModeState.placement)
+                            currSelectedLight.transform.position = transform.position;
+                        break;
+                    }
+                case Mode.webcam:
+                    {
+                        if (isTriggerDown)
                         {
                             RaycastHit hit;
 
@@ -201,12 +324,12 @@ namespace MRR.Controller
                                 webcamScreen.transform.position = hit.point + Vector3.up * scalar;
                                 webcamScreen.transform.localScale = Vector3.one * scalar;
                             }
-
-                            break;
                         }
-                    default:
+
                         break;
-                }            
+                    }
+                default:
+                    break;
             }
         }
     }

@@ -14,11 +14,13 @@ namespace MRR.Controller
 
         // a reference to the action
         public SteamVR_Action_Boolean a_trigger;
-        public SteamVR_Action_Boolean a_switchPrompterPositon;
         public SteamVR_Action_Boolean a_nextPrompterPage;
-        public SteamVR_Action_Boolean a_pointerMode;
-        public SteamVR_Action_Boolean a_markerMode;
-        public SteamVR_Action_Boolean a_prompterMode;
+        public SteamVR_Action_Boolean a_cycleMode;
+        public SteamVR_Action_Boolean a_dPadUp;
+        public SteamVR_Action_Boolean a_dPadDown;
+        public SteamVR_Action_Boolean a_dPadLeft;
+        public SteamVR_Action_Boolean a_dPadRight;
+        public Transform userTransform;
         // a reference to the hand
         private SteamVR_Input_Sources handType = SteamVR_Input_Sources.RightHand;
         // reference to the sphere
@@ -26,6 +28,7 @@ namespace MRR.Controller
         public GameObject markerPrefab;
         public Text debugText;
         public GameObject promterScreen;
+        public GameObject groupMarker;
 
         private bool isTriggerDown = false;
 
@@ -42,15 +45,107 @@ namespace MRR.Controller
         {
             debugText.text = "Pointer Mode";
 
-            a_pointerMode.AddOnStateDownListener(SelectPointerMode, handType);
-            a_markerMode.AddOnStateDownListener(SelectMarkerMode, handType);
-            a_prompterMode.AddOnStateDownListener(SelectPrompterMode, handType);
+            a_cycleMode.AddOnStateDownListener(CycleMode, handType);
 
             a_trigger.AddOnStateDownListener(TriggerDown, handType);
             a_trigger.AddOnStateUpListener(TriggerUp, handType);
 
-            a_switchPrompterPositon.AddOnStateDownListener(UserSwitchPrompterPositionButtonDown, handType);
             a_nextPrompterPage.AddOnStateDownListener(UserNextPrompterPage, handType);
+
+            a_dPadUp.AddOnStateDownListener(UserDPadUpButtonDown, handType);
+            a_dPadDown.AddOnStateDownListener(UserDPadDownButtonDown, handType);
+            a_dPadLeft.AddOnStateDownListener(UserDPadLeftButtonDown, handType);
+            a_dPadRight.AddOnStateDownListener(UserDPadRightButtonDown, handType);
+        }
+
+        private void UserDPadUpButtonDown(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+        {
+            switch (mode)
+            {
+                case Mode.pointer:
+                    {
+                        break;
+                    }
+                case Mode.marker:
+                    {                
+
+                        foreach (Transform marker in groupMarker.transform)
+                            Destroy(marker.gameObject);
+
+                        break;
+                    }
+                case Mode.prompter:
+                    {
+                        break;
+                    }
+                default:
+                    break;
+            }
+        }
+
+        private void UserDPadDownButtonDown(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+        {
+            switch (mode)
+            {
+                case Mode.pointer:
+                    {
+                        break;
+                    }
+                case Mode.marker:
+                    {
+                        if (currSelectedMarker != null)
+                            Destroy(currSelectedMarker);
+                        break;
+                    }
+                case Mode.prompter:
+                    {
+                        break;
+                    }
+                default:
+                    break;
+            }
+        }
+
+        private void UserDPadLeftButtonDown(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+        {
+            switch (mode)
+            {
+                case Mode.pointer:
+                    {
+                        break;
+                    }
+                case Mode.marker:
+                    {
+                        break;
+                    }
+                case Mode.prompter:
+                    {
+                        break;
+                    }
+                default:
+                    break;
+            }
+        }
+
+        private void UserDPadRightButtonDown(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+        {
+            switch (mode)
+            {
+                case Mode.pointer:
+                    {
+                        break;
+                    }
+                case Mode.marker:
+                    {
+                        break;
+                    }
+                case Mode.prompter:
+                    {
+                        break;
+                    }
+                default:
+                    break;
+            }
         }
 
         public void UserNextPrompterPage(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
@@ -58,22 +153,27 @@ namespace MRR.Controller
             prompter.DisplayNextPage();
         }
 
-        public void SelectPointerMode(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+        public void CycleMode(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
         {
-            mode = Mode.pointer;
-            debugText.text = "Pointer Mode";
-        }
+            if (mode == Mode.prompter)
+                mode = Mode.pointer;
+            else
+                mode++;
 
-        public void SelectMarkerMode(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
-        {
-            mode = Mode.marker;
-            debugText.text = "Marker Mode";
-        }
-
-        public void SelectPrompterMode(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
-        {
-            mode = Mode.prompter;
-            debugText.text = "Prompter Mode";
+            switch (mode)
+            {
+                case Mode.pointer:
+                    debugText.text = "Pointer Mode";
+                    break;
+                case Mode.marker:
+                    debugText.text = "Marker Mode";
+                    break;
+                case Mode.prompter:
+                    debugText.text = "Promter Mode";
+                    break;
+                default:
+                    break;
+            }
         }
 
         public void TriggerUp(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
@@ -89,7 +189,12 @@ namespace MRR.Controller
                     }
                 case Mode.marker:
                     {
-                        currSelectedMarker = null;
+                        if(currSelectedMarker != null)
+                        {
+                            currSelectedMarker.GetComponent<Renderer>().material = matCurrSelectedMarker;
+                            currSelectedMarker.GetComponent<BoxCollider>().enabled = true;
+                            currSelectedMarker = null;
+                        }
                         break;
                     }
                 case Mode.prompter:
@@ -104,10 +209,13 @@ namespace MRR.Controller
         }
 
         private GameObject currSelectedMarker;
+        public Material[] matMarker = new Material[3];
+        public Material matHoverMarker;
+        private int markerColorIndex = 0;
 
         public void TriggerDown(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
         {
-            Debug.Log("Operator Trigger is down!");
+            Debug.Log("User Trigger is down!");
 
             switch (mode)
             {
@@ -117,7 +225,34 @@ namespace MRR.Controller
                     }
                 case Mode.marker:
                     {
-                        currSelectedMarker = Instantiate(markerPrefab);                        
+                        if(currSelectedMarker == null)
+                        {
+                            RaycastHit hit;
+
+                            if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity))
+                            {
+                                if (hit.transform.gameObject.tag == "Marker")
+                                {
+                                    currSelectedMarker = hit.transform.gameObject;
+                                    currSelectedMarker.GetComponent<BoxCollider>().enabled = false;
+                                }
+                                else if (Vector3.Dot(hit.normal, Vector3.up) > 0.75f)
+                                {
+                                    if (markerColorIndex == 2)
+                                        markerColorIndex = 0;
+                                    else
+                                        markerColorIndex++;
+
+                                    matCurrSelectedMarker = matMarker[markerColorIndex];
+
+                                    currSelectedMarker = Instantiate(markerPrefab);
+                                    currSelectedMarker.transform.parent = groupMarker.transform;
+                                    currSelectedMarker.GetComponent<Renderer>().material = matHoverMarker;
+                                    currSelectedMarker.GetComponent<BoxCollider>().enabled = false;
+                                }
+                            }
+                        }                       
+
                         break;
                     }
                 case Mode.prompter:
@@ -132,20 +267,17 @@ namespace MRR.Controller
 
         }
 
-        public void UserSwitchPrompterPositionButtonDown(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
-        {
-            Debug.Log("User Button is down!");         
-        }
+        private GameObject hoverMarker = null;
+        private Material matCurrSelectedMarker;
 
         private void Update()
         {
 
-            if (isTriggerDown)
+            switch (mode)
             {
-
-                switch (mode)
-                {
-                    case Mode.pointer:
+                case Mode.pointer:
+                    {
+                        if (isTriggerDown)
                         {
                             RaycastHit hit;
 
@@ -160,24 +292,38 @@ namespace MRR.Controller
                             {
                                 highlightPrefab.GetComponent<MeshRenderer>().enabled = false;
                             }
-
-                            break;
                         }
-                    case Mode.marker:
+                        break;
+                    }
+                case Mode.marker:
+                    {
+                        RaycastHit hit;
+
+                        if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity))
                         {
-                            if(currSelectedMarker != null)
+                            if (currSelectedMarker != null && isTriggerDown && Vector3.Dot(hit.normal, Vector3.up) > 0.75f)
                             {
-                                RaycastHit hit;
-
-                                if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity))
-                                {
-                                    currSelectedMarker.transform.position = hit.point + Vector3.up * currSelectedMarker.transform.localScale.y / 2.0f;
-                                }
+                                currSelectedMarker.transform.position = hit.point + Vector3.up * currSelectedMarker.transform.localScale.y / 2.0f;
+                                currSelectedMarker.transform.LookAt(new Vector3(userTransform.position.x, currSelectedMarker.transform.position.y, userTransform.position.z));
                             }
-
-                            break;
+                            else if (hoverMarker == null && hit.transform.gameObject.tag == "Marker")
+                            {
+                                hoverMarker = hit.transform.gameObject;
+                                matCurrSelectedMarker = hoverMarker.GetComponent<Renderer>().material;
+                                hoverMarker.GetComponent<Renderer>().material = matHoverMarker;
+                            }
+                            else if(hoverMarker != null && hit.transform.gameObject.tag != "Marker")
+                            {
+                                hoverMarker.GetComponent<Renderer>().material = matCurrSelectedMarker;
+                                hoverMarker = null;
+                            }
                         }
-                    case Mode.prompter:
+
+                        break;
+                    }
+                case Mode.prompter:
+                    {
+                        if(isTriggerDown)
                         {
                             RaycastHit hit;
 
@@ -188,13 +334,13 @@ namespace MRR.Controller
                                 promterScreen.transform.position = hit.point + Vector3.up * scalar;
                                 promterScreen.transform.localScale = Vector3.one * scalar;
                             }
-
-                            break;
                         }
-                    default:
+
                         break;
-                }            
-            }
+                    }
+                default:
+                    break;
+            }               
         }
     }
 }

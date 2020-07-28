@@ -25,30 +25,6 @@ namespace Valve.VR
             }
         }
         
-        public virtual SteamVR_Action_Boolean OperatorPointerMode
-        {
-            get
-            {
-                return SteamVR_Actions.mixedRealityRecorder_OperatorPointerMode;
-            }
-        }
-        
-        public virtual SteamVR_Action_Boolean OperatorLightMode
-        {
-            get
-            {
-                return SteamVR_Actions.mixedRealityRecorder_OperatorLightMode;
-            }
-        }
-        
-        public virtual SteamVR_Action_Boolean OperatorWebcamMode
-        {
-            get
-            {
-                return SteamVR_Actions.mixedRealityRecorder_OperatorWebcamMode;
-            }
-        }
-        
         public virtual SteamVR_Action_Boolean OperatorTrigger
         {
             get
@@ -65,14 +41,6 @@ namespace Valve.VR
             }
         }
         
-        public virtual SteamVR_Action_Boolean UserSwitchPrompterPosition
-        {
-            get
-            {
-                return SteamVR_Actions.mixedRealityRecorder_UserSwitchPrompterPosition;
-            }
-        }
-        
         public virtual SteamVR_Action_Boolean UserNextPrompterPage
         {
             get
@@ -81,35 +49,91 @@ namespace Valve.VR
             }
         }
         
-        public virtual SteamVR_Action_Boolean UserPointerMode
-        {
-            get
-            {
-                return SteamVR_Actions.mixedRealityRecorder_UserPointerMode;
-            }
-        }
-        
-        public virtual SteamVR_Action_Boolean UserMarkerMode
-        {
-            get
-            {
-                return SteamVR_Actions.mixedRealityRecorder_UserMarkerMode;
-            }
-        }
-        
-        public virtual SteamVR_Action_Boolean UserPrompterMode
-        {
-            get
-            {
-                return SteamVR_Actions.mixedRealityRecorder_UserPrompterMode;
-            }
-        }
-        
         public virtual SteamVR_Action_Boolean OperatorRotateScene
         {
             get
             {
                 return SteamVR_Actions.mixedRealityRecorder_OperatorRotateScene;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean OperatorCycleMode
+        {
+            get
+            {
+                return SteamVR_Actions.mixedRealityRecorder_OperatorCycleMode;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean UserCycleMode
+        {
+            get
+            {
+                return SteamVR_Actions.mixedRealityRecorder_UserCycleMode;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean OperatorDPadUp
+        {
+            get
+            {
+                return SteamVR_Actions.mixedRealityRecorder_OperatorDPadUp;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean OperatorDPadDown
+        {
+            get
+            {
+                return SteamVR_Actions.mixedRealityRecorder_OperatorDPadDown;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean OperatorDPadRight
+        {
+            get
+            {
+                return SteamVR_Actions.mixedRealityRecorder_OperatorDPadRight;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean OperatorDPadLeft
+        {
+            get
+            {
+                return SteamVR_Actions.mixedRealityRecorder_OperatorDPadLeft;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean UserDPadUp
+        {
+            get
+            {
+                return SteamVR_Actions.mixedRealityRecorder_UserDPadUp;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean UserDPadDown
+        {
+            get
+            {
+                return SteamVR_Actions.mixedRealityRecorder_UserDPadDown;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean UserDPadRight
+        {
+            get
+            {
+                return SteamVR_Actions.mixedRealityRecorder_UserDPadRight;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean UserDPadLeft
+        {
+            get
+            {
+                return SteamVR_Actions.mixedRealityRecorder_UserDPadLeft;
             }
         }
     }

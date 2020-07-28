@@ -101,14 +101,20 @@ MonoBehaviour:
   a_toggleRecording:
     actionPath: /actions/mixedRealityRecorder/in/OperatorToggleRecording
     needsReinit: 0
-  a_pointerMode:
-    actionPath: /actions/mixedRealityRecorder/in/OperatorPointerMode
+  a_cycleMode:
+    actionPath: /actions/mixedRealityRecorder/in/OperatorCycleMode
     needsReinit: 0
-  a_lightMode:
-    actionPath: /actions/mixedRealityRecorder/in/OperatorLightMode
+  a_dPadUp:
+    actionPath: /actions/mixedRealityRecorder/in/OperatorDPadUp
     needsReinit: 0
-  a_webcamMode:
-    actionPath: /actions/mixedRealityRecorder/in/OperatorWebcamMode
+  a_dPadDown:
+    actionPath: /actions/mixedRealityRecorder/in/OperatorDPadDown
+    needsReinit: 0
+  a_dPadLeft:
+    actionPath: /actions/mixedRealityRecorder/in/OperatorDPadLeft
+    needsReinit: 0
+  a_dPadRight:
+    actionPath: /actions/mixedRealityRecorder/in/OperatorDPadRight
     needsReinit: 0
   HighlightPrefab: {fileID: 8046696669229558092}
   canvasScreencapture: {fileID: 1903987315621449144}
@@ -149,6 +155,7 @@ Transform:
   - {fileID: 402434}
   - {fileID: 4000013889601590}
   - {fileID: 1486452578}
+  - {fileID: 1565902093}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -391,20 +398,32 @@ MonoBehaviour:
   a_nextPrompterPage:
     actionPath: /actions/mixedRealityRecorder/in/UserNextPrompterPage
     needsReinit: 0
-  a_pointerMode:
-    actionPath: /actions/mixedRealityRecorder/in/UserPointerMode
+  a_cycleMode:
+    actionPath: /actions/mixedRealityRecorder/in/UserCycleMode
     needsReinit: 0
-  a_markerMode:
-    actionPath: /actions/mixedRealityRecorder/in/UserMarkerMode
+  a_dPadUp:
+    actionPath: /actions/mixedRealityRecorder/in/UserDPadUp
     needsReinit: 0
-  a_prompterMode:
-    actionPath: /actions/mixedRealityRecorder/in/UserPrompterMode
+  a_dPadDown:
+    actionPath: /actions/mixedRealityRecorder/in/UserDPadDown
     needsReinit: 0
+  a_dPadLeft:
+    actionPath: /actions/mixedRealityRecorder/in/UserDPadLeft
+    needsReinit: 0
+  a_dPadRight:
+    actionPath: /actions/mixedRealityRecorder/in/UserDPadRight
+    needsReinit: 0
+  userTransform: {fileID: 4000013889601590}
   highlightPrefab: {fileID: 5439862126059778705}
   markerPrefab: {fileID: 787434347980742433, guid: 03ca6f0d3fbbf1d459d2ce1cf554f799,
     type: 3}
   debugText: {fileID: 5990359143129206007}
   promterScreen: {fileID: 0}
+  groupMarker: {fileID: 0}
+  matMarker:
+  - {fileID: 2100000, guid: 63176b9e7686aa842a1b915f8f70581f, type: 2}
+  - {fileID: 2100000, guid: 9b9c63082f6ab1841a5ac19298a244a3, type: 2}
+  - {fileID: 2100000, guid: 4e67af46a84a5e54a89b6b989f0edf1e, type: 2}
 --- !u!1 &192944
 GameObject:
   m_ObjectHideFlags: 0
@@ -554,6 +573,36 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!1 &1565902092
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1565902093}
+  m_Layer: 0
+  m_Name: group_userMarker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1565902093
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1565902092}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 420908}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1901146412
 GameObject:
   m_ObjectHideFlags: 0
@@ -1250,12 +1299,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3d832f69edbe6b7498c6be0963342e51, type: 3}
---- !u!4 &1486452578 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6148841860617510641, guid: 3d832f69edbe6b7498c6be0963342e51,
-    type: 3}
-  m_PrefabInstance: {fileID: 6148841862102903187}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &6474469922647336863 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 904347279075937804, guid: 3d832f69edbe6b7498c6be0963342e51,
@@ -1283,6 +1326,12 @@ MonoBehaviour:
 --- !u!223 &1903987315621449144 stripped
 Canvas:
   m_CorrespondingSourceObject: {fileID: 5708665987642336299, guid: 3d832f69edbe6b7498c6be0963342e51,
+    type: 3}
+  m_PrefabInstance: {fileID: 6148841862102903187}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1486452578 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6148841860617510641, guid: 3d832f69edbe6b7498c6be0963342e51,
     type: 3}
   m_PrefabInstance: {fileID: 6148841862102903187}
   m_PrefabAsset: {fileID: 0}
@@ -1360,15 +1409,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a6939571cf5f86443b926bab2eb3e830, type: 3}
---- !u!4 &5439862126059778710 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3350708256945440368, guid: a6939571cf5f86443b926bab2eb3e830,
-    type: 3}
-  m_PrefabInstance: {fileID: 7349415683670111462}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &5439862126059778705 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3350708256945440375, guid: a6939571cf5f86443b926bab2eb3e830,
+    type: 3}
+  m_PrefabInstance: {fileID: 7349415683670111462}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5439862126059778710 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3350708256945440368, guid: a6939571cf5f86443b926bab2eb3e830,
     type: 3}
   m_PrefabInstance: {fileID: 7349415683670111462}
   m_PrefabAsset: {fileID: 0}
