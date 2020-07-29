@@ -234,7 +234,13 @@ namespace MRR.Controller
                     }
                 case Mode.light:
                     {
-                        if(lightModeState == LightModeState.none)
+                        if (hoveredSphereLight != null)
+                        {
+                            currSelectedLight = hoveredSphereLight.transform.parent.transform.gameObject;
+                            hoveredSphereLight = null;
+                            lightModeState = LightModeState.placement;
+                        }
+                        else if (lightModeState == LightModeState.none)
                         {
                             currSelectedLight = CreateLight();
                             lightModeState = LightModeState.placement;
@@ -242,6 +248,7 @@ namespace MRR.Controller
                         else if (lightModeState == LightModeState.edit)
                         {
                             lightModeState = LightModeState.none;
+                            currSelectedLight.transform.Find("mesh_sphere").GetComponent<MeshRenderer>().enabled = false;
                             currSelectedLight = null;
                         }
 
@@ -259,6 +266,8 @@ namespace MRR.Controller
 
         }
 
+        public Material matSelectLight;
+
         private GameObject CreateLight()
         {
             GameObject lightObject = new GameObject();
@@ -270,6 +279,14 @@ namespace MRR.Controller
             lightComponent.range = 2.0f;
             lightComponent.intensity = 1.0f;
 
+            GameObject sphereObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            sphereObject.name = "mesh_sphere";
+            sphereObject.tag = "Light";
+            sphereObject.GetComponent<Renderer>().material = matSelectLight;
+            sphereObject.transform.localScale = Vector3.one * 0.3f;
+            sphereObject.transform.parent = lightObject.transform;
+            sphereObject.transform.localPosition = Vector3.zero;
+
             lightObject.transform.position = transform.position;
 
             return lightObject;
@@ -280,6 +297,8 @@ namespace MRR.Controller
             Debug.Log("Operator Button is down!");
             canvasScreencapture.GetComponent<Canvas>().enabled = !canvasScreencapture.GetComponent<Canvas>().enabled;
         }
+
+        private GameObject hoveredSphereLight;
 
         private void Update()
         {
@@ -307,8 +326,27 @@ namespace MRR.Controller
                     }
                 case Mode.light:
                     {
+
                         if (currSelectedLight != null && lightModeState == LightModeState.placement)
                             currSelectedLight.transform.position = transform.position;
+                        else if(lightModeState == LightModeState.none)
+                        {
+                            RaycastHit hit;
+
+                            if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity) && hit.transform.gameObject.tag == "Light")
+                            {
+                                hoveredSphereLight = hit.transform.gameObject;
+
+                                if (hoveredSphereLight.GetComponent<MeshRenderer>().enabled == false)
+                                    hoveredSphereLight.GetComponent<MeshRenderer>().enabled = true;
+                            }
+                            else if(hoveredSphereLight != null)
+                            {
+                                hoveredSphereLight.GetComponent<MeshRenderer>().enabled = false;
+                                hoveredSphereLight = null;
+                            }
+                        }
+
                         break;
                     }
                 case Mode.webcam:

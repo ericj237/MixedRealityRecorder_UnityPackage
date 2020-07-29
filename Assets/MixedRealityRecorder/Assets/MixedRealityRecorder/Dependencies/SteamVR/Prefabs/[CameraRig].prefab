@@ -120,6 +120,7 @@ MonoBehaviour:
   canvasScreencapture: {fileID: 1903987315621449144}
   debugText: {fileID: 1901146414}
   webcamScreen: {fileID: 0}
+  matSelectLight: {fileID: 2100000, guid: 0b9cc7492aceaab4393d63e91c3d51b4, type: 2}
 --- !u!1 &146900
 GameObject:
   m_ObjectHideFlags: 0
@@ -392,9 +393,6 @@ MonoBehaviour:
   a_trigger:
     actionPath: /actions/mixedRealityRecorder/in/UserTrigger
     needsReinit: 0
-  a_switchPrompterPositon:
-    actionPath: /actions/mixedRealityRecorder/in/UserSwitchPrompterPosition
-    needsReinit: 0
   a_nextPrompterPage:
     actionPath: /actions/mixedRealityRecorder/in/UserNextPrompterPage
     needsReinit: 0
@@ -419,11 +417,12 @@ MonoBehaviour:
     type: 3}
   debugText: {fileID: 5990359143129206007}
   promterScreen: {fileID: 0}
-  groupMarker: {fileID: 0}
+  groupMarker: {fileID: 1565902092}
   matMarker:
   - {fileID: 2100000, guid: 63176b9e7686aa842a1b915f8f70581f, type: 2}
   - {fileID: 2100000, guid: 9b9c63082f6ab1841a5ac19298a244a3, type: 2}
   - {fileID: 2100000, guid: 4e67af46a84a5e54a89b6b989f0edf1e, type: 2}
+  matHoverMarker: {fileID: 2100000, guid: 1f34acd6600b2864aa2d947015aafc65, type: 2}
 --- !u!1 &192944
 GameObject:
   m_ObjectHideFlags: 0
