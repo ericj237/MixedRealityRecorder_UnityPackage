@@ -15158,6 +15158,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraController: {fileID: 8285643408426802524}
+  webcamController: {fileID: 0}
   uiView: {fileID: 6701903564010593674}
   uiCamera: {fileID: 5804706171241315711}
   videoRecorder: {fileID: 6148841861028112752}

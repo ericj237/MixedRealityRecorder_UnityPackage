@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &430469697041541859
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 430469697041541868}
+  - component: {fileID: 430469697041541869}
+  m_Layer: 0
+  m_Name: Construction Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &430469697041541868
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 430469697041541859}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &430469697041541869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 430469697041541859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98e69710d095b8143af1faa5cc4d9106, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomDimensions: {x: 8, y: 4.5, z: 8}
+  wallySize: {x: 5, y: 3}
+  floorPrefab: {fileID: 2125852036725012581, guid: dfc789cde8ec7d24d9dc62a24707970b,
+    type: 3}
+  ceilingPrefab: {fileID: 2125852036725012581, guid: 090e1807257dfab4cb5b03bd7d888dfb,
+    type: 3}
+  wallPrefab: {fileID: 2125852036725012581, guid: 9a8cb88038391854e93fe5077f43b987,
+    type: 3}
+  framePrefab: {fileID: 2125852036725012581, guid: 79faea3f5e51b044cb29f4f09ea955ca,
+    type: 3}
+  wallLightPrefab: {fileID: 3170594914277985806, guid: 8fea063ff1c351842a99165cf816e7ad,
+    type: 3}
+  ceilingLightPrefab: {fileID: 2869609190561830339, guid: 2b37b7b15fb958e48b8ad1fce1356b6d,
+    type: 3}
+  humanPrefab: {fileID: 614567143080386667, guid: 248b02eda78dcb440beb7b3370f43ab3,
+    type: 3}
+  doorPrefab: {fileID: 3521844599588875962, guid: 443151639bfca4b4da1a344bcc1ccb7a,
+    type: 3}
+  officePrefab: {fileID: 33904718291777720, guid: a81ed1724f3686046ba2927dda27fcc3,
+    type: 3}
+  tilePrefab: {fileID: 6270644039311655485, guid: 557d9838387a03440b1182d4d31ed0b7,
+    type: 3}
+  amountCubes: {x: 33, y: 20}
+  tileSize: {x: 0.15, y: 0.15, z: 0.4}
+  spacing: 0.01
+  priority: 2
