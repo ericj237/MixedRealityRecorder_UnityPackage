@@ -11,11 +11,11 @@ namespace MRR.Controller
 
         private void StartAudio()
         {
-            AudioSource audioSource = this.gameObject.GetComponent<AudioSource>();
-            audioSource.clip = Microphone.Start("Microphone (Realtek(R) Audio)", true, 10, 44100);
-            audioSource.loop = true;
+            //AudioSource audioSource = this.gameObject.GetComponent<AudioSource>();
+            //audioSource.clip = Microphone.Start("Microphone (Realtek(R) Audio)", true, 10, 44100);
+            //audioSource.loop = true;
             //while (!(Microphone.GetPosition(null) > 0)) { }
-            audioSource.Play();
+            //audioSource.Play();
             //foreach (var device in Microphone.devices)
             //{
             //    Debug.Log("Name: " + device);

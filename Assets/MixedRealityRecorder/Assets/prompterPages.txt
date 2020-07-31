@@ -1,3 +1,10 @@
-Page1
-Page2
-Page3
+Hallo, wir befinden uns gerade hier in unserer virtuellen Testumgebung. Aber da wir eigentlich etwas anderes zeigen wollten, blenden wir sie kurz noch einmal aus.
+Denn bei Forschungen im Bereich der virtuellen Realität haben wir häufig das Problem nach aussen zu kommunizieren, woran wir gerade arbeiten.
+Am liebsten würden wir jeden zu uns einladen, um direkt vor Ort sich unsere Ergebnisse anzuschauen. Da dies natürlich, vor allem in der aktuellen Corona-Zeit, nicht immer möglich ist und zudem auch oft mit hohem Aufwand verbunden ist, erstellen wir häufig Videos von unseren Projekten
+Am häufigsten benutzen wir in diesen Videos einen Splitscreen und zeigen auf der einen Seite den Nutzer, wie er die VR-Brille trägt und auf der anderen Seite sieht man das, was er selbst gerade sieht.
+Bei manchen Aufnahmen, wie bei dieser z.B. kann es vorkommen, dass dem Zuschauer die Erfahrungen des Nutzers nicht auf anhieb verständlich rüber gebracht wird.
+Darum kann es von Vorteil sein, eine zusätzliche Beobachterkamera in die Szene einzubinden. Denn dadurch hat der Zuschauer die Möglichkeit den Nutzer in dem virtuellen Raum zu sehen.
+Hier sehen wir z. B. aus einem anderen Forschungsprojekt, wie sich eine lebendige Wand beim Nutzer anfühlen würde, ohne das wir diese erstmal bauen müssten. Das hat natürlich Vorteile, damit man erstmal testen kann wie groß eine solche Wand oder die einzelnen bewegten Steine überhaupt sein sollen.
+Da schätzungsweise die meisten Forscher nicht auch gleichzeitig Schauspieler sind und gerade ich sehr schlecht im auswendig lernen bin, hilft mir unser Tool mit einem Teleprompter, von dem ich ganz einfach ablesen kann.
+Da schätzungsweise die meisten Forscher nicht auch gleichzeitig Schauspieler sind und gerade ich sehr schlecht im auswendig lernen bin, hilft mir unser Tool mit einem Teleprompter, von dem ich ganz einfach ablesen kann.
+Wir hoffen mit unserem Mixed Reality Research Recorder in Zukunft auch anderen Forschern zu helfen, ihre Ergebnisse schneller und leichter präsentieren zu können. Danke für die Aufmerksamkeit und bis zum nächsten Mal.

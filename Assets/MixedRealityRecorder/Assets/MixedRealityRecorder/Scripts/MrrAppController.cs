@@ -64,15 +64,17 @@ namespace MRR.Controller
                 rawPhysicalCameraTexture.Stop();
             else
             {
-                rawPhysicalCameraTexture = new WebCamTexture(settings.physicalCameraSource);
-                foreach (WebCamDevice webCamDevice in GetWebCamDevices())
-                {
-                    if (webCamDevice.name != settings.physicalCameraSource)
-                    {
-                        webcamController.StartWebcam(webCamDevice.name);
-                        break;
-                    }
-                }
+                rawPhysicalCameraTexture = new WebCamTexture("Blackmagic Design");
+                //foreach (WebCamDevice webCamDevice in GetWebCamDevices())
+                //{
+                //    if (webCamDevice.name != settings.physicalCameraSource)
+                //    {
+                //        webcamController.StartWebcam("Logitech Webcam C925e");
+                //        break;
+                //    }
+                //}
+
+                webcamController.StartWebcam("Logitech Webcam C925e");
             }
 
             rawPhysicalCameraTexture.Play();
@@ -161,6 +163,8 @@ namespace MRR.Controller
         private void CacheWebcamDevices()
         {
             webCamDevices = WebCamTexture.devices;
+            foreach (WebCamDevice device in webCamDevices)
+                UnityEngine.Debug.Log("WebCamDevice = " + device.name);
         }
 
         private void CacheTargetObjects()
